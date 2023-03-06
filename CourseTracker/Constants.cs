@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using SQLite;
 
 namespace CourseTracker
 {
@@ -16,6 +17,7 @@ namespace CourseTracker
             SQLite.SQLiteOpenFlags.Create |
             // enable multi-threaded database access
             SQLite.SQLiteOpenFlags.SharedCache;
+
 
         public static string DatabasePath
         {
