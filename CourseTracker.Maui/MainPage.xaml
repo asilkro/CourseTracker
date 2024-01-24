@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<FlyoutPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+            xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+            xmlns:Views="clr-namespace:CourseTracker.Maui.Views"
+            xmlns:viewModels="clr-namespace:CourseTracker.Maui.ViewModels"
+            x:Class="CourseTracker.Maui.MainPage"
+            x:DataType="viewModels:MainPageVM"
+            FlyoutLayoutBehavior="Split">
+
+    <FlyoutPage.Flyout>
+            <ContentPage Title="MainPage">
+            <VerticalStackLayout>
+                <Button x:Name="homeButton"
+                        Text="Home"
+                        Clicked="FlyoutButton_OnClicked"/>
+                <Button x:Name="termButton"
+                        Text="Terms"
+                        Clicked="FlyoutButton_OnClicked"/>
+                <Button x:Name="courseButton"
+                        Text="Courses"
+                        Clicked="FlyoutButton_OnClicked"/>
+                
+
+                <!--Temporary Buttons-->
+                <Button x:Name="addCourseButton"
+                        Text="Add Course"
+                        Clicked="FlyoutButton_OnClicked"/>
+                <Button x:Name="editCourseButton"
+                        Text="Edit Course"
+                        Clicked="FlyoutButton_OnClicked"/>
+                <Button x:Name="addTermButton"
+                        Text="Add Term"
+                        Clicked="FlyoutButton_OnClicked"/>
+                <Button x:Name="editTermButton"
+                        Text="Edit Term"
+                        Clicked="FlyoutButton_OnClicked"/>
+            </VerticalStackLayout>
+        </ContentPage>
+    </FlyoutPage.Flyout>
+    
+    <FlyoutPage.Detail>
+        <NavigationPage>
+            <x:Arguments>
+                <Views:Homepage/>
+            </x:Arguments>
+        </NavigationPage>
+    </FlyoutPage.Detail>
+
+</FlyoutPage>

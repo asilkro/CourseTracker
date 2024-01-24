@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:CourseTracker.Maui.ViewModels"
+             x:DataType="viewModels:ListTermsVM"
+             x:Class="CourseTracker.Maui.Views.ListTerms"
+             Title="Term List">
+
+    <VerticalStackLayout
+    Padding="20,10" Spacing="5">
+        <Label 
+            Text="Terms"
+            VerticalOptions="Center" 
+            HorizontalOptions="Center" />
+
+        <!-- Display List of Terms using ListView -->
+        <!--<ListView ItemsSource="{Binding Terms}" VerticalOptions="FillAndExpand" ItemTapped="ListView_ItemTapped">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Padding="10">
+                            --><!-- Display Properties of Each Term --><!--
+                            <Label Text="{Binding Term.TermName}" FontAttributes="Bold" />
+                            <Label Text="{Binding Term.TermId}"/>
+                            <Label Text="{Binding Term.TermStart, StringFormat='Start: {0:d}'}" />
+                            <Label Text="{Binding Term.TermEnd, StringFormat='End: {0:d}'}" />
+                            <Label Text="{Binding Term.CourseCount}"/>
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>-->
+    </VerticalStackLayout>
+
+</ContentPage>

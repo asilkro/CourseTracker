@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:CourseTracker.Maui.ViewModels"
+             x:DataType="viewModels:EditCoursesVM"
+             x:Class="CourseTracker.Maui.Views.EditCourses"
+             Title="Edit Course">
+    <VerticalStackLayout
+    Padding="20,10" Spacing="5">
+
+        <!--Course Id-->
+        <VerticalStackLayout>
+            <Label Text="Course Id" />
+            <Entry x:Name="courseIdEntry" Text="{Binding Course.CourseId}"/>
+        </VerticalStackLayout>
+
+        <!--Term Id-->
+        <VerticalStackLayout>
+            <Label Text="Term Id" />
+            <Entry x:Name="termIdEntry" Text="{Binding Course.TermId}"/>
+        </VerticalStackLayout>
+
+        <!--Instructor Id-->
+        <VerticalStackLayout>
+            <Label Text="Instructor Id" />
+            <Entry x:Name="instructorIdEntry" Text="{Binding Course.InstructorId}"/>
+        </VerticalStackLayout>
+
+        <!--Course Name-->
+        <VerticalStackLayout>
+            <Label Text="Course Name" />
+            <Entry x:Name="courseNameEntry" Text="{Binding Course.CourseName}"/>
+        </VerticalStackLayout>
+
+        <!--Course Status-->
+        <VerticalStackLayout>
+            <Label Text="Course Status" />
+            <Picker x:Name="courseStatusPicker" Title="Choose using the dropdown:" SelectedItem="{Binding Course.CourseStatus}">
+                <Picker.ItemsSource>
+                    <x:Array Type="{x:Type x:String}">
+                        <x:String>Planned</x:String>
+                        <x:String>In Progress</x:String>
+                        <x:String>Completed</x:String>
+                        <x:String>Awaiting Evaluation</x:String>
+                        <x:String>Dropped</x:String>
+                    </x:Array>
+                </Picker.ItemsSource>
+            </Picker>
+        </VerticalStackLayout>
+
+        <!--Course Assessment Count-->
+        <VerticalStackLayout>
+            <Label Text="Assessment Count:" />
+            <Entry x:Name="courseAssessmentCountEntry" Text="{Binding Course.CourseAssessmentCount}"/>
+            <Label Text="Courses may only have 1 or 2." FontSize="Caption"/>
+        </VerticalStackLayout>
+
+        <!--Course Start-->
+        <VerticalStackLayout>
+            <Label Text="Course Start" />
+            <DatePicker x:Name="courseStartPicker" Date="{Binding Course.CourseStart}" MinimumDate="2000-01-01" MaximumDate="3999-12-31"/>
+        </VerticalStackLayout>
+
+        <!--Course End-->
+        <VerticalStackLayout>
+            <Label Text="Course End" />
+            <DatePicker x:Name="courseEndPicker" Date="{Binding Course.CourseEnd}" MinimumDate="2000-01-01" MaximumDate="3999-12-31"/>
+        </VerticalStackLayout>
+
+        <!--Course Notes-->
+        <VerticalStackLayout>
+            <Label Text="Course Notes" />
+            <Editor x:Name="courseNoteEditor" Text="{Binding Course.CourseNotes}" AutoSize="TextChanges"/>
+        </VerticalStackLayout>
+
+        <!--Notifications Enabled-->
+        <VerticalStackLayout>
+            <Label Text="Enable Course Notifications" />
+            <Switch x:Name="courseNotificationsSwitch" IsToggled="{Binding Course.NotificationsEnabled}" />
+        </VerticalStackLayout>
+
+        <!--Submit Button-->
+        <Button x:Name="submitButton" Text="Submit" Clicked="SubmitButton_Clicked"/>
+
+        <!--Cancel Button-->
+        <Button x:Name="cancelButton" Text="Cancel" Clicked="CancelButton_Clicked"/>
+    </VerticalStackLayout>
+</ContentPage>

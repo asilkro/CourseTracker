@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:CourseTracker.Maui.ViewModels"
+             x:DataType="viewModels:EditTermsVM"
+             x:Class="CourseTracker.Maui.Views.EditTerms"
+             Title="Edit Term">
+    <VerticalStackLayout
+    Padding="20,10" Spacing="5">
+
+        <!--Term Id-->
+        <VerticalStackLayout>
+            <Label Text="Term Id" />
+            <Entry x:Name="termIdEntry" Text="{Binding Term.TermId}"/>
+        </VerticalStackLayout>
+
+        <!--Term Name-->
+        <VerticalStackLayout>
+            <Label Text="Term Name" />
+            <Entry x:Name="termNameEntry" Text="{Binding Term.TermName}"/>
+        </VerticalStackLayout>
+
+        <!--Term Start-->
+        <VerticalStackLayout>
+            <Label Text="Term Start" />
+            <DatePicker x:Name="termStartPicker" Date="{Binding Term.TermStart}" MinimumDate="2000-01-01" MaximumDate="3999-12-31"/>
+        </VerticalStackLayout>
+
+        <!--Term End-->
+        <VerticalStackLayout>
+            <Label Text="Term End" />
+            <DatePicker x:Name="termEndPicker" Date="{Binding Term.TermEnd}" MinimumDate="2000-01-01" MaximumDate="3999-12-31"/>
+        </VerticalStackLayout>
+
+        <!--Course Count-->
+        <VerticalStackLayout>
+            <Label Text="Number of Courses in Term" />
+            <Entry x:Name="termCourseCountEntry" Text="{Binding Term.TermName}"/>
+        </VerticalStackLayout>
+
+        <!--Notifications Enabled-->
+        <VerticalStackLayout>
+            <Label Text="Enable Notifications" />
+            <Switch x:Name="termNotificationsSwitch" IsToggled="{Binding Term.NotificationsEnabled}" />
+        </VerticalStackLayout>
+
+        <!--Submit Button-->
+        <Button x:Name="submitButton" Text="Submit" Clicked="SubmitButton_Clicked"/>
+
+        <!--Cancel Button-->
+        <Button x:Name="cancelButton" Text="Cancel" Clicked="CancelButton_Clicked"/>
+    
+    </VerticalStackLayout>
+</ContentPage>
