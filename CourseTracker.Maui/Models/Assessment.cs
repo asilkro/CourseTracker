@@ -19,7 +19,7 @@ namespace CourseTracker.Maui.Models
 
         [Column("RelatedCourseId")] public int RelatedCourseId { get; set; } = -1; // -1 means not set to actual course
 
-        [Column("NotificationEnabled")] public bool NotificationEnabled { get; set; } = false;
+        [Column("NotificationsEnabled")] public bool NotificationsEnabled { get; set; } = false;
 
         #endregion
 
