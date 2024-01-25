@@ -1,6 +1,7 @@
 ﻿using CourseTracker.Maui.ViewModels;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Supplemental;
+using System.Diagnostics;
 
 namespace CourseTracker.Maui.Factories
 {
@@ -24,13 +25,12 @@ namespace CourseTracker.Maui.Factories
             string phone, out string errorMessage)
         {
             errorMessage = "";
-            //TODO: Finish validation logic
 
-            if (id <= 0)
+            if (!Validation.IdWasSet(id))
             {
                 errorMessage = "Instructor ID must be greater than 0.";
             }
-            else if (Validation.IsNull(name))
+            else if (!Validation.NotNull(name))
             {
                 errorMessage = "Instructor name cannot be empty.";
             }
@@ -38,7 +38,7 @@ namespace CourseTracker.Maui.Factories
             {
                 errorMessage = "Instructor email is not valid.";
             }
-            else if (Validation.IsNull(phone))
+            else if (!Validation.NotNull(phone))
             {
                 errorMessage = "Instructor phone cannot be empty.";
             }
@@ -47,6 +47,7 @@ namespace CourseTracker.Maui.Factories
                 errorMessage = "Instructor phone is not valid."; 
             }
 
+            Debug.WriteLine(errorMessage);
             return string.IsNullOrEmpty(errorMessage);
         }
 

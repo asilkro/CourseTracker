@@ -10,26 +10,26 @@ public class DummyData
 
     public List<String> CourseNames = new List<string>
     {
-        "Course Name Placeholder",
-        "Course Name Placeholder",
-        "Course Name Placeholder",
-        "Course Name Placeholder"
+        "Social Psychology",
+        "Comparative Religion",
+        "The Art of Discourse",
+        "Aerodynamics of Gender"
     };
 
     public List<String> InstructorNames = new List<string>
     {
-        "Instructor Name Placeholder",
-        "Instructor Name Placeholder",
-        "Instructor Name Placeholder",
-        "Instructor Name Placeholder"
+        "Jeff Winger",
+        "Britta Perry",
+        "Troy Barnes",
+        "Annie Edison"
     };
 
     public List<String> InstructorEmails = new List<string>
     {
-        "instructor@contoso.edu",
-        "instructor@contoso.edu",
-        "instructor@contoso.edu",
-        "instructor@contoso.edu"
+        "jwinger@greendalecc.edu",
+        "bperry@greendalecc.edu",
+        "troyb@greendalecc.edu",
+        "aedison13@greendalecc.edu"
     };
 
     public List<String> InstructorPhones = new List<string>
@@ -63,7 +63,6 @@ public class DummyData
         "PA 988",
         "OA 789"
     };
-
 
     //DateTime CourseStart1 = DateTime.Now.Date.AddDays(-320);
     //DateTime CourseStart2 = DateTime.Now.Date.AddDays(-190);

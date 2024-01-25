@@ -28,21 +28,5 @@ namespace CourseTracker.Maui.Models
         {
         }
         #endregion
-
-        #region Methods
-        public bool AssessmentTypeIsValid(string assessmentType)
-        {
-            var result = assessmentType switch
-            {
-                "Objective" => true,
-                "Performance" => true,
-                "None" => true, //Covers cases where a course may only have one assessment
-                _ => false
-            };
-
-            return result;
-        }
-
-        #endregion
     }
 }

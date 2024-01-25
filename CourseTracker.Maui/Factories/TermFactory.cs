@@ -1,4 +1,5 @@
-﻿using CourseTracker.Maui.Models;
+﻿using System.Diagnostics;
+using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Supplemental;
 using CourseTracker.Maui.ViewModels;
 
@@ -35,27 +36,18 @@ namespace CourseTracker.Maui.Factories
         {
             errorMessage = "";
 
-            if (termId <= 0)
+            if (!Validation.IdWasSet(termId))
                 errorMessage = "Term ID must be greater than 0.";
-            else if (Validation.IsNull(termName))
+            else if (!Validation.NotNull(termName))
                 errorMessage = "Term name cannot be empty.";
-            else if (termStart < DateTime.MinValue)
-                errorMessage = "Term start date cannot be earlier than the minimum value.";
-            else if (termEnd < DateTime.MinValue)
-                errorMessage = "Term end date cannot be earlier than the minimum value.";
-            else if (termStart > DateTime.MaxValue)
-                errorMessage = "Term start date cannot be later than the maximum value.";
-            else if (termEnd > DateTime.MaxValue)
-                errorMessage = "Term end date cannot be later than the maximum value.";
-            else if (termStart > termEnd)
-                errorMessage = "Term start date cannot be after term end date.";
             else if (!Validation.TermsAreValid(termStart, termEnd))
                 errorMessage = "Term start and end dates must be the first and last days of the month, respectively.";
-            else if (courseCount < 0)
-                errorMessage = "Course count cannot be less than 0.";
-            else if (courseCount > 6)
-                errorMessage = "Course count cannot be greater than 6.";
+            else if (!Validation.CourseCountIsValid(courseCount))
+                errorMessage = "Terms must have between 1 and 6 courses.";
+            else if (!Validation.DatesAreValid(termStart, termEnd))
+                errorMessage = "Term start and end dates are not valid.";
 
+            Debug.WriteLine(errorMessage);
             return string.IsNullOrEmpty(errorMessage);
         }
 

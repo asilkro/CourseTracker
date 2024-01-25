@@ -25,25 +25,7 @@ public class Course
 
     public Course()
     {
+
     }
-
-    #endregion
-
-    #region Methods
-
-    public static bool CourseStatusIsValid(string status)
-    {
-        var result = status switch
-        {
-            "Planned" => true,
-            "In Progress" => true,
-            "Completed" => true,
-            "Awaiting Evaluation" => true,
-            "Dropped" => true,
-            _ => false
-        };
-        return result;
-    }
-
     #endregion
 }
