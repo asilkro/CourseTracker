@@ -18,12 +18,11 @@ public partial class AddCourses : ContentPage
 
     private void SubmitButton_Clicked(object sender, EventArgs e)
     {
-        Console.WriteLine(sender + " triggered this.");
+        Debug.WriteLine(sender + " triggered this.");
 
         var factory = new CourseFactory();
         factory.CreateCourse(viewModel, out var errorMessage);
     }
-
 
 
     private async void CancelButton_Clicked(object sender, EventArgs e)

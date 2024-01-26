@@ -8,8 +8,8 @@ public partial class ListTerms : ContentPage
 	ListTermsVM viewModel;
 
 	public ListTerms()
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
 		viewModel = new ListTermsVM();
 		BindingContext = viewModel;
 	}

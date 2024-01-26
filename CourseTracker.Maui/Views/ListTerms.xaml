@@ -14,12 +14,12 @@
             HorizontalOptions="Center" />
 
         <!-- Display List of Terms using ListView -->
-        <!--<ListView ItemsSource="{Binding Terms}" VerticalOptions="FillAndExpand" ItemTapped="ListView_ItemTapped">
+        <ListView ItemsSource="{Binding Terms}" VerticalOptions="FillAndExpand" ItemTapped="ListView_ItemTapped">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
                         <StackLayout Padding="10">
-                            --><!-- Display Properties of Each Term --><!--
+                            <!-- Display Properties of Each Term -->
                             <Label Text="{Binding Term.TermName}" FontAttributes="Bold" />
                             <Label Text="{Binding Term.TermId}"/>
                             <Label Text="{Binding Term.TermStart, StringFormat='Start: {0:d}'}" />
@@ -29,7 +29,7 @@
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
-        </ListView>-->
+        </ListView>
     </VerticalStackLayout>
 
 </ContentPage>
