@@ -14,7 +14,7 @@
             HorizontalOptions="Center" />
 
         <!-- Display List of Terms using ListView -->
-        <ListView ItemsSource="{Binding Terms}" VerticalOptions="FillAndExpand" ItemTapped="ListView_ItemTapped">
+        <ListView ItemsSource="{Binding Terms}" VerticalOptions="FillAndExpand">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
