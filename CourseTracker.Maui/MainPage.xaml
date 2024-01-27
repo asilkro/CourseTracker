@@ -9,7 +9,9 @@
 
     <FlyoutPage.Flyout>
             <ContentPage Title="MainPage">
-            <VerticalStackLayout>
+            <VerticalStackLayout 
+                Padding="20,0"
+                Spacing="10">
                 <Button x:Name="homeButton"
                         Text="Home"
                         Clicked="FlyoutButton_OnClicked"/>

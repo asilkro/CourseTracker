@@ -63,18 +63,18 @@
                 <!--Course Status-->
                 <Label x:Name="courseStatusLabel" HorizontalTextAlignment="Center" Text="Course Status" FontAttributes="Bold" Grid.Column="0" Grid.Row="0"/>
                 <Picker x:Name="courseStatusPicker"  SelectedItem="{Binding Course.CourseStatus}" Grid.Column="0" Grid.Row="1">
-            <Picker.ItemsSource>
-                <x:Array Type="{x:Type x:String}">
-                    <x:String>Planned</x:String>
-                    <x:String>In Progress</x:String>
-                    <x:String>Completed</x:String>
-                    <x:String>Awaiting Evaluation</x:String>
-                    <x:String>Dropped</x:String>
-                </x:Array>
-            </Picker.ItemsSource>
-        </Picker>
+                    <Picker.ItemsSource>
+                        <x:Array Type="{x:Type x:String}">
+                            <x:String>Planned</x:String>
+                            <x:String>In Progress</x:String>
+                            <x:String>Completed</x:String>
+                            <x:String>Awaiting Evaluation</x:String>
+                            <x:String>Dropped</x:String>
+                        </x:Array>
+                    </Picker.ItemsSource>
+                </Picker>
 
-        <!--Course Assessment Count-->
+                <!--Course Assessment Count-->
 
                 <Label x:Name="courseAssessmentCountLabel" HorizontalTextAlignment="Center" Text="Assessment Count:" FontAttributes="Bold" Grid.Column="1" Grid.Row="0"/>
                 <Entry x:Name="courseAssessmentCountEntry" Text="{Binding Course.CourseAssessmentCount}" Grid.Column="1" Grid.Row="1"/>
@@ -121,7 +121,7 @@
             </Grid>
         </HorizontalStackLayout>
 
-
+        <!--Buttons-->
         <HorizontalStackLayout
             Spacing="20"
             Padding="5"
