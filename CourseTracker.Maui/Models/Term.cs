@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using SQLite;
 
 namespace CourseTracker.Maui.Models;
 
@@ -17,6 +17,7 @@ namespace CourseTracker.Maui.Models;
     #endregion
 
     #region Constructors
+    
     public Term()
     {
     

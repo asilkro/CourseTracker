@@ -1,13 +1,13 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using SQLite;
 
 namespace CourseTracker.Maui.Models;
-
 
 [Table("Course")]
 public class Course
 {
     #region Properties
 
+    [PrimaryKey]
     [Column("CourseId")] public int CourseId { get; set; } = -1; // -1 means new course
     [Column("TermId")] public int TermId { get; set; } = -1; // -1 means not set to actual term
     [Column("InstructorId")] public int InstructorId { get; set; } = -1; // -1 means not set to actual instructor
