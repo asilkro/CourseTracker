@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using CommunityToolkit.Maui;
+using SQLite;
 
 namespace CourseTracker.Maui
 {
@@ -14,7 +15,8 @@ namespace CourseTracker.Maui
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-            }).UseMauiCommunityToolkit();
+            });
+
 #if DEBUG
             builder.Logging.AddDebug();
 #endif

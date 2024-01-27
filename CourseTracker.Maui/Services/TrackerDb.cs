@@ -59,12 +59,14 @@ namespace CourseTracker.Maui.Services
 
         #region Utility
 
-        public static int? GetNextAutoIncrementID(string tableName)
+        public static int GetNextAutoIncrementID(string tableName)
         {
             var query = $"SELECT seq FROM sqlite_sequence WHERE name = '{tableName}'";
             var result = _dbConnection.ExecuteScalar<int>(query);
             return result + 1;
         }
+
+        //TODO: Add CRUD methods using Factories
 
         #endregion
 
