@@ -43,13 +43,13 @@
 
                 <!--Term Start-->
                 <Label x:Name="termStartLabel" Text="Term Start" HorizontalTextAlignment="Center" FontAttributes="Bold" Grid.Column="0" Grid.Row="0"/>
-                <DatePicker x:Name="termStartPicker" Date="{Binding Term.TermStart}" MinimumDate="2000-01-01" MaximumDate="3999-12-31" Grid.Column="0" Grid.Row="1"/>
+                <DatePicker x:Name="termStartPicker" Date="{Binding Term.TermStart}" MinimumDate="{Binding MinimumDate}" MaximumDate="{Binding MaximumDate}" Grid.Column="0" Grid.Row="1"/>
 
 
                 <!--Term End-->
 
                 <Label x:Name="termEndLabel" Text="Term End" HorizontalTextAlignment="Center" FontAttributes="Bold" Grid.Column="1" Grid.Row="0"/>
-                <DatePicker x:Name="termEndPicker" Date="{Binding Term.TermEnd}" MinimumDate="2000-01-01" MaximumDate="3999-12-31" Grid.Column="1" Grid.Row="1"/>
+                <DatePicker x:Name="termEndPicker" Date="{Binding Term.TermEnd}" MinimumDate="{Binding MinimumDate}" MaximumDate="{Binding MaximumDate}" Grid.Column="1" Grid.Row="1"/>
 
 
                 <!--Notifications Enabled-->

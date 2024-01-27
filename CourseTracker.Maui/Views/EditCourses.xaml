@@ -90,15 +90,15 @@
               ColumnSpacing="10"
               RowSpacing="10">
                 <!--Course Start-->
-                <Label Text="Course Start" HorizontalTextAlignment="Center" FontAttributes="Bold" Grid.Column="0" Grid.Row="0"/>
-                <DatePicker x:Name="courseStartPicker" Date="{Binding Course.CourseStart}" MinimumDate="2000-01-01" MaximumDate="3999-12-31" Grid.Column="0" Grid.Row="1"/>
+                <Label x:Name="courseStartLabel" Text="Course Start" HorizontalTextAlignment="Center" FontAttributes="Bold" Grid.Column="0" Grid.Row="0"/>
+                <DatePicker x:Name="courseStartPicker" Date="{Binding Course.CourseStart}" MinimumDate="{Binding MinimumDate}" MaximumDate="{Binding MaximumDate}" Grid.Column="0" Grid.Row="1"/>
 
                 <!--Course End-->
-                <Label Text="Course End" HorizontalTextAlignment="Center" FontAttributes="Bold" Grid.Column="1" Grid.Row="0"/>
-                <DatePicker x:Name="courseEndPicker" Date="{Binding Course.CourseEnd}" MinimumDate="2000-01-01" MaximumDate="3999-12-31" Grid.Column="1" Grid.Row="1"/>
+                <Label x:Name="courseEndLabel" Text="Course End" HorizontalTextAlignment="Center" FontAttributes="Bold" Grid.Column="1" Grid.Row="0"/>
+                <DatePicker x:Name="courseEndPicker" Date="{Binding Course.CourseEnd}" MinimumDate="{Binding MinimumDate}" MaximumDate="{Binding MaximumDate}" Grid.Column="1" Grid.Row="1"/>
 
                 <!--Notifications Enabled-->
-                <Label Text="Course Notifications" HorizontalTextAlignment="Center" FontAttributes="Bold" Grid.Column="2" Grid.Row="0"/>
+                <Label x:Name="courseNotificationsLabel" Text="Course Notifications" HorizontalTextAlignment="Center" FontAttributes="Bold" Grid.Column="2" Grid.Row="0"/>
                 <Switch x:Name="courseNotificationsSwitch" IsToggled="{Binding Course.NotificationsEnabled}" Grid.Column="2" Grid.Row="1" />
             </Grid>
 
@@ -115,7 +115,7 @@
               ColumnSpacing="10"
               RowSpacing="10">
                 <!--Course Notes-->
-                <Label Text="Course Notes" HorizontalTextAlignment="Center" FontAttributes="Bold" Grid.Column="0" Grid.Row="0"/>
+                <Label x:Name="courseNoteLabel" Text="Course Notes" HorizontalTextAlignment="Center" FontAttributes="Bold" Grid.Column="0" Grid.Row="0"/>
                 <Editor x:Name="courseNoteEditor" Text="{Binding Course.CourseNotes}" AutoSize="TextChanges" Grid.Column="0" Grid.Row="1"/>
             </Grid>
         </HorizontalStackLayout>
