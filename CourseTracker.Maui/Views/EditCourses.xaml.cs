@@ -1,12 +1,14 @@
+using System.Diagnostics;
 using CourseTracker.Maui.ViewModels;
+using CourseTracker.Maui.Services;
 
 namespace CourseTracker.Maui.Views;
 
 public partial class EditCourses : ContentPage
 {
 	EditCoursesVM viewModel;
-
-	public EditCourses()
+    readonly Connection database = new Connection();
+    public EditCourses()
 	{
 		InitializeComponent();
 		viewModel = new EditCoursesVM();
@@ -15,11 +17,11 @@ public partial class EditCourses : ContentPage
 
     private void SubmitButton_Clicked(object sender, EventArgs e)
     {
-        Console.WriteLine(sender + " triggered this.");
+        Debug.WriteLine(sender + " triggered this.");
     }
 
-    private void CancelButton_Clicked(object sender, EventArgs e)
+    private async void CancelButton_Clicked(object sender, EventArgs e)
     {
-        Console.WriteLine(sender + " triggered this.");
+        await Navigation.PopAsync();
     }
 }

@@ -1,12 +1,18 @@
 ﻿using System.Diagnostics;
 using CourseTracker.Maui.Models;
+using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Supplemental;
 using CourseTracker.Maui.ViewModels;
+using SQLite;
 
 namespace CourseTracker.Maui.Factories
 {
     internal class TermFactory : FactoryBase<Term>
     {
+       public TermFactory(IAsyncSqLite database) : base(database)
+        {
+        }
+
         public Term? CreateTerm(AddTermsVM addTermsVM, out string errorMessage)
         {
             return CreateTerm(addTermsVM.Term.TermId, addTermsVM.Term.TermName,
@@ -15,6 +21,30 @@ namespace CourseTracker.Maui.Factories
         }
 
         public Term? CreateTerm(int termId, string termName, DateTime termStart, DateTime termEnd,
+            bool notificationsEnabled, int courseCount, out string errorMessage)
+        {
+            if (!IsValidTerm(termId, termName, termStart, termEnd,
+                notificationsEnabled, courseCount, out errorMessage))
+            {
+                return null;
+            }
+
+            var term = CreateObject();
+            term.TermId = termId;
+            term.TermName = termName;
+            term.TermStart = termStart;
+            term.TermEnd = termEnd;
+            return term;
+        }
+
+        public Term? UpdateTerm(EditTermsVM editTermsVM, out string errorMessage)
+        {
+            return UpdateTerm(editTermsVM.Term.TermId, editTermsVM.Term.TermName,
+                editTermsVM.Term.TermStart, editTermsVM.Term.TermEnd,
+                editTermsVM.Term.NotificationsEnabled, editTermsVM.Term.CourseCount, out errorMessage);
+        }
+
+        public Term? UpdateTerm(int termId, string termName, DateTime termStart, DateTime termEnd,
             bool notificationsEnabled, int courseCount, out string errorMessage)
         {
             if (!IsValidTerm(termId, termName, termStart, termEnd,

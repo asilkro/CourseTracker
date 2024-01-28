@@ -2,11 +2,16 @@
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Supplemental;
 using System.Diagnostics;
+using CourseTracker.Maui.Services;
 
 namespace CourseTracker.Maui.Factories
 {
     internal class InstructorFactory : FactoryBase<Instructor>
     {
+        public InstructorFactory(IAsyncSqLite database) : base(database)
+        {
+        }
+
         public Instructor? CreateInstructor(int id, string name, string email, string phone, out string errorMessage)
         {
             if (!IsValidInstructor(id, name, email, phone, out errorMessage))

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CourseTracker.Maui.Models;
+using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Supplemental;
 using CourseTracker.Maui.ViewModels;
 
@@ -12,6 +13,10 @@ namespace CourseTracker.Maui.Factories
 {
     internal class CourseFactory : FactoryBase<Course>
     {
+        public CourseFactory(IAsyncSqLite database) : base(database)
+        {
+        }
+
         public Course? CreateCourse(AddCoursesVM addCoursesVM, out string errorMessage)
         {
             return CreateCourse(addCoursesVM.Course.CourseId, addCoursesVM.Course.TermId, 
@@ -26,6 +31,39 @@ namespace CourseTracker.Maui.Factories
             bool notificationEnabled, int courseAssessmentCount, out string errorMessage)
         {
             if (!IsValidCourse(courseId,termId, instructorId, courseName, courseStatus,
+                courseStart, courseEnd, courseNotes, notificationEnabled, courseAssessmentCount, out errorMessage))
+            {
+                return null;
+            }
+
+            var course = CreateObject();
+            course.CourseStart = courseStart;
+            course.CourseEnd = courseEnd;
+            course.CourseName = courseName;
+            course.CourseNotes = courseNotes;
+            course.CourseStatus = courseStatus;
+            course.CourseId = courseId;
+            course.TermId = termId;
+            course.InstructorId = instructorId;
+            course.NotificationsEnabled = notificationEnabled;
+            course.CourseAssessmentCount = courseAssessmentCount;
+            return course;
+        }
+
+        public Course? EditCourse(EditCoursesVM editCoursesVM, out string errorMessage)
+        {
+            return EditCourse(editCoursesVM.Course.CourseId, editCoursesVM.Course.TermId,
+                editCoursesVM.Course.InstructorId, editCoursesVM.Course.CourseName,
+                editCoursesVM.Course.CourseStatus, editCoursesVM.Course.CourseStart,
+                editCoursesVM.Course.CourseEnd, editCoursesVM.Course.CourseNotes,
+                editCoursesVM.Course.NotificationsEnabled, editCoursesVM.Course.CourseAssessmentCount, out errorMessage);
+        }
+
+        public Course? EditCourse(int courseId, int termId, int instructorId, string courseName,
+            string courseStatus, DateTime courseStart, DateTime courseEnd, string courseNotes,
+            bool notificationEnabled, int courseAssessmentCount, out string errorMessage)
+        {
+            if (!IsValidCourse(courseId, termId, instructorId, courseName, courseStatus,
                 courseStart, courseEnd, courseNotes, notificationEnabled, courseAssessmentCount, out errorMessage))
             {
                 return null;

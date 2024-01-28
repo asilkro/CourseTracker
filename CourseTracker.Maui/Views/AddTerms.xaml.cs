@@ -1,24 +1,28 @@
 using System.Diagnostics;
 using CourseTracker.Maui.Factories;
 using CourseTracker.Maui.ViewModels;
+using CourseTracker.Maui.Services;
+using CommunityToolkit.Maui.Converters;
+using CourseTracker.Maui.Models;
 
 namespace CourseTracker.Maui.Views;
 
 public partial class AddTerms : ContentPage
 {
     AddTermsVM viewModel;
-
-	public AddTerms()
+    readonly Connection database = new Connection();
+    public AddTerms()
 	{
 		InitializeComponent();
         viewModel = new AddTermsVM();
         BindingContext = viewModel;
 	}
 
-    private void SubmitButton_Clicked(object sender, EventArgs e)
+    private async void SubmitButton_Clicked(object sender, EventArgs e)
     {
-        var factory = new TermFactory();
-        factory.CreateTerm(viewModel, out var errorMessage);
+        var factory = new TermFactory(database);
+        var term = factory.CreateTerm(viewModel, out var errorMessage);
+        await database.InsertAsync<Term>(term);
 
         Debug.WriteLine(sender + " triggered this.");
     }

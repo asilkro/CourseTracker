@@ -2,11 +2,16 @@
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Supplemental;
 using System.Diagnostics;
+using CourseTracker.Maui.Services;
 
 namespace CourseTracker.Maui.Factories
 {
     internal class AssessmentFactory : FactoryBase<Assessment>
     {
+        public AssessmentFactory(IAsyncSqLite database) : base(database)
+        {
+        }
+
         public Assessment? CreateAssessment(int assessmentId, string assessmentName, string assessmentType, DateTime assessmentStartDate, DateTime assessmentEndDate, int relatedCourseId, bool notificationsEnabled, out string errorMessage)
         {
             if (!IsValidAssessment(assessmentId, assessmentName, assessmentType, assessmentStartDate, assessmentEndDate, relatedCourseId, notificationsEnabled, out errorMessage))

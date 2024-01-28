@@ -8,8 +8,14 @@ namespace CourseTracker.Maui.Factories
     internal abstract class FactoryBase<T>
         where T : new()
     {
-        readonly SQLiteAsyncConnection _database;
+        readonly IAsyncSqLite _database;
         protected List<T> createdObjects = new();
+
+
+        protected FactoryBase(IAsyncSqLite database)
+        {
+            _database = database;
+        }
 
         public T? CreateObject()
         {
@@ -30,7 +36,7 @@ namespace CourseTracker.Maui.Factories
 
         public async Task<List<T>> GetAllObjects()
         {
-            return await _database.Table<T>().ToListAsync();
+            return await _database.Table<T>();
         }
 
         public async Task<T> GetObjectById(int oid)
