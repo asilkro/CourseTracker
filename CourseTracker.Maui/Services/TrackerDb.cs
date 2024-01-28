@@ -35,7 +35,7 @@ namespace CourseTracker.Maui.Services
         // This is the platform-specific path(?) to the database on the device and is used by the SQLiteConnection object
         // to connect to the database. It may also be just a cache directory, but I'm not sure.
 
-        private static async Task Initialize()
+        public static async Task Initialize()
         {
             if (_db != null) return; // If the database is already initialized, don't do it again.
 
@@ -47,7 +47,7 @@ namespace CourseTracker.Maui.Services
             await SetupTables(_db);
         }
 
-        private static async Task SetupTables(SQLiteAsyncConnection db)
+        public static async Task SetupTables(SQLiteAsyncConnection db)
         {
             await db.CreateTableAsync<Term>();
             await db.CreateTableAsync<Course>();

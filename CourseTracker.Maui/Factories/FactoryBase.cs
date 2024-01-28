@@ -1,13 +1,14 @@
-﻿using System;
+﻿using CourseTracker.Maui.Services;
+using SQLite;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CourseTracker.Maui.Factories
 {
     internal abstract class FactoryBase<T>
+        where T : new()
     {
+        readonly SQLiteAsyncConnection _database;
         protected List<T> createdObjects = new();
 
         public T? CreateObject()
@@ -21,8 +22,33 @@ namespace CourseTracker.Maui.Factories
             return obj;
         }
 
-        protected abstract T? CreateDefaultObject();
+        public async Task AddObject(T obj)
+        {
+            await _database.InsertAsync(obj);
+            createdObjects.Add(obj);
+        }
 
+        public async Task<List<T>> GetAllObjects()
+        {
+            return await _database.Table<T>().ToListAsync();
+        }
+
+        public async Task<T> GetObjectById(int oid)
+        {
+            return await _database.FindAsync<T>(oid);
+        }
+
+        public async Task UpdateObject(T obj)
+        {
+            await _database.UpdateAsync(obj);
+        }
+
+        public async Task DeleteObject(T obj)
+        {
+            await _database.DeleteAsync(obj);
+        }
+
+        protected abstract T? CreateDefaultObject();
 
     }
 }
