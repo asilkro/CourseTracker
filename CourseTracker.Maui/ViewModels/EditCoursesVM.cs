@@ -19,6 +19,34 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
+        private Instructor instructor = new();
+        public Instructor Instructor
+        {
+            get { return instructor; }
+            set
+            {
+                if (instructor != value)
+                {
+                    instructor = value;
+                    OnPropertyChanged("Instructor");
+                }
+            }
+        }
+
+        private Assessment assessment = new();
+        public Assessment Assessment
+        {
+            get { return assessment; }
+            set
+            {
+                if (assessment != value)
+                {
+                    assessment = value;
+                    OnPropertyChanged("Assessment");
+                }
+            }
+        }
+
         private DateTime minimumDate = DateTime.Parse("01/01/2020");
         public DateTime MinimumDate
         {

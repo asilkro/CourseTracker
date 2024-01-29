@@ -23,5 +23,16 @@ namespace CourseTracker.Maui.Models;
     
     }
 
+    public Term(int termId, string termName, DateTime termStart,
+        DateTime termEnd, bool notificationsEnabled, int courseCount)
+    {
+        TermId = termId;
+        TermName = termName;
+        TermStart = termStart;
+        TermEnd = termEnd;
+        NotificationsEnabled = notificationsEnabled;
+        CourseCount = courseCount;
+    }
+
      #endregion
     }

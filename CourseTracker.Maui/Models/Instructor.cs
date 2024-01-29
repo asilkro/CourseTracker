@@ -22,5 +22,13 @@ public class Instructor
 
     }
 
+    public Instructor(int instructorId, string instructorName, string instructorEmail, string instructorPhone)
+    {
+        InstructorId = instructorId;
+        InstructorName = instructorName;
+        InstructorEmail = instructorEmail;
+        InstructorPhone = instructorPhone;
+    }
+
     #endregion
 }

@@ -27,5 +27,21 @@ public class Course
     {
 
     }
+
+    public Course(int courseId, int termId, int instructorId, string courseName, string courseStatus, DateTime courseStart, DateTime courseEnd, string courseNotes, bool notificationsEnabled, int courseAssessmentCount)
+    {
+        CourseId = courseId;
+        TermId = termId;
+        InstructorId = instructorId;
+        CourseName = courseName;
+        CourseStatus = courseStatus;
+        CourseStart = courseStart;
+        CourseEnd = courseEnd;
+        CourseNotes = courseNotes;
+        NotificationsEnabled = notificationsEnabled;
+        CourseAssessmentCount = courseAssessmentCount;
+    }
+
+
     #endregion
 }

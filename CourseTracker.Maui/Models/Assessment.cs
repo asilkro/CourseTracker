@@ -23,5 +23,16 @@ public class Assessment
     public Assessment()
     {
     }
+
+    public Assessment(int assessmentId, string assessmentName, string assessmentType, DateTime assessmentStartDate, DateTime assessmentEndDate, int relatedCourseId, bool notificationsEnabled)
+    {
+        AssessmentId = assessmentId;
+        AssessmentName = assessmentName;
+        AssessmentType = assessmentType;
+        AssessmentStartDate = assessmentStartDate;
+        AssessmentEndDate = assessmentEndDate;
+        RelatedCourseId = relatedCourseId;
+        NotificationsEnabled = notificationsEnabled;
+    }
     #endregion
 }
