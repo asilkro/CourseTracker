@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Diagnostics;
 using CourseTracker.Maui.Models;
+using CourseTracker.Maui.Placeholder_Stuff;
 using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Supplemental;
 using CourseTracker.Maui.ViewModels;
@@ -13,8 +9,10 @@ namespace CourseTracker.Maui.Factories
 {
     internal class CourseFactory : FactoryBase<Course>
     {
-        public CourseFactory(IAsyncSqLite database) : base(database)
+        private readonly DummyData _dummyData;
+        public CourseFactory(IAsyncSqLite database, DummyData dummyData) : base(database)
         {
+            _dummyData = dummyData;
         }
 
         public Course? CreateCourse(AddCoursesVM addCoursesVM, out string errorMessage)
@@ -112,6 +110,35 @@ namespace CourseTracker.Maui.Factories
         protected override Course? CreateDefaultObject()
         {
             return new Course();
+        }
+
+        public async Task<List<Course>> GenerateSampleCourses(int numberOfCourses)
+        {
+            var sampleCourses = new List<Course>();
+            // Loop to create the specified number of sample courses
+            for (int i = 0; i < numberOfCourses; i++)
+            {
+                // Generate sample courses
+                var course = new Course
+                {
+                    CourseId = i + 1,
+                    TermId = i + 1,
+                    InstructorId = i + 1,
+                    CourseName = _dummyData.CourseNames[i % _dummyData.CourseNames.Count],
+                    CourseStatus = _dummyData.CourseStatuses[i % _dummyData.CourseStatuses.Count],
+                    CourseStart = _dummyData.CourseStatuses[i % _dummyData.CourseStatuses.Count] == "In Progress" ? DateTime.Now : DateTime.Now.AddDays(-30),
+                    CourseEnd = _dummyData.CourseStatuses[i % _dummyData.CourseStatuses.Count] == "In Progress" ? DateTime.Now.AddDays(30) : DateTime.Now,
+                    CourseNotes = "These are placeholder notes for the sample courses",
+                    NotificationsEnabled = i % 2 == 0,
+                    CourseAssessmentCount = 1
+                };
+                // Add the sample course to the list
+                sampleCourses.Add(course);
+
+                // Insert the sample course into the database
+                await AddObject(course);
+            }
+                return sampleCourses;
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using CourseTracker.Maui.ViewModels;
 using CourseTracker.Maui.Models;
+using CourseTracker.Maui.Placeholder_Stuff;
 using CourseTracker.Maui.Supplemental;
 using System.Diagnostics;
 using CourseTracker.Maui.Services;
@@ -8,8 +9,10 @@ namespace CourseTracker.Maui.Factories
 {
     internal class AssessmentFactory : FactoryBase<Assessment>
     {
-        public AssessmentFactory(IAsyncSqLite database) : base(database)
+        private readonly DummyData _dummyData;
+        public AssessmentFactory(IAsyncSqLite database, DummyData dummyData) : base(database)
         {
+            _dummyData = dummyData;
         }
 
         public Assessment? CreateAssessment(int assessmentId, string assessmentName, string assessmentType, DateTime assessmentStartDate, DateTime assessmentEndDate, int relatedCourseId, bool notificationsEnabled, out string errorMessage)
@@ -56,6 +59,31 @@ namespace CourseTracker.Maui.Factories
         protected override Assessment? CreateDefaultObject()
         {
             return new Assessment();
+        }
+
+        public async Task<List<Assessment>> GenerateSampleTerms(int numberOfAssessments)
+        {
+            var assessments = new List<Assessment>();
+            for (int i = 0; i < numberOfAssessments; i++)
+            {
+                var assessment = new Assessment
+                {
+                    AssessmentId = i,
+                    AssessmentName = _dummyData.AssessmentNames[i % _dummyData.AssessmentNames.Count],
+                    AssessmentType = "Objective",
+                    AssessmentStartDate = _dummyData.CourseStarts[i % _dummyData.CourseStarts.Count],   
+                    AssessmentEndDate = _dummyData.CourseStarts[i % _dummyData.CourseStarts.Count],
+                    RelatedCourseId = i,
+                    NotificationsEnabled = i % 2 == 0
+                };
+
+                // Add the assessment to the list
+                assessments.Add(assessment);
+
+                // Add to the database
+                await AddObject(assessment);
+            }
+            return assessments;
         }
     }
 }

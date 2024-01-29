@@ -6,11 +6,10 @@ using System.Threading.Tasks;
 namespace CourseTracker.Maui.Factories
 {
     internal abstract class FactoryBase<T>
-        where T : new()
+    where T : new()
     {
         readonly IAsyncSqLite _database;
         protected List<T> createdObjects = new();
-
 
         protected FactoryBase(IAsyncSqLite database)
         {
@@ -36,11 +35,13 @@ namespace CourseTracker.Maui.Factories
 
         public async Task<List<T>> GetAllObjects()
         {
+            // Ensure the 'new()' constraint is applied here
             return await _database.Table<T>();
         }
 
         public async Task<T> GetObjectById(int oid)
         {
+            // Ensure the 'new()' constraint is applied here
             return await _database.FindAsync<T>(oid);
         }
 
@@ -55,6 +56,6 @@ namespace CourseTracker.Maui.Factories
         }
 
         protected abstract T? CreateDefaultObject();
-
     }
+
 }

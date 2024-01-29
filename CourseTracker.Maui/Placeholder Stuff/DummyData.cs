@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CourseTracker.Maui.Models;
+using CourseTracker.Maui.Services;
 
 namespace CourseTracker.Maui.Placeholder_Stuff;
 public class DummyData
 {
-
+    #region Lists of Data
     public List<String> CourseNames = new List<string>
     {
         "Social Psychology",
@@ -64,15 +61,40 @@ public class DummyData
         "OA 789"
     };
 
-    //DateTime CourseStart1 = DateTime.Now.Date.AddDays(-320);
-    //DateTime CourseStart2 = DateTime.Now.Date.AddDays(-190);
-    //DateTime CourseStart3 = DateTime.Now.Date.AddDays(-210);
-    //DateTime CourseStart4 = DateTime.Now.Date.AddDays(-60);
+    public List<DateTime> TermStarts = new List<DateTime>
+    {
+        DateTime.Now.Date.AddDays(-320),
+        DateTime.Now.Date.AddDays(-190),
+        DateTime.Now.Date.AddDays(-210),
+        DateTime.Now.Date.AddDays(-60)
+    };
 
-    //DateTime CourseEnd1 = CourseStart1.Date.AddDays(90);
-    //DateTime CourseEnd2 = CourseStart2.Date.AddDays(140);
-    //DateTime CourseEnd3 = CourseStart3.Date.AddDays(120);
-    //DateTime CourseEnd4 = CourseStart4.Date.AddDays(45);
+    public List<DateTime> TermEnds = new List<DateTime>
+    {
+        DateTime.Now.Date.AddDays(-90),
+        DateTime.Now.Date.AddDays(-140),
+        DateTime.Now.Date.AddDays(-120),
+        DateTime.Now.Date.AddDays(-45)
+    };
+
+    public List<DateTime> CourseStarts = new List<DateTime>
+    {
+        DateTime.Now.Date.AddDays(-320),
+        DateTime.Now.Date.AddDays(-190),
+        DateTime.Now.Date.AddDays(-210),
+        DateTime.Now.Date.AddDays(-60)
+    };
+
+    public List<DateTime> CourseEnds = new List<DateTime>
+    {
+        DateTime.Now.Date.AddDays(-90),
+        DateTime.Now.Date.AddDays(-140),
+        DateTime.Now.Date.AddDays(-120),
+        DateTime.Now.Date.AddDays(-45)
+    };
+
+    #endregion
+
 }
 
 
