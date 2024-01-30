@@ -8,7 +8,7 @@ using SQLite;
 
 namespace CourseTracker.Maui.Factories
 {
-    internal abstract class TermFactory : FactoryBase<Term>
+    internal class TermFactory : FactoryBase<Term>
     {
         private readonly DummyData _dummyData;
 
@@ -108,7 +108,11 @@ namespace CourseTracker.Maui.Factories
                     CourseCount = i % 6 + 1 // Range from 1 to 6 courses
                                             // Add other properties as needed
                 };
-
+                if (!IsValidTerm(term.TermId, term.TermName, term.TermStart, term.TermEnd,
+                                       term.NotificationsEnabled, term.CourseCount, out _))
+                {
+                    return sampleTerms;
+                }
                 // Add the generated term to the list
                 sampleTerms.Add(term);
 

@@ -77,6 +77,11 @@ namespace CourseTracker.Maui.Factories
                     NotificationsEnabled = i % 2 == 0
                 };
 
+                if (!IsValidAssessment(assessment.AssessmentId, assessment.AssessmentName, assessment.AssessmentType, assessment.AssessmentStartDate, assessment.AssessmentEndDate, assessment.RelatedCourseId, assessment.NotificationsEnabled, out string errorMessage))
+                {
+                    return assessments;
+                }
+
                 // Add the assessment to the list
                 assessments.Add(assessment);
 

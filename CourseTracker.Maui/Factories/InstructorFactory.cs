@@ -3,6 +3,7 @@ using CourseTracker.Maui.Placeholder_Stuff;
 using CourseTracker.Maui.Supplemental;
 using System.Diagnostics;
 using CourseTracker.Maui.Services;
+using System.Diagnostics.Metrics;
 
 namespace CourseTracker.Maui.Factories
 {
@@ -66,17 +67,23 @@ namespace CourseTracker.Maui.Factories
         public async Task<List<Instructor>> GenerateSampleInstructors(int numberOfInstructors)
         {
             var instructors = new List<Instructor>();
-            // Loop to create the specified number of sample terms
+            // Loop to create the specified number of sample instructors
             for (int i = 0; i < numberOfInstructors; i++)
             {
                 // Generate sample instructors
                 var instructor = new Instructor
                 {
                     InstructorId = i + 1,
-                    InstructorName = _dummyData.InstructorNames[i + 1],
-                    InstructorEmail = _dummyData.InstructorEmails[i + 1],
-                    InstructorPhone = _dummyData.InstructorPhones[i + 1]
+                    InstructorName = _dummyData.InstructorNames[i % _dummyData.InstructorNames.Count],
+                    InstructorEmail = _dummyData.InstructorEmails[i % _dummyData.InstructorEmails.Count],
+                    InstructorPhone = _dummyData.InstructorPhones[i % _dummyData.InstructorPhones.Count]
                 };
+
+                if (!IsValidInstructor(instructor.InstructorId, instructor.InstructorName,
+                                       instructor.InstructorEmail, instructor.InstructorPhone, out string errorMessage))
+                { 
+                    return instructors;
+                }
 
                 // Add the sample instructors to the list
                 instructors.Add(instructor);

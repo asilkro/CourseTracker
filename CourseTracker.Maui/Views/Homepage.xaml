@@ -3,9 +3,28 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="CourseTracker.Maui.Views.Homepage"
              Title="Homepage">
-    <VerticalStackLayout>
-        <Label 
+    <VerticalStackLayout
+        Padding="20, 10"
+        Spacing="10">
+        <Label x:Name="homeLabel"
             Text="Home"
-            FontSize="Large" />
+            FontSize="Large" 
+            HorizontalTextAlignment="End"/>
+
+        <!-- This section will not be part of the shipped application, 
+        but is designed to allow the evaluator to quickly populate some datas-->
+        <Label x:Name="dummyButtonLabel"
+            Text="Number of demo items to generate"
+            HorizontalTextAlignment="End"/>
+        <Slider x:Name="dummyButtonSlider"
+            Maximum="4"
+            Minimum="0"
+                
+            Value="1"/>
+        <Button x:Name="loadCourseButton" Text="Load course(s)" Clicked="loadButton_Clicked"/>
+        <Button x:Name="loadTermButton" Text="Load term(s)" Clicked="loadButton_Clicked"/>
+        <Button x:Name="loadAssessmentButton" Text="Load assessment(s)" Clicked="loadButton_Clicked"/>
+        <Button x:Name="loadInstructorButton" Text="Load instructor(s)" Clicked="loadButton_Clicked"/>
+
     </VerticalStackLayout>
 </ContentPage>

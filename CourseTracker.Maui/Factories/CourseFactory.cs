@@ -132,6 +132,14 @@ namespace CourseTracker.Maui.Factories
                     NotificationsEnabled = i % 2 == 0,
                     CourseAssessmentCount = 1
                 };
+                if (!IsValidCourse(course.CourseId, course.TermId, course.InstructorId, course.CourseName,
+                                       course.CourseStatus, course.CourseStart, course.CourseEnd, course.CourseNotes,
+                                                          course.NotificationsEnabled, course.CourseAssessmentCount, out string errorMessage))
+                {
+                    return sampleCourses; // Return empty list if the generated
+                                          // sample data would be invalid
+                }
+
                 // Add the sample course to the list
                 sampleCourses.Add(course);
 
