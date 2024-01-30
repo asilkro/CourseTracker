@@ -28,10 +28,6 @@ public partial class EditTerms : ContentPage
     private async void SubmitButton_Clicked(object sender, EventArgs e)
     {
         Debug.WriteLine(sender + " triggered this.");
-
-        var factory = new TermFactory(database);
-        var term = factory.UpdateTerm(viewModel, out var errorMessage);
-        await database.UpdateAsync<Term>(term);
     }
 
     private async void CancelButton_Clicked(object sender, EventArgs e)

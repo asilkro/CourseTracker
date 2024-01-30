@@ -20,10 +20,6 @@ public partial class AddTerms : ContentPage
 
     private async void SubmitButton_Clicked(object sender, EventArgs e)
     {
-        var factory = new TermFactory(database);
-        var term = factory.CreateTerm(viewModel, out var errorMessage);
-        await database.InsertAsync<Term>(term);
-
         Debug.WriteLine(sender + " triggered this.");
     }
 
