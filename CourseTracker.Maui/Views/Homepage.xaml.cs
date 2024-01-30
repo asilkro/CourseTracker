@@ -8,10 +8,17 @@ namespace CourseTracker.Maui.Views;
 
 public partial class Homepage : ContentPage
 {
-		public Homepage()
+	TrackerDb _trackerDb = new TrackerDb();
+	public Homepage()
 	{
 		InitializeComponent();
+		StartDB();
 	}
+
+	private async Task StartDB()
+	{
+        await TrackerDb.Initialize();
+    }
 
 	private async void LoadDummyData(string type, int howMany)
 	{

@@ -13,12 +13,12 @@
             HorizontalOptions="Center" />
 
         <!-- Display List of Courses using ListView -->
-        <!--<ListView ItemsSource="{Binding Courses}" VerticalOptions="FillAndExpand" ItemTapped="ListView_ItemTapped">
+        <ListView x:Name="courseListView" ItemsSource="{Binding Courses}" VerticalOptions="FillAndExpand">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
                         <StackLayout Padding="10">
-                            --><!-- Display Properties of Each Course --><!--
+                            <!-- Display Properties of Each Course -->
                             <Label Text="{Binding Course.CourseName}" FontAttributes="Bold" />
                             <Label Text="{Binding Course.CourseId}" />
                             <Label Text="{Binding Course.TermId}" />
@@ -31,6 +31,6 @@
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
-        </ListView>-->
+        </ListView>
     </VerticalStackLayout>
 </ContentPage>

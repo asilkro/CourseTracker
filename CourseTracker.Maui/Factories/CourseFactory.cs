@@ -15,6 +15,11 @@ namespace CourseTracker.Maui.Factories
             _dummyData = dummyData;
         }
 
+        public CourseFactory(IAsyncSqLite database) : base(database)
+        {
+         
+        }
+
         public Course? CreateCourse(AddCoursesVM addCoursesVM, out string errorMessage)
         {
             return CreateCourse(addCoursesVM.Course.CourseId, addCoursesVM.Course.TermId, 

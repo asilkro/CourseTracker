@@ -4,7 +4,7 @@ using static Microsoft.Maui.Storage.FileSystem;
 
 namespace CourseTracker.Maui.Services
 {
-    public static class TrackerDb
+    public class TrackerDb
     {
         private static Connection _connection = new();
         private static SQLiteConnection _dbConnection;
@@ -42,19 +42,41 @@ namespace CourseTracker.Maui.Services
             _db = new SQLiteAsyncConnection(DatabasePath);
             _dbConnection = new SQLiteConnection(DatabasePath);
 
+            if (_dbConnection.Table<Term>().Count() != 0) return; // If the database already has data, don't add more.
+
             await _db.EnableLoadExtensionAsync(true);
             _dbConnection.EnableLoadExtension(true); // cannot async a void method
-            await SetupTables(_db);
+            await SetupTables(_db); // Will create tables if they don't exist
         }
 
         public static async Task SetupTables(SQLiteAsyncConnection db)
         {
-            await db.CreateTableAsync<Term>();
-            await db.CreateTableAsync<Course>();
-            await db.CreateTableAsync<Assessment>();
-            await db.CreateTableAsync<Instructor>();
+            if (_db == null)
+            {
+                return;
+            }
+            else
+            {
+                if (await db.GetTableInfoAsync("Term") == null)
+                {
+                    await db.CreateTableAsync<Term>();
+                }
+                if (await db.GetTableInfoAsync("Course") == null)
+                {
+                    await db.CreateTableAsync<Course>();
+                }
+                if (await db.GetTableInfoAsync("Assessment") == null)
+                {
+                    await db.CreateTableAsync<Assessment>();
+                }
+                if (await db.GetTableInfoAsync("Instructor") == null)
+                {
+                    await db.CreateTableAsync<Instructor>();
+                }
+            }
+            
         }
-
+        
         #endregion
 
         #region Utility
