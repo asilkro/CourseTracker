@@ -7,7 +7,7 @@ using System.Diagnostics.Metrics;
 
 namespace CourseTracker.Maui.Factories
 {
-    internal class InstructorFactory : FactoryBase<Instructor>
+    public class InstructorFactory : FactoryBase<Instructor>
     {
         private readonly DummyData _dummyData;
         public InstructorFactory(IAsyncSqLite database, DummyData dummyData) : base(database)

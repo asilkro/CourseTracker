@@ -2,7 +2,7 @@
 
 namespace CourseTracker.Maui.ViewModels
 {
-    internal class EditCoursesVM : ViewModelBase
+    public class EditCoursesVM : ViewModelBase
     {
         private Course course = new();
 

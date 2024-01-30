@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CourseTracker.Maui.ViewModels
 {
-    internal class MainPageVM : ViewModelBase
+    public class MainPageVM : ViewModelBase
     {
     }
 }

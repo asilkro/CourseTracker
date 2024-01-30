@@ -7,7 +7,7 @@ using CourseTracker.Maui.Services;
 
 namespace CourseTracker.Maui.Factories
 {
-    internal class AssessmentFactory : FactoryBase<Assessment>
+    public class AssessmentFactory : FactoryBase<Assessment>
     {
         private readonly DummyData _dummyData;
         public AssessmentFactory(IAsyncSqLite database, DummyData dummyData) : base(database)

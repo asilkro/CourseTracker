@@ -2,7 +2,7 @@
 
 namespace CourseTracker.Maui.ViewModels
 {
-    internal class AddTermsVM : ViewModelBase
+    public class AddTermsVM : ViewModelBase
     {
         private Term term = new();
 

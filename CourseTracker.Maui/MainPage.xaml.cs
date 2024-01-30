@@ -1,12 +1,16 @@
 ﻿using System.Diagnostics;
 using CourseTracker.Maui.ViewModels;
 using CourseTracker.Maui.Views;
+using CourseTracker.Maui.Factories;
+using CourseTracker.Maui.Services;
 
 namespace CourseTracker.Maui
 {
     public partial class MainPage : FlyoutPage
     {
         MainPageVM viewModel;
+        private readonly CourseFactory _courseFactory;
+        private readonly Connection _connection;
 
         public MainPage()
         {
@@ -24,7 +28,7 @@ namespace CourseTracker.Maui
                     Navigation.PushAsync(new Homepage());
                     break;
                 case "Courses":
-                    Navigation.PushAsync(new ListCourses());
+                    Navigation.PushAsync(new ListCourses(_courseFactory));
                     break;
                 case "Terms":
                     Navigation.PushAsync(new ListTerms());

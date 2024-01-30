@@ -1,25 +1,43 @@
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.ViewModels;
 using CourseTracker.Maui.Services;
+using System.Collections.ObjectModel;
+using CourseTracker.Maui.Factories;
 
 namespace CourseTracker.Maui.Views;
 
 public partial class ListCourses : ContentPage
 {
 	ListCoursesVM viewModel;
-    readonly Connection _database;
-    public ListCourses()
+	private readonly CourseFactory _courseFactory;
+	private readonly Connection _connection;
+	public ObservableCollection<Course> Courses { get; private set; }
+    public ListCourses(CourseFactory courseFactory)
 	{
 		InitializeComponent();
-		viewModel = new ListCoursesVM();
+        _courseFactory = courseFactory;
+        viewModel = new ListCoursesVM();
 		BindingContext = viewModel;
-		if (_database == null)
+	}
+
+	protected override async void OnAppearing()
+	{
+        base.OnAppearing();
+        await LoadCoursesFromDatabase();
+    }
+
+	private async Task LoadCoursesFromDatabase()
+	{
+		try
 		{
-            _database = new Connection();
-			_database.GetAsyncConnection();
+			var courses = await _courseFactory.GetAllObjects();
+			Courses = new ObservableCollection<Course>(await _courseFactory.GetAllObjects());
+			OnPropertyChanged(nameof(Courses));
+		}
+		catch (Exception ex)
+		{
+            await DisplayAlert("Error", $"Error while loading courses: {ex.Message}", "OK");
         }
-		var list = _database.Table<Course>();
-		courseListView.ItemsSource = (System.Collections.IEnumerable)list;
 	}
 
 	public async void OnAddCourseClicked(object sender, EventArgs e)
@@ -41,8 +59,9 @@ public partial class ListCourses : ContentPage
 		var result = await DisplayAlert("Delete Course", "Are you sure you want to delete this course?", "Yes", "No");
 		if (result)
 		{
-            await _database.DeleteAsync<Course>(selected);
+            //TODO add await Delete method
             await Navigation.PopAsync();
         }
 	}
+
 }

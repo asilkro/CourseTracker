@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace CourseTracker.Maui.Factories
 {
-    internal abstract class FactoryBase<T>
+    public abstract class FactoryBase<T>
     where T : new()
     {
         readonly IAsyncSqLite _database;

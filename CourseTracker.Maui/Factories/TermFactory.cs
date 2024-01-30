@@ -8,7 +8,7 @@ using SQLite;
 
 namespace CourseTracker.Maui.Factories
 {
-    internal class TermFactory : FactoryBase<Term>
+    public class TermFactory : FactoryBase<Term>
     {
         private readonly DummyData _dummyData;
 

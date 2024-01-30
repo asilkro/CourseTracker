@@ -7,7 +7,7 @@ using CourseTracker.Maui.ViewModels;
 
 namespace CourseTracker.Maui.Factories
 {
-    internal class CourseFactory : FactoryBase<Course>
+    public class CourseFactory : FactoryBase<Course>
     {
         private readonly DummyData _dummyData;
         public CourseFactory(IAsyncSqLite database, DummyData dummyData) : base(database)

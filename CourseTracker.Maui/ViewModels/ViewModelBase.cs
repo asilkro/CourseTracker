@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CourseTracker.Maui.ViewModels
 {
-    internal class ViewModelBase : INotifyPropertyChanged
+    public class ViewModelBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
