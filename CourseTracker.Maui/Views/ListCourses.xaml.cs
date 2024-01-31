@@ -42,7 +42,7 @@ public partial class ListCourses : ContentPage
 
 	public async void OnAddCourseClicked(object sender, EventArgs e)
 	{
-        await Navigation.PushAsync(new AddCourses());
+        await Navigation.PushAsync(new AddCourses(_courseFactory));
     }
 
 	private async void OnEditCourseClicked(object sender, EventArgs e)

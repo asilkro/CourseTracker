@@ -11,11 +11,13 @@ public partial class AddTerms : ContentPage
 {
     AddTermsVM viewModel;
     readonly Connection database = new Connection();
-    public AddTerms()
+    readonly TermFactory _termFactory;
+    public AddTerms(TermFactory termFactory)
 	{
 		InitializeComponent();
         viewModel = new AddTermsVM();
         BindingContext = viewModel;
+        _termFactory = termFactory;
 	}
 
     private async void SubmitButton_Clicked(object sender, EventArgs e)
