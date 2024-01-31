@@ -7,31 +7,37 @@ namespace CourseTracker.Maui.Views;
 
 public partial class ListTerms : ContentPage
 {
-	ListTermsVM viewModel;
-    readonly Connection _database;
+	private ListTermsVM viewModel;
+    private Connection _database;
     readonly TermFactory _termFactory;
 
-    public ListTerms(TermFactory termFactory)
+    public ListTerms()
     {
         InitializeComponent();
-		viewModel = new ListTermsVM();
-		BindingContext = viewModel;
-        _termFactory = termFactory;
+        viewModel = new ListTermsVM();
+        BindingContext = viewModel;
+        InitializeDataAsync();
+    }
+
+    private async Task InitializeDataAsync()
+    {
         if (_database == null)
         {
             _database = new Connection();
             _database.GetAsyncConnection();
         }
-        var list = _database.Table<Term>();
-        termListView.ItemsSource = (System.Collections.IEnumerable)list;
-	}
+
+        var list = await _database.Table<Term>();
+        termListView.ItemsSource = list;
+    }
+
 
     private async Task ListView_ItemTapped(object sender, ItemTappedEventArgs e)
     {
 		if (e.Item is Term selectedTerm)
 		{
             // Navigate to EditTerm view, passing the selectedTerm
-            await Navigation.PushAsync(new EditTerms(_termFactory,selectedTerm));
+            await Navigation.PushAsync(new EditTerms(selectedTerm));
         }
 
             // Deselect the item

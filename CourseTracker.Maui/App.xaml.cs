@@ -8,20 +8,12 @@ using System;
 namespace CourseTracker.Maui
 {
     public partial class App : Application
-    {
-        //private IServiceProvider _serviceProvider;
-        NavigationPage navigation;
-        
+    {        
         public App()
         {
             InitializeComponent();
-            NavigationPage navigationPage = new(new MainPage());
-            navigation = navigationPage;
-            NavigationPage.SetHasNavigationBar(navigation, true);
 
-            MainPage = navigation; //-- This is the original code
-
+            MainPage = new AppShell();
         }
-      
     }
 }

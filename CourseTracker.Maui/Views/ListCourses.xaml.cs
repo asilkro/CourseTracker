@@ -12,37 +12,17 @@ public partial class ListCourses : ContentPage
 	private readonly CourseFactory _courseFactory;
 	private readonly Connection _connection;
 	public ObservableCollection<Course> Courses { get; private set; }
-    public ListCourses(CourseFactory courseFactory)
+    
+	public ListCourses()
 	{
 		InitializeComponent();
-        _courseFactory = courseFactory;
         viewModel = new ListCoursesVM();
 		BindingContext = viewModel;
 	}
 
-	protected override async void OnAppearing()
-	{
-        base.OnAppearing();
-        await LoadCoursesFromDatabase();
-    }
-
-	private async Task LoadCoursesFromDatabase()
-	{
-		try
-		{
-			var courses = await _courseFactory.GetAllObjects();
-			Courses = new ObservableCollection<Course>(await _courseFactory.GetAllObjects());
-			OnPropertyChanged(nameof(Courses));
-		}
-		catch (Exception ex)
-		{
-            await DisplayAlert("Error", $"Error while loading courses: {ex.Message}", "OK");
-        }
-	}
-
 	public async void OnAddCourseClicked(object sender, EventArgs e)
 	{
-        await Navigation.PushAsync(new AddCourses(_courseFactory));
+        await Navigation.PushAsync(new AddCourses());
     }
 
 	private async void OnEditCourseClicked(object sender, EventArgs e)

@@ -12,10 +12,9 @@ public partial class AddCourses : ContentPage
     readonly Connection database = new Connection();
     readonly CourseFactory _coursefactory;
 
-    public AddCourses(CourseFactory courseFactory)
+    public AddCourses()
 	{
 		InitializeComponent();
-        _coursefactory = courseFactory;
 		viewModel = new AddCoursesVM();
 		BindingContext = viewModel;
 	}

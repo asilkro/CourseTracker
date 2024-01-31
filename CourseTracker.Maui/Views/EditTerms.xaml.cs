@@ -12,14 +12,7 @@ public partial class EditTerms : ContentPage
     readonly Connection database = new Connection();
     readonly TermFactory _termFactory;
 
-    public EditTerms(TermFactory termFactory)
-	{
-		InitializeComponent();
-		viewModel = new EditTermsVM();
-		BindingContext = viewModel;
-	}
-
-    public EditTerms(TermFactory termFactory, Term termBeingEdited)
+    public EditTerms(Term termBeingEdited)
     {
         InitializeComponent();
         viewModel = new EditTermsVM();

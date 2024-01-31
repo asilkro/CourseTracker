@@ -6,10 +6,10 @@ using CourseTracker.Maui.Services;
 
 namespace CourseTracker.Maui
 {
-    public partial class MainPage : FlyoutPage
+    public partial class MainPage : ContentPage
     {
         public MainPage()
-        { 
+        {
             InitializeComponent();
         }
 

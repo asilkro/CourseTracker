@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModel="clr-namespace:CourseTracker.Maui.ViewModels"
              x:Class="CourseTracker.Maui.Views.Homepage"
              Title="Homepage">
+
+    <ContentPage.BindingContext>
+        <viewModel:HomepageVM />
+    </ContentPage.BindingContext>
+
     <VerticalStackLayout
         Padding="20, 10"
         Spacing="10">
@@ -14,13 +20,14 @@
         <!-- This section will not be part of the shipped application, 
         but is designed to allow the evaluator to quickly populate some datas-->
         <Label x:Name="dummyButtonLabel"
-            Text="Number of demo items to generate"
+            Text="{Binding LabelText, StringFormat='Generate {0} demo items'}"
+           
+               FontSize="Medium"
             HorizontalTextAlignment="End"/>
         <Slider x:Name="dummyButtonSlider"
             Maximum="4"
-            Minimum="0"
-                
-            Value="1"/>
+            Minimum="1"
+            Value="{Binding SliderValue}"/>
         <Button x:Name="loadCourseButton" Text="Load course(s)" Clicked="loadButton_Clicked"/>
         <Button x:Name="loadTermButton" Text="Load term(s)" Clicked="loadButton_Clicked"/>
         <Button x:Name="loadAssessmentButton" Text="Load assessment(s)" Clicked="loadButton_Clicked"/>
