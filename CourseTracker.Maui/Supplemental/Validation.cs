@@ -61,13 +61,7 @@ namespace CourseTracker.Maui.Supplemental
         public static bool ValidPhoneNumber(string phoneNumber)
         {
             Regex phoneFormat = new Regex(@"^[\d-]+$");
-
-            if (phoneFormat.IsMatch(phoneNumber))
-            {
-                return true;
-            }
-
-            return true;
+            return phoneFormat.IsMatch(phoneNumber);
         }
 
         public static bool ValidCourseAssessmentCount(int count)

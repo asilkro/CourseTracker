@@ -11,6 +11,7 @@ public interface IAsyncSqLite
     Task<T> FindAsync<T>(int id) where T : new();
     Task UpdateAsync<T>(T obj);
     Task DeleteAsync<T>(T obj);
+    Task<T> ExecuteScalarAsync<T>(string query);
 }
 
 class Connection : IAsyncSqLite
@@ -29,6 +30,13 @@ class Connection : IAsyncSqLite
     {
         var asyncConnection = GetAsyncConnection();
         await asyncConnection.InsertAsync(obj);
+    }
+
+    public async Task<int> InsertAndGetIdAsync<T>(T obj)
+    {
+        var asyncConnection = GetAsyncConnection();
+        await asyncConnection.InsertAsync(obj);
+        return await asyncConnection.ExecuteScalarAsync<int>("SELECT last_insert_rowid()");
     }
 
     public async Task<List<T>> Table<T>() where T : new()
@@ -53,5 +61,11 @@ class Connection : IAsyncSqLite
     {
         var asyncConnection = GetAsyncConnection();
         await asyncConnection.DeleteAsync(obj);
+    }
+
+    public async Task<T> ExecuteScalarAsync<T>(string query)
+    {
+        var asyncConnection = GetAsyncConnection();
+        return await asyncConnection.ExecuteScalarAsync<T>(query);
     }
 }

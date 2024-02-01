@@ -1,7 +1,6 @@
 using System.Diagnostics;
 using CourseTracker.Maui.Factories;
 using CourseTracker.Maui.Models;
-using CourseTracker.Maui.Placeholder_Stuff;
 using CourseTracker.Maui.Services;
 
 namespace CourseTracker.Maui.Views;
@@ -10,115 +9,104 @@ public partial class Homepage : ContentPage
 {
 	TrackerDb _trackerDb = new TrackerDb();
 	Connection connection = new Connection();
-	public Homepage()
+
+    public Homepage()
 	{
 		InitializeComponent();
-		StartDB();
+        StartDB();
 	}
 
 	private async Task StartDB()
 	{
+        _trackerDb ??= new TrackerDb();
         await TrackerDb.Initialize();
     }
 
-	private async void LoadDummyData(string type, int howMany)
-	{
-        Debug.WriteLine("Attempting to load " + howMany + " sample item(s) of type " + type);
-        switch (type)
-		{
-			case "Assessment":
-				var assessmentFactory = new AssessmentFactory(new Connection(), new DummyData());
-				await assessmentFactory.GenerateSampleTerms(howMany);
-				break;
-			case "Course":
-				var courseFactory = new CourseFactory(new Connection(), new DummyData());
-				await courseFactory.GenerateSampleCourses(howMany);
-				break;
-			case "Instructor":
-                var instructorFactory = new InstructorFactory(new Connection(), new DummyData());
-                await instructorFactory.GenerateSampleInstructors(howMany);
-                break;
-			case "Term":
-				var termFactory = new TermFactory(new Connection(), new DummyData());
-                await termFactory.GenerateSampleTerms(howMany);
-                break;
-		}
-		Debug.WriteLine("Insert successful(?) of " + howMany + 
-			" sample item(s) of type " + type);
-	}
-
-	private async Task LoadSampleData() // This can be removed after evaluation.
-	{
-		if (connection == null)
-		{
-            connection = new Connection();
-            connection.GetAsyncConnection();
-        }
-
-		int termId = LoadSampleTerm();
-
-	}
-
-	private async Task<int> LoadSampleTerm()
-	{
-		if (connection == null)
-		{
-            connection = new Connection();
-            connection.GetAsyncConnection();
-        }
-		Term demoTerm = new Term
+    private async void LoadSampleData(Term demoTerm, Instructor demoInstructor,
+        Course demoCourse, Assessment demoAssessment1, Assessment demoAssessment2)
+    {
+        if (connection == null)
         {
-            TermName = "C3 Term",
-            TermStart = new DateTime(2024, 01, 01),
-            TermEnd = new DateTime(2024, 06, 30),
-            NotificationsEnabled = true,
-            CourseCount = 0
-        };
+            connection = new Connection();
+            connection.GetAsyncConnection(); // Ensure this method sets up the connection properly
+        }
 
-		await InsertTermAsync(demoTerm);
-        return await connection.Query<int>("SELECT last_insert_rowid()");
+        var termId = await connection.InsertAndGetIdAsync<Term>(demoTerm);
+        var instructorId = await connection.InsertAndGetIdAsync<Instructor>(demoInstructor);
+
+        demoCourse.TermId = termId;
+        demoCourse.InstructorId = instructorId;
+
+        var courseId = await connection.InsertAndGetIdAsync<Course>(demoCourse);
+
+        demoAssessment1.RelatedCourseId = courseId;
+        demoAssessment2.RelatedCourseId = courseId;
+
+        await connection.InsertAsync<Assessment>(demoAssessment1);
+        await connection.InsertAsync<Assessment>(demoAssessment2);
+
+		await DisplayAlert("Sample Data Loaded", "Sample data has been loaded", "OK");
     }
 
-    private async Task<int> InsertTermAsync(Term term)
+
+    private async void loadButton_Clicked(object sender, EventArgs e)
     {
-		if (connection == null)
+		if (sender == loadSampleDataButton)
 		{
-			connection = new Connection();
-			connection.GetAsyncConnection();
-		}
-
-        await connection.InsertAsync(term);
-        var result = await connection.Table<Term>().
-    }
-
-    private void loadButton_Clicked(object sender, EventArgs e)
-    {
-		var number = dummyButtonSlider.Value;
-		if (number < 1) { return; }
-		if (sender == loadAssessmentButton)
-		{
-			LoadDummyData("Assessment", Convert.ToInt32(number));
-		}
-		else if (sender == loadCourseButton)
-		{
-			LoadDummyData("Course", Convert.ToInt32(number));
-		}
-		else if (sender == loadInstructorButton)
-		{
-			LoadDummyData("Instructor", Convert.ToInt32(number));
-		}
-		else if (sender == loadTermButton)
-		{
-			LoadDummyData("Term", Convert.ToInt32(number));
-		}
-		else if (sender == loadSampleDataButton)
-		{
-			using Connection.Equals(connection)
-
-			{
-                connection.LoadSampleData();
+            if (_trackerDb == null)
+            {
+                await StartDB();
             }
+			LoadSampleData(demoTerm, demoInstructor, demoCourse, demoOA, demoPA);
 		}
 
     }
+
+    #region Sample Data For Evaluation
+    private readonly Term demoTerm = new Term
+    {
+        TermName = "Demo Term",
+        TermStart = new DateTime(2024, 01, 01),
+        TermEnd = new DateTime(2024, 06, 30),
+        NotificationsEnabled = true,
+        CourseCount = 0
+    };
+
+    private Course demoCourse = new Course
+    {
+        CourseName = "C6 Requirements re: C3 Course",
+        CourseStatus = "In Progress",
+
+        CourseStart = new DateTime(2024, 01, 01),
+        CourseEnd = new DateTime(2024, 06, 30),
+        CourseNotes = "This addresses requirement C6",
+        NotificationsEnabled = true,
+        CourseAssessmentCount = 2
+    };
+
+    private readonly Instructor demoInstructor = new Instructor
+    {
+        InstructorName = "Anika Patel",
+        InstructorEmail = "anika.patel@strimeuniversity.edu",
+        InstructorPhone = "555-123-4567"
+    };
+
+    private readonly Assessment demoOA = new Assessment
+    {
+        AssessmentName = "C6 OA",
+        AssessmentType = "Objective",
+        AssessmentStartDate = new DateTime(2024, 01, 01),
+        AssessmentEndDate = new DateTime(2024, 02, 29),
+        NotificationsEnabled = true
+    };
+
+    private readonly Assessment demoPA = new Assessment
+    {
+        AssessmentName = "C6 PA",
+        AssessmentType = "Performance",
+        AssessmentStartDate = new DateTime(2024, 03, 01),
+        AssessmentEndDate = new DateTime(2024, 04, 30),
+        NotificationsEnabled = true
+    };
+    #endregion
 }

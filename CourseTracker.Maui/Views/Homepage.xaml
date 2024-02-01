@@ -17,24 +17,7 @@
             FontSize="Large" 
             HorizontalTextAlignment="End"/>
 
-        <Button x:Name="loadSampleDataButton" Text="Load Data for Evaluation" Clicked="loadButton_Clicked" BackgroundColor="Red" TextColor="AntiqueWhite"/>
-
-        <VerticalStackLayout x:Name="dummySection" IsVisible="false">
-            <!-- This section will not be part of the shipped application, 
-        but is designed to allow the evaluator to quickly populate some datas-->
-            <Label x:Name="dummyButtonLabel"
-            Text="{Binding LabelText, StringFormat='Generate {0} demo items'}"
-               FontSize="Medium"
-            HorizontalTextAlignment="End"/>
-            <Slider x:Name="dummyButtonSlider"
-            Maximum="4"
-            Minimum="1"
-            Value="{Binding SliderValue}"/>
-            <Button x:Name="loadCourseButton" Text="Load course(s)" Clicked="loadButton_Clicked"/>
-            <Button x:Name="loadTermButton" Text="Load term(s)" Clicked="loadButton_Clicked"/>
-            <Button x:Name="loadAssessmentButton" Text="Load assessment(s)" Clicked="loadButton_Clicked"/>
-            <Button x:Name="loadInstructorButton" Text="Load instructor(s)" Clicked="loadButton_Clicked"/>
-        </VerticalStackLayout>
+        <Button x:Name="loadSampleDataButton" Text="C971 - Load Evaluation Data" Clicked="loadButton_Clicked" BackgroundColor="Red" TextColor="AntiqueWhite"/>
 
 
     </VerticalStackLayout>

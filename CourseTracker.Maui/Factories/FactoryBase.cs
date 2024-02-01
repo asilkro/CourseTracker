@@ -35,13 +35,11 @@ namespace CourseTracker.Maui.Factories
 
         public async Task<List<T>> GetAllObjects()
         {
-            // Ensure the 'new()' constraint is applied here
             return await _database.Table<T>();
         }
 
         public async Task<T> GetObjectById(int oid)
         {
-            // Ensure the 'new()' constraint is applied here
             return await _database.FindAsync<T>(oid);
         }
 
