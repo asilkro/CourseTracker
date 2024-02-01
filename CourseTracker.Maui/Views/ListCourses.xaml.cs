@@ -10,14 +10,11 @@ public partial class ListCourses : ContentPage
 {
 	private ListCoursesVM viewModel;
 	private Connection _database;
-    private ObservableCollection<Course> _courses = new();
-	public ObservableCollection<Course> Courses { get; private set; }
     
 	public ListCourses()
 	{
 		InitializeComponent();
-        viewModel = new ListCoursesVM();
-		BindingContext = viewModel;
+        BindingContext = new ListCoursesVM();
 	}
 
     private void CourseListView_ItemTapped(object sender, ItemTappedEventArgs e)
@@ -56,6 +53,11 @@ public partial class ListCourses : ContentPage
         var result = await DisplayAlert("Delete Course", $"Are you sure you want to delete {course.CourseName}?", "Yes", "No");
         if (result)
         {
+            if (_database == null)
+            {
+                _database = new Connection();
+                _database.GetAsyncConnection();
+            }
             await _database.DeleteAsync(course);
             await viewModel.LoadCourses();
         }

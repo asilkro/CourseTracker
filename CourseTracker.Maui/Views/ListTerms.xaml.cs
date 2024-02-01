@@ -15,9 +15,7 @@ public partial class ListTerms : ContentPage
     public ListTerms()
     {
         InitializeComponent();
-        viewModel = new ListTermsVM();
-        BindingContext = viewModel;
-        viewModel.LoadTerms();
+        BindingContext = new ListTermsVM();
     }
 
     private async Task InitializeDataAsync()

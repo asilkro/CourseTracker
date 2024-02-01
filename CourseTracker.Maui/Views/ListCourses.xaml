@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModel="clr-namespace:CourseTracker.Maui.ViewModels"
              x:Class="CourseTracker.Maui.Views.ListCourses"
-             x:DataType="viewModel:ListCoursesVM"
              Title="Course List">
     <VerticalStackLayout
     Padding="20,10" Spacing="5">
@@ -20,18 +19,43 @@
                     <ViewCell>
                         <StackLayout Padding="10">
                             <!-- Display Properties of Each Course -->
-                            <Label Text="{Binding CourseName}" FontAttributes="Bold" />
-                            <Label Text="{Binding CourseId}" />
-                            <Label Text="{Binding TermId}" />
-                            <Label Text="{Binding InstructorId}" />
-                            <Label Text="{Binding CourseStatus}" />                            
-                            <Label Text="{Binding CourseStart, StringFormat='Start: {0:d}'}" />
-                            <Label Text="{Binding CourseEnd, StringFormat='End: {0:d}'}" />
-                            <Label Text="{Binding CourseAssessmentCount}" />
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Course Name: " FontAttributes="Bold" />
+                                <Label Text="{Binding CourseName}" FontAttributes="Bold" />
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Course ID: " />
+                                <Label Text="{Binding CourseId}" />
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Term ID: " />
+                                <Label Text="{Binding TermId}" />
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Instructor ID: " />
+                                <Label Text="{Binding InstructorId}" />
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Course Status: " />
+                                <Label Text="{Binding CourseStatus}" />
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Course Start Date: " />
+                                <Label Text="{Binding CourseStart, StringFormat='{0:d}'}" />
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Course End Date: " />
+                                <Label Text="{Binding CourseEnd, StringFormat='{0:d}'}" />
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Assessment Count: " />
+                                <Label Text="{Binding CourseAssessmentCount}" />
+                            </StackLayout>
                         </StackLayout>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
+        
     </VerticalStackLayout>
 </ContentPage>
