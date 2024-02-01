@@ -10,9 +10,11 @@
 
     <!-- Flyout Menu -->
     <Shell.FlyoutHeader>
-        <!-- Custom header for flyout menu (optional) -->
         <Label Text="Course Tracker" HorizontalTextAlignment="Center" FontAttributes="Bold"/>
     </Shell.FlyoutHeader>
+
+    <!-- Menu Tabs -->
+    <ShellContent Title="Home" ContentTemplate="{DataTemplate views:Homepage}" />
 
     <FlyoutItem Title="Terms">
         <ShellContent Title="List Terms" ContentTemplate="{DataTemplate views:ListTerms}"/>

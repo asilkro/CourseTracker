@@ -1,21 +1,35 @@
-﻿using CourseTracker.Maui.Models;
+﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
+using CourseTracker.Maui.Models;
+using CourseTracker.Maui.Services;
 
 namespace CourseTracker.Maui.ViewModels
 {
     public class ListTermsVM : ViewModelBase
     {
-        private List<Term> terms;
+        public ObservableCollection<Term> Terms { get; private set; } = new ObservableCollection<Term>();
 
-        public List<Term> Terms
+        private Connection _database;
+        public ListTermsVM()
         {
-            get { return terms; }
-            set
+            LoadTerms();
+        }
+
+        public async Task LoadTerms()
+        {
+            try
             {
-                if (terms != value)
+                _database = _database ?? new Connection();
+                var updatedTermsList = await _database.Table<Term>();
+                Terms.Clear();
+                foreach (var term in updatedTermsList)
                 {
-                    terms = value;
-                    OnPropertyChanged("Terms");
+                    Terms.Add(term);
                 }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Issue loading terms: " + ex.Message);
             }
         }
 

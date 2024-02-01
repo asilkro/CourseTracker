@@ -1,7 +1,8 @@
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.ViewModels;
 using CourseTracker.Maui.Services;
-using CourseTracker.Maui.Factories;
+using System.Diagnostics;
+using System.Collections.ObjectModel;
 
 namespace CourseTracker.Maui.Views;
 
@@ -9,14 +10,14 @@ public partial class ListTerms : ContentPage
 {
 	private ListTermsVM viewModel;
     private Connection _database;
-    readonly TermFactory _termFactory;
+    private ObservableCollection<Term> _terms = new();
 
     public ListTerms()
     {
         InitializeComponent();
         viewModel = new ListTermsVM();
         BindingContext = viewModel;
-        InitializeDataAsync();
+        viewModel.LoadTerms();
     }
 
     private async Task InitializeDataAsync()
@@ -32,16 +33,62 @@ public partial class ListTerms : ContentPage
     }
 
 
-    private async Task ListView_ItemTapped(object sender, ItemTappedEventArgs e)
+    private void TermListView_ItemTapped(object sender, ItemTappedEventArgs e)
     {
 		if (e.Item is Term selectedTerm)
 		{
-            // Navigate to EditTerm view, passing the selectedTerm
-            await Navigation.PushAsync(new EditTerms(selectedTerm));
+            ShowActionSheet(selectedTerm);
         }
 
-            // Deselect the item
-            ((ListView)sender).SelectedItem = null;
+        ((ListView)sender).SelectedItem = null;
     }
- 
+    private async void ShowActionSheet(Term term)
+    {
+        string action = await DisplayActionSheet("Term Actions", "Cancel", null, "Edit Term", "Delete Term");
+        switch (action)
+        {
+            case "Edit Term":
+                NavigateToEditTermASync(term);
+                break;
+            case "Delete Term":
+                RemoveTermAsync(term);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private async Task RemoveTermAsync(Term term)
+    {
+        var result = await DisplayAlert("Delete Term", $"Are you sure you want to delete {term.TermName}?", "Yes", "No");
+        if (result)
+        {
+            await _database.DeleteAsync(term);
+            await LoadTerms();
+        }
+    }
+
+    private async Task NavigateToEditTermASync(Term term) // workaround for not being able to use await Nav
+    {
+        await Navigation.PushAsync(new EditTerms(term));
+    }
+
+    private async Task LoadTerms()
+    {
+        try
+        {
+            _database = _database ?? new Connection();
+            var updatedTermsList = await _database.Table<Term>();
+            _terms.Clear();
+            foreach (var term in updatedTermsList)
+            {
+                _terms.Add(term);
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine("Issue loading terms: " + ex.Message);
+        }
+    }
+
 }
