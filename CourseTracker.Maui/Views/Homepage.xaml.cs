@@ -9,6 +9,7 @@ namespace CourseTracker.Maui.Views;
 public partial class Homepage : ContentPage
 {
 	TrackerDb _trackerDb = new TrackerDb();
+	Connection connection = new Connection();
 	public Homepage()
 	{
 		InitializeComponent();
@@ -46,6 +47,50 @@ public partial class Homepage : ContentPage
 			" sample item(s) of type " + type);
 	}
 
+	private async Task LoadSampleData() // This can be removed after evaluation.
+	{
+		if (connection == null)
+		{
+            connection = new Connection();
+            connection.GetAsyncConnection();
+        }
+
+		int termId = LoadSampleTerm();
+
+	}
+
+	private async Task<int> LoadSampleTerm()
+	{
+		if (connection == null)
+		{
+            connection = new Connection();
+            connection.GetAsyncConnection();
+        }
+		Term demoTerm = new Term
+        {
+            TermName = "C3 Term",
+            TermStart = new DateTime(2024, 01, 01),
+            TermEnd = new DateTime(2024, 06, 30),
+            NotificationsEnabled = true,
+            CourseCount = 0
+        };
+
+		await InsertTermAsync(demoTerm);
+        return await connection.Query<int>("SELECT last_insert_rowid()");
+    }
+
+    private async Task<int> InsertTermAsync(Term term)
+    {
+		if (connection == null)
+		{
+			connection = new Connection();
+			connection.GetAsyncConnection();
+		}
+
+        await connection.InsertAsync(term);
+        var result = await connection.Table<Term>().
+    }
+
     private void loadButton_Clicked(object sender, EventArgs e)
     {
 		var number = dummyButtonSlider.Value;
@@ -65,6 +110,14 @@ public partial class Homepage : ContentPage
 		else if (sender == loadTermButton)
 		{
 			LoadDummyData("Term", Convert.ToInt32(number));
+		}
+		else if (sender == loadSampleDataButton)
+		{
+			using Connection.Equals(connection)
+
+			{
+                connection.LoadSampleData();
+            }
 		}
 
     }

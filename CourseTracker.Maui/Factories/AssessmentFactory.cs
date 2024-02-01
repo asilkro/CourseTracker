@@ -15,6 +15,10 @@ namespace CourseTracker.Maui.Factories
             _dummyData = dummyData;
         }
 
+        public AssessmentFactory(IAsyncSqLite database) : base(database)
+        {
+        }
+
         public Assessment? CreateAssessment(int assessmentId, string assessmentName, string assessmentType, DateTime assessmentStartDate, DateTime assessmentEndDate, int relatedCourseId, bool notificationsEnabled, out string errorMessage)
         {
             if (!IsValidAssessment(assessmentId, assessmentName, assessmentType, assessmentStartDate, assessmentEndDate, relatedCourseId, notificationsEnabled, out errorMessage))
