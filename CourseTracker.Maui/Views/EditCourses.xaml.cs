@@ -12,16 +12,19 @@ public partial class EditCourses : ContentPage
     public EditCourses()
 	{
 		InitializeComponent();
-		viewModel = new EditCoursesVM();
-		BindingContext = viewModel;
+        viewModel = new EditCoursesVM();
+        this.BindingContext = viewModel;
 	}
 
     public EditCourses(Course? course)
     {
         InitializeComponent();
         viewModel = new EditCoursesVM();
-        BindingContext = viewModel;
-        setCourse(course);
+        this.BindingContext = viewModel;
+        if (course != null)
+        {
+            setCourse(course);
+        }
     }
 
     private void setCourse(Course course)

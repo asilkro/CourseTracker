@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using CommunityToolkit.Maui.Core.Views;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Supplemental;
@@ -115,6 +116,27 @@ namespace CourseTracker.Maui.Factories
         protected override Course? CreateDefaultObject()
         {
             return new Course();
+        }
+
+        public async Task<string> InsertCourseAndUpdateTermCount(Course newCourse)
+        {
+            var connection = new Connection();
+            var term = await connection.FindAsync<Term>(newCourse.TermId);
+            if (term == null)
+            {
+                return "Associated term not found.";
+            }
+
+            if (term.CourseCount >= 6)
+            {
+                return "Terms may NOT consist of more than six courses.";
+            }
+
+            term.CourseCount += 1;
+            await connection.UpdateAsync(term);
+            await connection.InsertAsync(newCourse);
+
+            return "Course added successfully.";
         }
 
     }

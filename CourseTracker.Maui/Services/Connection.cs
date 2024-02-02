@@ -9,6 +9,7 @@ public interface IAsyncSqLite
     Task InsertAsync<T>(T obj);
     Task<List<T>> Table<T>() where T : new();
     Task<T> FindAsync<T>(int id) where T : new();
+    Task<T> FindAsync<T>(string stringBeingChecked) where T : new();
     Task UpdateAsync<T>(T obj);
     Task DeleteAsync<T>(T obj);
     Task<T> ExecuteScalarAsync<T>(string query);
@@ -49,6 +50,12 @@ class Connection : IAsyncSqLite
     {
         var asyncConnection = GetAsyncConnection();
         return await asyncConnection.FindAsync<T>(id);
+    }
+
+    public async Task<T> FindAsync<T>(string stringBeingChecked) where T : new()
+    {
+        var asyncConnection = GetAsyncConnection();
+        return await asyncConnection.FindAsync<T>(stringBeingChecked);
     }
 
     public async Task UpdateAsync<T>(T obj)

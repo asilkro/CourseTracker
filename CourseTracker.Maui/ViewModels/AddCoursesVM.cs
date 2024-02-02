@@ -1,9 +1,12 @@
 ﻿using CourseTracker.Maui.Models;
+using CourseTracker.Maui.Services;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 
 namespace CourseTracker.Maui.ViewModels
 {
-    public class AddCoursesVM : ViewModelBase
-    {
+	public class AddCoursesVM : ViewModelBase
+	{
 		private Course course = new();
 		public Course Course
 		{
@@ -21,30 +24,30 @@ namespace CourseTracker.Maui.ViewModels
 		private Instructor instructor = new();
 		public Instructor Instructor
 		{
-            get { return instructor; }
-            set
+			get { return instructor; }
+			set
 			{
-                if (instructor != value)
+				if (instructor != value)
 				{
-                    instructor = value;
-                    OnPropertyChanged("Instructor");
-                }
-            }
-        }
+					instructor = value;
+					OnPropertyChanged("Instructor");
+				}
+			}
+		}
 
 		private Assessment assessment = new();
 		public Assessment Assessment
 		{
-            get { return assessment; }
-            set
+			get { return assessment; }
+			set
 			{
-                if (assessment != value)
+				if (assessment != value)
 				{
-                    assessment = value;
-                    OnPropertyChanged("Assessment");
-                }
-            }
-        }
+					assessment = value;
+					OnPropertyChanged("Assessment");
+				}
+			}
+		}
 
 		private DateTime minimumDate = DateTime.Parse("01/01/2020");
 		public DateTime MinimumDate
@@ -62,11 +65,11 @@ namespace CourseTracker.Maui.ViewModels
 
 		private DateTime maximumDate = DateTime.Parse("12/31/4020");
 		public DateTime MaximumDate
-		{ 
+		{
 			get { return maximumDate; }
-		    set
+			set
 			{
-				if(maximumDate != value)
+				if (maximumDate != value)
 				{
 					maximumDate = value;
 					OnPropertyChanged("MaximumDate");
@@ -80,12 +83,110 @@ namespace CourseTracker.Maui.ViewModels
 			get { return date; }
 			set
 			{
-                if(date != value)
+				if (date != value)
 				{
-                    date = value;
-                    OnPropertyChanged("Date");
+					date = value;
+					OnPropertyChanged("Date");
+				}
+			}
+		}
+
+		private Term term = new();
+		public Term Term
+		{
+			get { return term; }
+			set
+			{
+				if (term != value)
+				{
+					term = value;
+					OnPropertyChanged("Term");
+				}
+			}
+		}
+
+        public ObservableCollection<Term> Terms { get; } = new ObservableCollection<Term>();
+        public ObservableCollection<Instructor> Instructors { get; } = new ObservableCollection<Instructor>();
+		Connection _connection;
+
+		public AddCoursesVM()
+		{
+			LoadTerms();
+			LoadInstructors();
+		}
+
+		private async void LoadTerms()
+		{
+            try
+            {
+                if (_connection == null)
+				{
+					_connection = new Connection();
+					_connection.GetAsyncConnection();
+				}
+				var terms = await _connection.Table<Term>();
+                Terms.Clear();
+                foreach (var term in terms)
+                {
+                    Terms.Add(term);
                 }
             }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Issue loading terms: " + ex.Message);
+            }
+        }
+
+		private async void LoadInstructors()
+		{
+			try
+			{
+				if (_connection == null)
+				{
+                    _connection = new Connection();
+                    _connection.GetAsyncConnection();
+                }
+				var instructors = await _connection.Table<Instructor>();
+				Instructors.Clear();
+				foreach (var instructor in instructors)
+				{
+                    Instructors.Add(instructor);
+                }
+			}
+			catch (Exception ex)
+			{
+                Debug.WriteLine("Issue loading instructors: " + ex.Message);
+            }
 		}
-	}
+
+        private Term _selectedTerm;
+        public Term SelectedTerm
+        {
+            get => _selectedTerm;
+            set
+            {
+                if (_selectedTerm != value)
+                {
+                    _selectedTerm = value;
+                    Course.TermId = value.TermId;
+                    OnPropertyChanged(nameof(SelectedTerm));
+                }
+            }
+        }
+
+        private Instructor _selectedInstructor;
+        public Instructor SelectedInstructor
+        {
+            get => _selectedInstructor;
+            set
+            {
+                if (_selectedInstructor != value)
+                {
+                    _selectedInstructor = value;
+                    Course.InstructorId = value.InstructorId;
+                    OnPropertyChanged(nameof(SelectedInstructor));
+                }
+            }
+        }
+    }
 }

@@ -31,22 +31,25 @@
         </HorizontalStackLayout>
 
         <!--Row 2-->
-        <HorizontalStackLayout
-                Spacing="5"
-                Padding="5"
-            HorizontalOptions="CenterAndExpand">
+        <HorizontalStackLayout Spacing="5" Padding="5" HorizontalOptions="CenterAndExpand">
             <Grid ColumnDefinitions="100, *"
-                  RowDefinitions="*, *"
-                  ColumnSpacing="10"
-                  RowSpacing="10">
+          RowDefinitions="*, *"
+          ColumnSpacing="10"
+          RowSpacing="10">
 
-                <!--Term Id-->
-                <Label x:Name="termIdLabel" HorizontalTextAlignment="Center" Text="Term Id" FontAttributes="Bold" Grid.Column="0" Grid.Row="0"/>
-                <Entry x:Name="termIdEntry" Placeholder="-1" Text="{Binding Course.TermId}" Grid.Column="0" Grid.Row="1"/>
+                <!-- Term Selector -->
+                <Label Grid.Column="0" Grid.Row="0" Text="Term" HorizontalTextAlignment="Center" FontAttributes="Bold"/>
+                <Picker x:Name="termPicker" Title="Select Term" Grid.Column="0" Grid.Row="1"
+                ItemsSource="{Binding Terms}"
+                ItemDisplayBinding="{Binding TermName}"
+                SelectedItem="{Binding SelectedTerm}" />
 
-                <!--Instructor Id-->
-                <Label x:Name="instructorIdLabel" HorizontalTextAlignment="Center" Text="Instructor Id" FontAttributes="Bold" Grid.Column="1" Grid.Row="0"/>
-                <Entry x:Name="instructorIdEntry" Placeholder="-1" Text="{Binding Course.InstructorId}" Grid.Column="1" Grid.Row="1"/>
+                <!-- Instructor Selector -->
+                <Label Grid.Column="1" Grid.Row="0" Text="Instructor" HorizontalTextAlignment="Center" FontAttributes="Bold"/>
+                <Picker x:Name="instructorPicker" Title="Select Instructor" Grid.Column="1" Grid.Row="1"
+                ItemsSource="{Binding Instructors}"
+                ItemDisplayBinding="{Binding InstructorName}"
+                SelectedItem="{Binding SelectedInstructor}" />
 
             </Grid>
         </HorizontalStackLayout>

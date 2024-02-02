@@ -1,4 +1,7 @@
-﻿using CourseTracker.Maui.Models;
+﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
+using CourseTracker.Maui.Models;
+using CourseTracker.Maui.Services;
 
 namespace CourseTracker.Maui.ViewModels
 {
@@ -88,5 +91,104 @@ namespace CourseTracker.Maui.ViewModels
                 }
             }
         }
+
+        private Term term = new();
+        public Term Term
+        {
+            get { return term; }
+            set
+            {
+                if (term != value)
+                {
+                    term = value;
+                    OnPropertyChanged("Term");
+                }
+            }
+        }
+
+        public ObservableCollection<Term> Terms { get; } = new ObservableCollection<Term>();
+        public ObservableCollection<Instructor> Instructors { get; } = new ObservableCollection<Instructor>();
+        Connection _connection;
+
+        public EditCoursesVM()
+        {
+            LoadTerms();
+            LoadInstructors();
+        }
+
+        private async void LoadTerms()
+        {
+            try
+            {
+                if (_connection == null)
+                {
+                    _connection = new Connection();
+                    _connection.GetAsyncConnection();
+                }
+                var terms = await _connection.Table<Term>();
+                Terms.Clear();
+                foreach (var term in terms)
+                {
+                    Terms.Add(term);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Issue loading terms: " + ex.Message);
+            }
+        }
+
+        private async void LoadInstructors()
+        {
+            try
+            {
+                if (_connection == null)
+                {
+                    _connection = new Connection();
+                    _connection.GetAsyncConnection();
+                }
+                var instructors = await _connection.Table<Instructor>();
+                Instructors.Clear();
+                foreach (var instructor in instructors)
+                {
+                    Instructors.Add(instructor);
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Issue loading instructors: " + ex.Message);
+            }
+        }
+
+        private Term _selectedTerm;
+        public Term SelectedTerm
+        {
+            get => _selectedTerm;
+            set
+            {
+                if (_selectedTerm != value)
+                {
+                    _selectedTerm = value;
+                    Course.TermId = value.TermId;
+                    OnPropertyChanged(nameof(SelectedTerm));
+                }
+            }
+        }
+
+        private Instructor _selectedInstructor;
+        public Instructor SelectedInstructor
+        {
+            get => _selectedInstructor;
+            set
+            {
+                if (_selectedInstructor != value)
+                {
+                    _selectedInstructor = value;
+                    Course.InstructorId = value.InstructorId;
+                    OnPropertyChanged(nameof(SelectedInstructor));
+                }
+            }
+        }
+
     }
 }

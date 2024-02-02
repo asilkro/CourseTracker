@@ -59,5 +59,26 @@ namespace CourseTracker.Maui.Factories
             return new Assessment();
         }
 
+        public async Task<string> InsertAssessmentAndUpdateCourseCount(Assessment newAssessment)
+        {
+            var connection = new Connection();
+            var course = await connection.FindAsync<Course>(newAssessment.RelatedCourseId);
+            if (course == null)
+            {
+                return "Course not found.";
+            }
+
+            if (course.CourseAssessmentCount >= 2)
+            {
+                return "Courses may have no more than two assessments.";
+            }
+
+            course.CourseAssessmentCount += 1;
+            await connection.UpdateAsync(course);
+            await connection.InsertAsync(newAssessment);
+
+            return "Assessment added successfully.";
+        }
+
     }
 }

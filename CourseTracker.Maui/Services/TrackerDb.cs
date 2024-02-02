@@ -1,6 +1,7 @@
 ﻿using SQLite;
 using CourseTracker.Maui.Models;
 using static Microsoft.Maui.Storage.FileSystem;
+using System.Diagnostics;
 
 namespace CourseTracker.Maui.Services
 {
@@ -90,7 +91,15 @@ namespace CourseTracker.Maui.Services
 
         public static void ResetDatabase()
         {
+            if (_connection == null)
+            {
+                _connection = new Connection();
+            }
+
+            using var _dbConnection = _connection.GetConnection();
+
             _dbConnection.DropTable<Term>();
+            Debug.WriteLine("Dropped table ");
             _dbConnection.DropTable<Course>();
             _dbConnection.DropTable<Assessment>();
             _dbConnection.DropTable<Instructor>();
@@ -99,147 +108,6 @@ namespace CourseTracker.Maui.Services
             _dbConnection.CreateTable<Assessment>();
             _dbConnection.CreateTable<Instructor>();
         }
-
-        #endregion
-
-        #region Term CRUD
-
-        public static async Task<List<Term>> GetTermsAsync()
-        {
-            return await _db.Table<Term>().ToListAsync();
-        }
-
-        public static async Task<Term> GetTermAsync(int id) // ID = PK
-        {
-            return await _db.FindAsync<Term>(id);
-        }
-
-        public static async Task<int> SaveTermAsync(Term term)
-        {
-            if (term.TermId == -1 || term == null)
-            {
-                return await _db.InsertAsync(term);
-            }
-            else
-            {
-                return await _db.UpdateAsync(term);
-                
-            }
-        }
-
-        public static async Task<int> DeleteTermAsync(int id)
-        {
-            return await _db.DeleteAsync<Term>(id);
-        }
-
-        #endregion
-
-        #region Course CRUD
-
-        public static async Task<List<Course>> GetCoursesAsync()
-        {
-            return await _db.Table<Course>().ToListAsync();
-        }
-
-        public static async Task<Course> GetCourseAsync(int id) // ID = PK
-        {
-            return await _db.FindAsync<Course>(id);
-        }
-
-        public static async Task<int> SaveCourseAsync(Course course)
-        {
-            if (course.CourseId == -1 || course == null)
-            {
-                return await _db.InsertAsync(course);
-            }
-            else
-            {
-                return await _db.UpdateAsync(course);
-            }
-        }
-
-        public static async Task<int> DeleteCourseAsync(int id)
-        {
-            return await _db.DeleteAsync<Course>(id);
-        }
-
-        #endregion
-
-        #region Assessment CRUD
-
-        public static async Task<List<Assessment>> GetAssessmentsAsync()
-        {
-            return await _db.Table<Assessment>().ToListAsync();
-        }
-
-        public static async Task<Assessment> GetAssessmentAsync(int id) // ID = PK
-        {
-            return await _db.FindAsync<Assessment>(id);
-        }
-
-        public static async Task<int> SaveAssessmentAsync(Assessment assessment)
-        {
-            if (assessment.AssessmentId == -1 || assessment == null)
-            {
-                return await _db.InsertAsync(assessment);
-            }
-            else
-            {
-                return await _db.UpdateAsync(assessment);
-            }
-        }
-
-        public static async Task<int> DeleteAssessmentAsync(int id)
-        {
-            return await _db.DeleteAsync<Assessment>(id);
-        }
-
-        #endregion
-
-        #region Instructor CRUD
-
-        public static async Task<List<Instructor>> GetInstructorsAsync()
-        {
-            return await _db.Table<Instructor>().ToListAsync();
-        }
-
-        public static async Task<Instructor> GetInstructorAsync(int id) // ID = PK
-        {
-            return await _db.FindAsync<Instructor>(id);
-        }
-
-        public static async Task<int> SaveInstructorAsync(Instructor instructor)
-        {
-            if (instructor.InstructorId == -1 || instructor == null)
-            {
-                return await _db.InsertAsync(instructor);
-            }
-            else
-            {
-                return await _db.UpdateAsync(instructor);
-            }
-        }
-
-        public static async Task<int> DeleteInstructorAsync(int id)
-        {
-            return await _db.DeleteAsync<Instructor>(id);
-        }
-
-        #endregion
-
-        #region Required Sample Data
-
-        private static string _demoTermName = "Big League Term";
-        private static string _demoTermId = "5";
-        private static DateTime _demoStartDate = new(2024, 2, 1);
-        private static DateTime _demoEndDate = new(2024, 7, 31);
-        private static string _demoInstructorName = "Anika Patel";
-        private static string _demoInstructorEmail = "anika.patel@strimeuniversity.edu";
-        private static string _demoInstructorPhone = "555-123-4567";
-        private static string _demoCourseName = "Intro to Felt Surrogacy";
-
-        private static string _demoNotes =
-            "Lecture series discussing the use of puppets to relive the traumatic events of our past.";
 
         #endregion
     }

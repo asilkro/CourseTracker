@@ -1,10 +1,12 @@
 ﻿using System.Text.RegularExpressions;
+using CourseTracker.Maui.Services;
+using CourseTracker.Maui.Models;
 
 namespace CourseTracker.Maui.Supplemental
 {
-
     internal class Validation
     {
+        readonly Connection connection;
         static readonly DateTime _minDate = DateTime.Parse("01/01/2020");
         static readonly DateTime _maxDate = DateTime.Parse("12/31/4020");
 
@@ -122,5 +124,52 @@ namespace CourseTracker.Maui.Supplemental
             }
             return true;
         }
+
+        public static async Task<bool> IsUniqueTermName(string termName, Connection _connection)
+        {
+            if (_connection == null)
+            {
+                _connection = new Connection();
+            }
+          var connection = _connection.GetAsyncConnection();
+          var existingTerm = await connection.Table<Term>().Where(t => t.TermName == termName).FirstOrDefaultAsync();
+          return existingTerm == null;
+        }
+
+        public static async Task<bool> IsUniqueCourseNameInTerm(string courseName, int termId, Connection _connection)
+        {
+            if (_connection == null)
+            {
+                _connection = new Connection();
+            }
+            var connection = _connection.GetAsyncConnection();
+            var existingCourse = await connection.Table<Course>().Where(c => c.CourseName == courseName && c.TermId == termId).FirstOrDefaultAsync();
+            return existingCourse == null;
+        }
+
+        public static async Task<bool> IsUniqueInstructorName(string instructorName, Connection _connection)
+        {
+            if (_connection == null)
+            {
+                _connection = new Connection();
+            }
+            var connection = _connection.GetAsyncConnection();
+            var existingInstructor = await connection.Table<Instructor>().Where(i => i.InstructorName == instructorName).FirstOrDefaultAsync();
+            return existingInstructor == null;
+        }
+
+        public static async Task<bool> IsUniqueAssessmentName(string assessmentName, int courseId, Connection _connection)
+        {
+            if (_connection == null)
+            {
+                _connection = new Connection();
+            }
+            var connection = _connection.GetAsyncConnection();
+            var existingAssessment = await connection.Table<Assessment>().Where(a => a.AssessmentName == assessmentName && a.RelatedCourseId == courseId).FirstOrDefaultAsync();
+            return existingAssessment == null;
+        }
+
+        
+
     }
 }

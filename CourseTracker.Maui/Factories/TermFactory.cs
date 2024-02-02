@@ -1,10 +1,8 @@
 ﻿using System.Diagnostics;
 using CourseTracker.Maui.Models;
-
 using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Supplemental;
 using CourseTracker.Maui.ViewModels;
-using SQLite;
 
 namespace CourseTracker.Maui.Factories
 {
@@ -79,6 +77,8 @@ namespace CourseTracker.Maui.Factories
                 errorMessage = "Terms must have between 1 and 6 courses.";
             else if (!Validation.DatesAreValid(termStart, termEnd))
                 errorMessage = "Term start and end dates are not valid.";
+            else if (Validation.IsUniqueTermName(termName, new()).Result == false)
+                errorMessage = "Term name must be unique.";
 
             Debug.WriteLine(errorMessage);
             return string.IsNullOrEmpty(errorMessage);
