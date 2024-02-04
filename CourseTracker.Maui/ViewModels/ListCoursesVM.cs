@@ -21,6 +21,7 @@ namespace CourseTracker.Maui.ViewModels
             try
             {
                 _database = _database ?? new Connection();
+                _database.GetAsyncConnection();
                 var updatedCoursesList = await _database.Table<Course>();
                 Courses.Clear();
                 foreach (var course in updatedCoursesList)

@@ -38,7 +38,14 @@ namespace CourseTracker.Maui.ViewModels
         public Course Course
         {
             get => course;
-            set => SetProperty(ref course, value);
+            set
+            {
+                if (course != value)
+                {
+                    course = value;
+                    OnPropertyChanged(nameof(Course));
+                }
+            }
         }
 
 

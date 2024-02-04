@@ -18,12 +18,22 @@
 
     <FlyoutItem Title="Terms">
         <ShellContent Title="List Terms" ContentTemplate="{DataTemplate views:ListTerms}"/>
-        <ShellContent Title="Add Term" ContentTemplate="{DataTemplate views:AddTerms}"/>
+        <ShellContent Title="New Term" ContentTemplate="{DataTemplate views:TermPage}"/>
     </FlyoutItem>
     
     <FlyoutItem Title="Courses">
         <ShellContent Title="List Courses" ContentTemplate="{DataTemplate views:ListCourses}"/>
-        <ShellContent Title="Add Course" ContentTemplate="{DataTemplate views:AddCourses}"/>
+        <ShellContent Title="New Course" ContentTemplate="{DataTemplate views:CoursePage}"/>
+    </FlyoutItem>
+
+    <FlyoutItem Title="Assessments">
+        <ShellContent Title="List Assessments" ContentTemplate="{DataTemplate views:ListAssessments}"/>
+        <ShellContent Title="New Assessment" ContentTemplate="{DataTemplate views:AssessmentPage}"/>
+    </FlyoutItem>
+
+    <FlyoutItem Title="Instructors">
+        <ShellContent Title="List Instructors" ContentTemplate="{DataTemplate views:List}"/>
+        <ShellContent Title="New Assessment" ContentTemplate="{DataTemplate views:AssessmentPage}"/>
     </FlyoutItem>
 
 

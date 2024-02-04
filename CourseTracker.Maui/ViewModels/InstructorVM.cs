@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CourseTracker.Maui.Services;
+using CourseTracker.Maui.Models;
+using System.Windows.Input;
+using CourseTracker.Maui.Factories;
+using CourseTracker.Maui.Supplemental;
 
 namespace CourseTracker.Maui.ViewModels
 {
@@ -12,6 +12,58 @@ namespace CourseTracker.Maui.ViewModels
         private string _instructorName = string.Empty;
         private string _instructorEmail = string.Empty;
         private string _instructorPhone = string.Empty;
+        private Connection connection = new Connection();
+
+        private Instructor instructor;
+        private Instructor _instructor = new Instructor();
+
+        public Instructor Instructor
+        {
+            get => _instructor;
+            set
+            {
+                if (_instructor != value)
+                {
+                    _instructor = value;
+                    OnPropertyChanged(nameof(Instructor));
+                }
+            }
+        }
+
+        public InstructorVM() 
+        {
+            // Blank constructor
+        }
+
+        public InstructorVM(int instructorId)
+        {
+            LoadInstructorDetails(instructorId);
+        }
+
+        private async void LoadInstructorDetails(int instructorId)
+        {
+            var _database = new Connection();
+            Instructor = await _database.FindAsync<Instructor>(instructorId);
+        }
+
+        public ICommand SaveInstructorCommand => new Command(async () => await SaveInstructorAsync());
+
+        private async Task SaveInstructorAsync()
+        {
+            InstructorFactory InstructorFactory = new(connection);
+
+            if (InstructorFactory.IsValidInstructor(_instructorId, _instructorName, _instructorEmail, _instructorPhone, out _)) // Valid value
+            {
+                connection.GetAsyncConnection();
+                await connection.InsertAndGetIdAsync<Instructor>(_instructor);
+             
+            }
+            else
+            {
+                // Show validation error message
+            }
+        }
+
 
         public int InstructorId
         {
@@ -64,5 +116,6 @@ namespace CourseTracker.Maui.ViewModels
                 }
             }
         }
+
     }
 }
