@@ -1,6 +1,8 @@
 ﻿using System.Text.RegularExpressions;
 using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Models;
+using Plugin.LocalNotification;
+using Android.Media.TV;
 
 namespace CourseTracker.Maui.Supplemental
 {
@@ -169,7 +171,68 @@ namespace CourseTracker.Maui.Supplemental
             return existingAssessment == null;
         }
 
-        
+        public static bool IsValidNotificationType(NotificationCategoryType type)
+        {
+            switch (type)
+            {
+                //Break on expected cases
+                case NotificationCategoryType.None:
+                    break;
+                case NotificationCategoryType.Alarm:
+                    break;
+                case NotificationCategoryType.Reminder:
+                    break;
+                case NotificationCategoryType.Event:
+                    break;
+                case NotificationCategoryType.Error:
+                    break;
+                case NotificationCategoryType.Progress:
+                    break;
+                case NotificationCategoryType.Promo:
+                    break;
+                case NotificationCategoryType.Recommendation:
+                    break;
+                case NotificationCategoryType.Service:
+                    break;
+                default:
+                    return false;
+            }
 
+            return true;
+        }
+
+
+        public async static Task<bool> IsValidNotification(NotificationRequest notification) //Non exhaustive checks
+        {
+            if (notification == null)
+            {
+                return false;
+            }
+            else if (!NotNull(notification.Title) || !NotNull(notification.Subtitle))
+            {
+                return false;
+            }
+            else if (notification.Schedule == null || notification.Schedule.NotifyTime < DateTime.Now)
+            {
+                return false;
+            }
+            else if (!IsValidNotificationType(notification.CategoryType))
+            {
+                return false;
+            }
+            else if (notification.Schedule.NotifyTime < DateTime.Now)
+            {
+                return false;
+            }
+            else if (notification.Schedule.NotifyAutoCancelTime < notification.Schedule.NotifyTime)
+            {
+                return false;
+            }
+
+            return true;
+                 
+        }
+         
     }
+
 }

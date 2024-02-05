@@ -6,4 +6,14 @@ public partial class TermPage : ContentPage
 	{
 		InitializeComponent();
 	}
+
+	private async void SubmitButton_Clicked(object sender, EventArgs e)
+	{
+        //Something
+    }
+
+	private async void CancelButton_Clicked(object sender, EventArgs e)
+	{
+        await Navigation.PopAsync();
+    }
 }
