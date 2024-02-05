@@ -1,9 +1,10 @@
 ﻿using System.Diagnostics;
-using CommunityToolkit.Maui.Core.Views;
+
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Supplemental;
 using CourseTracker.Maui.ViewModels;
+using Plugin.LocalNotification;
 
 namespace CourseTracker.Maui.Factories
 {
@@ -66,17 +67,25 @@ namespace CourseTracker.Maui.Factories
                 return null;
             }
 
-            var course = CreateObject();
-            course.CourseStart = courseStart;
-            course.CourseEnd = courseEnd;
-            course.CourseName = courseName;
-            course.CourseNotes = courseNotes;
-            course.CourseStatus = courseStatus;
-            course.CourseId = courseId;
-            course.TermId = termId;
-            course.InstructorId = instructorId;
-            course.NotificationsEnabled = notificationEnabled;
-            course.CourseAssessmentCount = courseAssessmentCount;
+            Course course = new()
+            {
+                CourseStart = courseStart,
+                CourseEnd = courseEnd,
+                CourseName = courseName,
+                CourseNotes = courseNotes,
+                CourseStatus = courseStatus,
+                CourseId = courseId,
+                TermId = termId,
+                InstructorId = instructorId,
+                NotificationsEnabled = notificationEnabled,
+                CourseAssessmentCount = courseAssessmentCount
+            };
+
+            if (course.NotificationsEnabled)
+            {
+                ScheduleCourseNotifications(course);
+            }
+
             return course;
         }
 
@@ -137,6 +146,33 @@ namespace CourseTracker.Maui.Factories
             await connection.InsertAsync(newCourse);
 
             return "Course added successfully.";
+        }
+
+        public async Task ScheduleCourseNotifications(Course course)
+        {
+            if (course.NotificationsEnabled)
+            {
+                var notificationId = course.CourseId; // Ideally, generate a unique ID for each notification.
+                var title = $"Reminder for {course.CourseName}";
+
+                // Schedule notifications for start date reminders
+                var startReminders = new[] { 14, 7, 1 };
+                foreach (var daysBefore in startReminders)
+                {
+                    var notifyTime = course.CourseStart.AddDays(-daysBefore);
+                    var subtitle = $"Starts in {daysBefore} days";
+                    await Notification.ScheduleNotificationAsync(notificationId++, title, subtitle, notifyTime, NotificationCategoryType.Reminder);
+                }
+
+                // Schedule notifications for end date reminders
+                var endReminders = new[] { 14, 7, 1 };
+                foreach (var daysBefore in endReminders)
+                {
+                    var notifyTime = course.CourseEnd.AddDays(-daysBefore);
+                    var subtitle = $"Ends in {daysBefore} days";
+                    await Notification.ScheduleNotificationAsync(notificationId++, title, subtitle, notifyTime, NotificationCategoryType.Reminder);
+                }
+            }
         }
 
     }

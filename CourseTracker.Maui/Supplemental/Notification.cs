@@ -5,8 +5,8 @@ namespace CourseTracker.Maui.Supplemental
     
     public class Notification
     {
-        int notificationId = 0; // Used to track the notification ID, would be a nice refactor to use a generator.
-        public async Task ScheduleNotificationAsync(string title, string subtitle, 
+         // Used to track the notification ID, would be a nice refactor to use a generator.
+        public static async Task ScheduleNotificationAsync(int notificationId, string title, string subtitle, 
             DateTime notifyTime, NotificationCategoryType type)
         {
             var notification = new NotificationRequest
@@ -25,9 +25,13 @@ namespace CourseTracker.Maui.Supplemental
             if (await Validation.IsValidNotification(notification))
             {
                 await LocalNotificationCenter.Current.Show(notification);
-                notificationId++;
             }
             else return;
+        }
+
+        public static async Task<bool> IsValidNotification(NotificationRequest notification)
+        {
+            return notification.Schedule.NotifyTime > DateTime.Now;
         }
     }
 }

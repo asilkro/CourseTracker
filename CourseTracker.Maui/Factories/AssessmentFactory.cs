@@ -1,8 +1,10 @@
 ﻿using CourseTracker.Maui.ViewModels;
 using CourseTracker.Maui.Models;
+using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Supplemental;
 using System.Diagnostics;
-using CourseTracker.Maui.Services;
+using Plugin.LocalNotification;
+using System.Security.Cryptography;
 
 namespace CourseTracker.Maui.Factories
 {
@@ -13,27 +15,46 @@ namespace CourseTracker.Maui.Factories
         {
         }
 
-        public Assessment? CreateAssessment(int assessmentId, string assessmentName, string assessmentType, DateTime assessmentStartDate, DateTime assessmentEndDate, int relatedCourseId, bool notificationsEnabled, out string errorMessage)
+        public async Task<AssessmentCreationOut> CreateAssessmentAsync(int assessmentId, string assessmentName, string assessmentType, DateTime assessmentStartDate, DateTime assessmentEndDate, int relatedCourseId, bool notificationsEnabled)
         {
-            if (!IsValidAssessment(assessmentId, assessmentName, assessmentType, assessmentStartDate, assessmentEndDate, relatedCourseId, notificationsEnabled, out errorMessage))
+
+            if (!IsValidAssessment(assessmentId, assessmentName, assessmentType, assessmentStartDate, assessmentEndDate, relatedCourseId, notificationsEnabled))
             {
                 return null;
             }
-            var assessment = CreateObject();
-            assessment.AssessmentId = assessmentId;
-            assessment.AssessmentName = assessmentName;
-            assessment.AssessmentType = assessmentType;
-            assessment.AssessmentStartDate = assessmentStartDate;
-            assessment.AssessmentEndDate = assessmentEndDate;
-            assessment.RelatedCourseId = relatedCourseId;
-            assessment.NotificationsEnabled = notificationsEnabled;
 
-            return assessment;
+            if (assessmentId <= 0)
+            {
+                assessmentId = RandomNumberGenerator.GetInt32(1, 5000);
+            }
+
+            var assessment = new Assessment
+            {
+                AssessmentId = assessmentId,
+                AssessmentName = assessmentName,
+                AssessmentType = assessmentType,
+                AssessmentStartDate = assessmentStartDate,
+                AssessmentEndDate = assessmentEndDate,
+                RelatedCourseId = relatedCourseId,
+                NotificationsEnabled = notificationsEnabled
+            };
+
+            await InsertAssessmentAndUpdateCourseCount(assessment);
+
+            if (assessment.NotificationsEnabled)
+            {
+                await ScheduleAssessmentNotifications(assessment);
+            }
+
+            return new AssessmentCreationOut
+            {
+                Assessment = assessment
+            };
         }
 
-        private bool IsValidAssessment(int id, string assessmentName, string assessmentType, DateTime assessmentStartDate, DateTime assessmentEndDate, int relatedCourseId, bool notificationsEnabled, out string errorMessage)
+        private bool IsValidAssessment(int id, string assessmentName, string assessmentType, DateTime assessmentStartDate, DateTime assessmentEndDate, int relatedCourseId, bool notificationsEnabled)
         {
-            errorMessage = "";
+            var errorMessage = "";
 
             if (!Validation.IdWasSet(id))
                 errorMessage = "Assessment ID must be greater than 0.";
@@ -78,6 +99,43 @@ namespace CourseTracker.Maui.Factories
             await connection.InsertAsync(newAssessment);
 
             return "Assessment added successfully.";
+        }
+
+        public async Task ScheduleAssessmentNotifications(Assessment assessment)
+        {
+            // Assumptions: Using full days 
+            if (assessment.NotificationsEnabled)
+            {
+                //var notificationId = (assessment.AssessmentId + DateTime.Now.Second); // Ideally, generate a unique ID for each notification.
+                var title = $"Reminder for {assessment.AssessmentName}";
+
+                // Schedule notifications for start date reminders
+                var startReminders = new[] { 14, 7, 1 }; // These could be different from the end reminders or configurable in-app in a future version.
+                foreach (var daysBefore in startReminders)
+                {
+                    var notificationId = (assessment.AssessmentId + DateTime.Now.Second);
+                    var notifyTime = assessment.AssessmentStartDate.AddDays(-daysBefore);
+                    var subtitle = $"{assessment.AssessmentName} starts in {daysBefore} day(s)";
+                    await Notification.ScheduleNotificationAsync(notificationId++, title, subtitle, notifyTime, NotificationCategoryType.Reminder);
+                }
+
+                // Schedule notifications for end date reminders
+                var endReminders = new[] { 14, 7, 1 }; // These could be different from the start reminders or configurable in-app in a future version.
+                foreach (var daysBefore in endReminders)
+                {
+                    var notificationId = (assessment.AssessmentId + DateTime.Now.Millisecond);
+                    var notifyTime = assessment.AssessmentEndDate.AddDays(-daysBefore);
+                    var subtitle = $"{assessment.AssessmentName} due in {daysBefore} day(s)";
+                    await Notification.ScheduleNotificationAsync(notificationId++, title, subtitle, notifyTime, NotificationCategoryType.Reminder);
+                }
+            }
+            return;
+        }
+
+        public class AssessmentCreationOut
+        {
+            public Assessment? Assessment { get; set; }
+            public string ErrorMessage { get; set; } = string.Empty;
         }
 
     }
