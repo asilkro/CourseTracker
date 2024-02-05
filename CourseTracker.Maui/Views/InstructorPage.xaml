@@ -33,8 +33,8 @@
             </Grid>
         </HorizontalStackLayout>
 
-        <Button x:Name="saveButton" Text="Save" Clicked="SaveButton_Clicked" />
-        <Button x:Name="cancelButton" Text="Cancel" Clicked="CancelButton_Clicked" />
+        <Button x:Name="saveButton" Text="Save"/>
+        <Button x:Name="cancelButton" Text="Cancel"/>
 
     </VerticalStackLayout>
 </ContentPage>

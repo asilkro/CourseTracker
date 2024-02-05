@@ -31,14 +31,4 @@ public partial class InstructorPage : ContentPage
     {
         viewModel.Instructor = instructor;
     }
-
-    private void SubmitButton_Clicked(object sender, EventArgs e)
-    {
-        Debug.WriteLine(sender + " triggered this.");
-    }
-
-    private async void CancelButton_Clicked(object sender, EventArgs e)
-    {
-        await Navigation.PopAsync();
-    }
 }

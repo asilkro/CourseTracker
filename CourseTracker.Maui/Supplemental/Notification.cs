@@ -15,7 +15,6 @@ namespace CourseTracker.Maui.Supplemental
                 Title = title,
                 Subtitle = subtitle,
                 CategoryType = type,
-                CategoryType = NotificationCategoryType
                 Schedule = new NotificationRequestSchedule
                 {
                     NotifyTime = notifyTime.Date,

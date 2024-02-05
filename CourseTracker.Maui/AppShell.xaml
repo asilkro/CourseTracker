@@ -32,7 +32,7 @@
     </FlyoutItem>
 
     <FlyoutItem Title="Instructors">
-        <ShellContent Title="List Instructors" ContentTemplate="{DataTemplate views:List}"/>
+        <ShellContent Title="List Instructors" ContentTemplate="{DataTemplate views:ListInstructors}"/>
         <ShellContent Title="New Assessment" ContentTemplate="{DataTemplate views:AssessmentPage}"/>
     </FlyoutItem>
 

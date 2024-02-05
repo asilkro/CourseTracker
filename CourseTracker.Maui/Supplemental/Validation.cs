@@ -2,7 +2,6 @@
 using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Models;
 using Plugin.LocalNotification;
-using Android.Media.TV;
 
 namespace CourseTracker.Maui.Supplemental
 {
