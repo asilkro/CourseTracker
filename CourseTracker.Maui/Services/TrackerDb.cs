@@ -43,36 +43,35 @@ namespace CourseTracker.Maui.Services
             _db = new SQLiteAsyncConnection(DatabasePath, Flags);
             _dbConnection = new SQLiteConnection(DatabasePath, Flags);
 
+            await SetupTables(_db); // Will create tables if they don't exist
             if (_dbConnection.Table<Term>().Count() != 0) return; // If the database already has data, don't add more.
 
             await _db.EnableLoadExtensionAsync(true);
-            _dbConnection.EnableLoadExtension(true); // cannot async a void method
-            await SetupTables(_db); // Will create tables if they don't exist
+            
         }
 
         public static async Task SetupTables(SQLiteAsyncConnection db)
         {
-            if (_db == null)
+            // Check if the 'Term' table exists and create it if it doesn't.
+            var termTableInfo = await db.GetTableInfoAsync(nameof(Term));
+            if (!termTableInfo.Any())
             {
-                return;
+                await db.CreateTableAsync<Term>();
             }
-            else
-            {
 
-                if (await db.GetTableInfoAsync("Term") == null)
-                {
-                    await db.CreateTableAsync<Term>();
-                }
-                if (await db.GetTableInfoAsync("Course") == null)
-                {
-                    await db.CreateTableAsync<Course>();
-                }
-                if (await db.GetTableInfoAsync("Assessment") == null)
-                {
-                    await db.CreateTableAsync<Assessment>();
-                }
+            // Check if the 'Course' table exists and create it if it doesn't.
+            var courseTableInfo = await db.GetTableInfoAsync(nameof(Course));
+            if (!courseTableInfo.Any())
+            {
+                await db.CreateTableAsync<Course>();
             }
-            
+
+            // Check if the 'Assessment' table exists and create it if it doesn't.
+            var assessmentTableInfo = await db.GetTableInfoAsync(nameof(Assessment));
+            if (!assessmentTableInfo.Any())
+            {
+                await db.CreateTableAsync<Assessment>();
+            }
         }
         
         #endregion
@@ -96,12 +95,17 @@ namespace CourseTracker.Maui.Services
             using var _dbConnection = _connection.GetConnection();
 
             _dbConnection.DropTable<Term>();
-            Debug.WriteLine("Dropped table ");
+            Debug.WriteLine("Dropped Term table");
             _dbConnection.DropTable<Course>();
+            Debug.WriteLine("Dropped Course table");
             _dbConnection.DropTable<Assessment>();
+            Debug.WriteLine("Dropped Assessment table");
             _dbConnection.CreateTable<Term>();
+            Debug.WriteLine("Created Term table");
             _dbConnection.CreateTable<Course>();
+            Debug.WriteLine("Created Course table");
             _dbConnection.CreateTable<Assessment>();
+            Debug.WriteLine("Created Assessment table");
         }
 
         #endregion

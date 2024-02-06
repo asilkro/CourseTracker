@@ -5,7 +5,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:views="clr-namespace:CourseTracker.Maui.Views"
     xmlns:local="clr-namespace:CourseTracker.Maui"
-    Shell.FlyoutBehavior="Locked"
+    Shell.FlyoutBehavior="Flyout"
     Title="CourseTracker.Maui">
 
     <!-- Flyout Menu -->

@@ -1,4 +1,6 @@
-﻿using CourseTracker.Maui.Models;
+﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
+using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
 
 namespace CourseTracker.Maui.ViewModels
@@ -12,6 +14,9 @@ namespace CourseTracker.Maui.ViewModels
         private DateTime _assessmentEndDate = DateTime.Today.Date.AddDays(30);
         private int _relatedCourseId = -1;
         private bool _notificationsEnabled = false;
+
+        private Assessment assessment;
+        private int assessmentId;
 
         public int AssessmentId
         {
@@ -109,6 +114,32 @@ namespace CourseTracker.Maui.ViewModels
                     OnPropertyChanged("Course");
                 }
             }
+        }
+
+        public AssessmentVM()
+        {
+        }
+
+        public AssessmentVM(Assessment assessment)
+        {
+            AssessmentId = assessment.AssessmentId;
+            LoadAssessmentDetails();
+        }
+
+        private async Task LoadAssessmentDetails()
+        {
+            Connection DatabaseService = new();
+            DatabaseService.GetAsyncConnection();
+
+            if (assessmentId > 0)
+            {
+                assessment = await DatabaseService.FindAsync<Assessment>(assessmentId);
+            }
+        }
+
+        public async Task InitializeAsync()
+        {
+            await LoadAssessmentDetails();
         }
     }
 }
