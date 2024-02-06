@@ -45,7 +45,7 @@ public partial class ListCourses : ContentPage
 
     private async void NavigateToEditCourseASync(Course course)
     {
-        await Navigation.PushAsync(new EditCourses(course));
+        await Navigation.PushAsync(new CoursePage(course));
     }
 
     private async void RemoveCourseAsync(Course course)

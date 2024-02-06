@@ -148,17 +148,6 @@ namespace CourseTracker.Maui.Supplemental
             return existingCourse == null;
         }
 
-        public static async Task<bool> IsUniqueInstructorName(string instructorName, Connection _connection)
-        {
-            if (_connection == null)
-            {
-                _connection = new Connection();
-            }
-            var connection = _connection.GetAsyncConnection();
-            var existingInstructor = await connection.Table<Instructor>().Where(i => i.InstructorName == instructorName).FirstOrDefaultAsync();
-            return existingInstructor == null;
-        }
-
         public static async Task<bool> IsUniqueAssessmentName(string assessmentName, int courseId, Connection _connection)
         {
             if (_connection == null)
@@ -203,32 +192,33 @@ namespace CourseTracker.Maui.Supplemental
 
         public async static Task<bool> IsValidNotification(NotificationRequest notification) //Non exhaustive checks
         {
+            var result = true;
             if (notification == null)
             {
-                return false;
+                result = false;
             }
             else if (!NotNull(notification.Title) || !NotNull(notification.Subtitle))
             {
-                return false;
+                result = false;
             }
-            else if (notification.Schedule == null || notification.Schedule.NotifyTime < DateTime.Now)
+            else if (notification.Schedule == null)
             {
-                return false;
+                result = false;
             }
             else if (!IsValidNotificationType(notification.CategoryType))
             {
-                return false;
+                result = false;
             }
-            else if (notification.Schedule.NotifyTime < DateTime.Now)
+            else if (notification.Schedule.NotifyTime <= DateTime.Now.Date)
             {
-                return false;
+                result = false;
             }
             else if (notification.Schedule.NotifyAutoCancelTime < notification.Schedule.NotifyTime)
             {
-                return false;
+                result = false;
             }
 
-            return true;
+            return result;
                  
         }
          

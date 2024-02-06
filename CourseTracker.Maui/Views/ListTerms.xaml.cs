@@ -68,7 +68,7 @@ public partial class ListTerms : ContentPage
 
     private async Task NavigateToEditTermASync(Term term) // workaround for not being able to use await Nav
     {
-        await Navigation.PushAsync(new EditTerms(term));
+        await Navigation.PushAsync(new TermPage(term));
     }
 
     private async Task LoadTerms()

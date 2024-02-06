@@ -40,8 +40,8 @@ namespace CourseTracker.Maui.Services
         {
             if (_db != null) return; // If the database is already initialized, don't do it again.
 
-            _db = new SQLiteAsyncConnection(DatabasePath);
-            _dbConnection = new SQLiteConnection(DatabasePath);
+            _db = new SQLiteAsyncConnection(DatabasePath, Flags);
+            _dbConnection = new SQLiteConnection(DatabasePath, Flags);
 
             if (_dbConnection.Table<Term>().Count() != 0) return; // If the database already has data, don't add more.
 
@@ -58,6 +58,7 @@ namespace CourseTracker.Maui.Services
             }
             else
             {
+
                 if (await db.GetTableInfoAsync("Term") == null)
                 {
                     await db.CreateTableAsync<Term>();
@@ -69,10 +70,6 @@ namespace CourseTracker.Maui.Services
                 if (await db.GetTableInfoAsync("Assessment") == null)
                 {
                     await db.CreateTableAsync<Assessment>();
-                }
-                if (await db.GetTableInfoAsync("Instructor") == null)
-                {
-                    await db.CreateTableAsync<Instructor>();
                 }
             }
             
@@ -102,11 +99,9 @@ namespace CourseTracker.Maui.Services
             Debug.WriteLine("Dropped table ");
             _dbConnection.DropTable<Course>();
             _dbConnection.DropTable<Assessment>();
-            _dbConnection.DropTable<Instructor>();
             _dbConnection.CreateTable<Term>();
             _dbConnection.CreateTable<Course>();
             _dbConnection.CreateTable<Assessment>();
-            _dbConnection.CreateTable<Instructor>();
         }
 
         #endregion

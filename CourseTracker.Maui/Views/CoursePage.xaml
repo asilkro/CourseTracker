@@ -42,13 +42,9 @@
                 ItemsSource="{Binding Terms}"
                 ItemDisplayBinding="{Binding TermName}"
                 SelectedItem="{Binding SelectedTerm}" />
-
-                <!-- Drop down to choose an Instructor since InstructorId is unintuitive to user -->
-                <Label Grid.Column="1" Grid.Row="0" Text="Instructor" HorizontalTextAlignment="Center" FontAttributes="Bold"/>
-                <Picker x:Name="instructorPicker" Title="Select Instructor" Grid.Column="1" Grid.Row="1"
-                ItemsSource="{Binding Instructors}"
-                ItemDisplayBinding="{Binding InstructorName}"
-                SelectedItem="{Binding SelectedInstructor}" />
+                
+                <!-- TODO: Add Instructor fields here-->
+                <Label Grid.Column="1" Grid.Row="0" Text="Placeholder: Instructor" HorizontalTextAlignment="Center" FontAttributes="Bold"/>
 
             </Grid>
         </HorizontalStackLayout>

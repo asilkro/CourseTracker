@@ -16,10 +16,10 @@ public partial class CoursePage : ContentPage
         this.BindingContext = viewModel;
     }
 
-    public CoursePage(int courseId = 0)
+    public CoursePage(Course course)
     {
         InitializeComponent();
-        viewModel = new CourseVM(courseId);
+        viewModel = new CourseVM(course);
         BindingContext = viewModel;
         viewModel.InitializeAsync();
     }

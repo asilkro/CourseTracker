@@ -4,6 +4,9 @@ namespace CourseTracker.Maui.ViewModels
 {
     public class TermVM : ViewModelBase
     {
+        public TermVM(Term term) { }
+        public TermVM() { }
+
         private Term term = new();
 
         public Term Term
@@ -60,6 +63,5 @@ namespace CourseTracker.Maui.ViewModels
                 }
             }
         }
-
     }
 }

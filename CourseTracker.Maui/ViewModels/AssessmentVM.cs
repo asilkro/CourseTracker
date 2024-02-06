@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using CourseTracker.Maui.Models;
+using CourseTracker.Maui.Services;
 
 namespace CourseTracker.Maui.ViewModels
 {
@@ -97,6 +94,19 @@ namespace CourseTracker.Maui.ViewModels
                 {
                     _notificationsEnabled = value;
                     OnPropertyChanged("NotificationsEnabled");
+                }
+            }
+        }
+
+        public Course course
+        {
+            get { return course; }
+            set
+            {
+                if (course != value)
+                {
+                    course = value;
+                    OnPropertyChanged("Course");
                 }
             }
         }

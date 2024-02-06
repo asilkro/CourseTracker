@@ -14,11 +14,11 @@ namespace CourseTracker.Maui.Factories
 
         }
 
-        public Term? CreateTerm(AddTermsVM addTermsVM, out string errorMessage)
+        public Term? CreateTerm(TermVM termVM, out string errorMessage)
         {
-            return CreateTerm(addTermsVM.Term.TermId, addTermsVM.Term.TermName,
-                addTermsVM.Term.TermStart, addTermsVM.Term.TermEnd,
-                addTermsVM.Term.NotificationsEnabled, addTermsVM.Term.CourseCount,out errorMessage);
+            return CreateTerm(termVM.Term.TermId, termVM.Term.TermName,
+                termVM.Term.TermStart, termVM.Term.TermEnd,
+                termVM.Term.NotificationsEnabled, termVM.Term.CourseCount,out errorMessage);
         }
 
         public Term? CreateTerm(int termId, string termName, DateTime termStart, DateTime termEnd,
@@ -38,11 +38,11 @@ namespace CourseTracker.Maui.Factories
             return term;
         }
 
-        public Term? UpdateTerm(EditTermsVM editTermsVM, out string errorMessage)
+        public Term? UpdateTerm(TermVM termVM, out string errorMessage)
         {
-            return UpdateTerm(editTermsVM.Term.TermId, editTermsVM.Term.TermName,
-                editTermsVM.Term.TermStart, editTermsVM.Term.TermEnd,
-                editTermsVM.Term.NotificationsEnabled, editTermsVM.Term.CourseCount, out errorMessage);
+            return UpdateTerm(termVM.Term.TermId, termVM.Term.TermName,
+                termVM.Term.TermStart, termVM.Term.TermEnd,
+                termVM.Term.NotificationsEnabled, termVM.Term.CourseCount, out errorMessage);
         }
 
         public Term? UpdateTerm(int termId, string termName, DateTime termStart, DateTime termEnd,

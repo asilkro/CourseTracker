@@ -22,7 +22,7 @@ public partial class Homepage : ContentPage
         await TrackerDb.Initialize();
     }
 
-    private async void LoadSampleData(Term demoTerm, Instructor demoInstructor,
+    private async void LoadSampleData(Term demoTerm,
         Course demoCourse, Assessment demoAssessment1, Assessment demoAssessment2)
     {
         if (connection == null)
@@ -32,10 +32,8 @@ public partial class Homepage : ContentPage
         }
 
         var termId = await connection.InsertAndGetIdAsync<Term>(demoTerm);
-        var instructorId = await connection.InsertAndGetIdAsync<Instructor>(demoInstructor);
 
         demoCourse.TermId = termId;
-        demoCourse.InstructorId = instructorId;
 
         var courseId = await connection.InsertAndGetIdAsync<Course>(demoCourse);
 
@@ -57,7 +55,7 @@ public partial class Homepage : ContentPage
             {
                 await StartDB();
             }
-			LoadSampleData(demoTerm, demoInstructor, demoCourse, demoOA, demoPA);
+			LoadSampleData(demoTerm, demoCourse, demoOA, demoPA);
 		}
 
     }
@@ -76,19 +74,14 @@ public partial class Homepage : ContentPage
     {
         CourseName = "C6 Requirements re: C3 Course",
         CourseStatus = "In Progress",
-
         CourseStart = new DateTime(2024, 01, 01),
         CourseEnd = new DateTime(2024, 06, 30),
+        InstructorEmail = "anika.patel@strimeuniversity.edu",
+        InstructorPhone = "555-123-4567",
+        InstructorName = "Anika Patel",
         CourseNotes = "This addresses requirement C6",
         NotificationsEnabled = true,
         CourseAssessmentCount = 2
-    };
-
-    private readonly Instructor demoInstructor = new Instructor
-    {
-        InstructorName = "Anika Patel",
-        InstructorEmail = "anika.patel@strimeuniversity.edu",
-        InstructorPhone = "555-123-4567"
     };
 
     private readonly Assessment demoOA = new Assessment

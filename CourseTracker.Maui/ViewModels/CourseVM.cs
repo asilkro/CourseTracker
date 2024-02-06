@@ -10,28 +10,26 @@ namespace CourseTracker.Maui.ViewModels
         private int courseId;
         private Course course;
 
-        public CourseVM(int courseId)
+        public CourseVM(Course course)
         {
-            this.courseId = courseId;
+            courseId = course.CourseId;
             LoadCourseDetails();
         }
 
         public CourseVM()
         {
             LoadTerms();
-            LoadInstructors();
         }
 
         public async Task InitializeAsync()
         {
-            if (courseId != 0)
+            if (courseId > 0)
             {
                 await LoadCourseDetails();
             }
             else
             {
                 await LoadTerms();
-                await LoadInstructors();
             }
         }
 
@@ -55,23 +53,9 @@ namespace CourseTracker.Maui.ViewModels
             Connection DatabaseService = new();
             DatabaseService.GetAsyncConnection();
 
-            if (courseId != 0)
+            if (courseId > 0)
             {
                 Course = await DatabaseService.FindAsync<Course>(courseId);
-            }
-        }
-
-        private Instructor instructor = new();
-        public Instructor Instructor
-        {
-            get { return instructor; }
-            set
-            {
-                if (instructor != value)
-                {
-                    instructor = value;
-                    OnPropertyChanged("Instructor");
-                }
             }
         }
 
@@ -146,7 +130,6 @@ namespace CourseTracker.Maui.ViewModels
         }
 
         public ObservableCollection<Term> Terms { get; } = new ObservableCollection<Term>();
-        public ObservableCollection<Instructor> Instructors { get; } = new ObservableCollection<Instructor>();
         Connection _connection;
 
 
@@ -169,24 +152,6 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
-        private async Task LoadInstructors()
-        {
-            try
-            {
-                _connection = _connection ?? new Connection();
-                _connection.GetAsyncConnection();
-                var instructors = await _connection.Table<Instructor>();
-                Instructors.Clear();
-                foreach (var instructor in instructors)
-                {
-                    Instructors.Add(instructor);
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine("Issue loading instructors: " + ex.Message);
-            }
-        }
 
 
         private Term _selectedTerm;
@@ -203,21 +168,5 @@ namespace CourseTracker.Maui.ViewModels
                 }
             }
         }
-
-        private Instructor _selectedInstructor;
-        public Instructor SelectedInstructor
-        {
-            get => _selectedInstructor;
-            set
-            {
-                if (_selectedInstructor != value)
-                {
-                    _selectedInstructor = value;
-                    Course.InstructorId = value.InstructorId;
-                    OnPropertyChanged(nameof(SelectedInstructor));
-                }
-            }
-        }
-
     }
 }
