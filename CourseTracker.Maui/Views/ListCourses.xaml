@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:viewModel="clr-namespace:CourseTracker.Maui.ViewModels"
+             xmlns:viewModels="clr-namespace:CourseTracker.Maui.ViewModels"
              x:Class="CourseTracker.Maui.Views.ListCourses"
-             Title="Course List">
+                          Title="Course List">
     <VerticalStackLayout
     Padding="20,10" Spacing="5">
         <Label 
@@ -32,8 +32,16 @@
                                 <Label Text="{Binding TermId}" />
                             </StackLayout>
                             <StackLayout Orientation="Horizontal">
-                                <Label Text="Instructor ID: " />
-                                <Label Text="{Binding InstructorId}" />
+                                <Label Text="Instructor Name: " />
+                                <Label Text="{Binding InstructorName}" />
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Instructor Email: " />
+                                <Label Text="{Binding InstructorEmail}" />
+                            </StackLayout>
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Instructor Phone: " />
+                                <Label Text="{Binding InstructorPhone}" />
                             </StackLayout>
                             <StackLayout Orientation="Horizontal">
                                 <Label Text="Course Status: " />
@@ -51,11 +59,15 @@
                                 <Label Text="Assessment Count: " />
                                 <Label Text="{Binding CourseAssessmentCount}" />
                             </StackLayout>
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="Notifications Enabled: " />
+                                <Label Text="{Binding NotificationsEnabled}" />
+                            </StackLayout>
                         </StackLayout>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        
+
     </VerticalStackLayout>
 </ContentPage>

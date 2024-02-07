@@ -8,14 +8,15 @@ namespace CourseTracker.Maui.Views;
 
 public partial class ListCourses : ContentPage
 {
-	private ListCoursesVM viewModel;
-	private Connection _database;
-    
-	public ListCourses()
-	{
-		InitializeComponent();
-        BindingContext = new ListCoursesVM();
-	}
+    private ListCoursesVM viewModel;
+    private Connection _database;
+
+    public ListCourses()
+    {
+        InitializeComponent();
+        viewModel = new ListCoursesVM();
+        BindingContext = viewModel;
+    }
 
     private void CourseListView_ItemTapped(object sender, ItemTappedEventArgs e)
     {
@@ -24,7 +25,7 @@ public partial class ListCourses : ContentPage
             ShowActionSheet(selectedCourse);
         }
 
-    ((ListView)sender).SelectedItem = null;
+        ((ListView)sender).SelectedItem = null;
     }
 
     private async void ShowActionSheet(Course course)
@@ -61,6 +62,18 @@ public partial class ListCourses : ContentPage
             await _database.DeleteAsync(course);
             await viewModel.LoadCourses();
         }
+    }
+
+    private async Task InitializeDataAsync()
+    {
+        if (_database == null)
+        {
+            _database = new Connection();
+            _database.GetAsyncConnection();
+        }
+
+        var list = await _database.Table<Course>();
+        courseListView.ItemsSource = list;
     }
 
 }

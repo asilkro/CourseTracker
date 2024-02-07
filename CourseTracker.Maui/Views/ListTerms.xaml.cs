@@ -46,10 +46,10 @@ public partial class ListTerms : ContentPage
         switch (action)
         {
             case "Edit Term":
-                NavigateToEditTermASync(term);
+                await NavigateToEditTermASync(term);
                 break;
             case "Delete Term":
-                RemoveTermAsync(term);
+                await RemoveTermAsync(term);
                 break;
             default:
                 break;

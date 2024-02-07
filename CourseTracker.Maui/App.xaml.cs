@@ -2,10 +2,12 @@
 using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Factories;
 using CourseTracker.Maui.Views;
+using CourseTracker.Maui.Supplemental;
 using Microsoft.Maui.Platform;
 using System;
 using Plugin.LocalNotification;
 using Plugin.LocalNotification.EventArgs;
+using System.Diagnostics;
 
 namespace CourseTracker.Maui
 {
@@ -23,18 +25,15 @@ namespace CourseTracker.Maui
         {
             if (e.IsDismissed)
             {
-                // your code goes here
+                e.Request.Cancel();
+                Debug.WriteLine(e.ActionId);
                 return;
             }
             if (e.IsTapped)
             {
-                // your code goes here
+                e.Request.Show();
+                Debug.WriteLine(e.ActionId);
                 return;
-            }
-            // if Notification Action are setup
-            switch (e.ActionId)
-            {
-                // your code goes here
             }
         }
     }
