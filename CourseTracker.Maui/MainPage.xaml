@@ -6,7 +6,4 @@
        x:Class="CourseTracker.Maui.MainPage"
        x:DataType="viewModels:MainPageVM">
 
-    <ContentPage.Content>
-        <Label Text="something"/>
-    </ContentPage.Content>
 </ContentPage>

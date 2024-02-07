@@ -17,6 +17,8 @@
             FontSize="Large" 
             HorizontalTextAlignment="End"/>
 
+        <!-- These are only for debug and assessment purposes, and would be removed in a public-facing build. -->
+        <Button x:Name="resetDbButton" Text="**RESET DATABASE - USE CAUTION**" Clicked="resetDbButton_Clicked" BackgroundColor="Red" TextColor="AntiqueWhite"/>
         <Button x:Name="loadSampleDataButton" Text="C971 - Load Evaluation Data" Clicked="loadButton_Clicked" BackgroundColor="Red" TextColor="AntiqueWhite"/>
 
 

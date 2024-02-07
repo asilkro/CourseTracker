@@ -58,6 +58,12 @@ public partial class ListTerms : ContentPage
 
     private async Task RemoveTermAsync(Term term)
     {
+        if (_database == null)
+        {
+            _database = new Connection();
+            _database.GetAsyncConnection();
+        }
+
         var result = await DisplayAlert("Delete Term", $"Are you sure you want to delete {term.TermName}?", "Yes", "No");
         if (result)
         {

@@ -4,25 +4,21 @@
              xmlns:viewModel="clr-namespace:CourseTracker.Maui.ViewModels"
              x:Class="CourseTracker.Maui.Views.ListAssessments"
              Title="Assessment List">
+
+    <ContentPage.BindingContext>
+        <viewModel:ListAssessmentsVM />
+    </ContentPage.BindingContext>
+    
     <VerticalStackLayout
     Padding="20,10" Spacing="5">
         <Label 
-            Text="Courses"
+            Text="Assessments"
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
 
-        <!-- Display List of Assessments using ListView -->
-        <ListView 
-            ItemsSource="{Binding Assessment}"
-            SelectedItem="{Binding SelectedAssessment}"
-            SelectionMode="Single">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextCell 
-                        Text="{Binding A}" 
-                        Detail="{Binding DueDate}" />
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+        <Label Text="PLACEHOLDER"/>
+        
+        <!-- TODO: Display List of Assessments using ListView -->
+        
     </VerticalStackLayout>
 </ContentPage>

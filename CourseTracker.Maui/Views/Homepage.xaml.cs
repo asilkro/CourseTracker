@@ -7,8 +7,8 @@ namespace CourseTracker.Maui.Views;
 
 public partial class Homepage : ContentPage
 {
-	TrackerDb _trackerDb = new TrackerDb();
-	Connection connection = new Connection();
+    TrackerDb _trackerDb = new();
+	Connection connection = new();
 
     public Homepage()
 	{
@@ -43,7 +43,10 @@ public partial class Homepage : ContentPage
         await connection.InsertAsync<Assessment>(demoAssessment1);
         await connection.InsertAsync<Assessment>(demoAssessment2);
 
-		await DisplayAlert("Sample Data Loaded", "Sample data has been loaded", "OK");
+        await DisplayAlert(
+            "Sample Data Loaded",
+            "Sample data has been loaded",
+            "OK");
     }
 
 
@@ -63,6 +66,7 @@ public partial class Homepage : ContentPage
     #region Sample Data For Evaluation
     private readonly Term demoTerm = new Term
     {
+        TermId = 999, // Should be a safe number to use for testing
         TermName = "Demo Term",
         TermStart = new DateTime(2024, 01, 01),
         TermEnd = new DateTime(2024, 06, 30),
@@ -72,6 +76,7 @@ public partial class Homepage : ContentPage
 
     private Course demoCourse = new Course
     {
+        CourseId = 555, // Should be a safe number to use for testing
         CourseName = "C6 Requirements re: C3 Course",
         CourseStatus = "In Progress",
         CourseStart = new DateTime(2024, 01, 01),
@@ -86,20 +91,30 @@ public partial class Homepage : ContentPage
 
     private readonly Assessment demoOA = new Assessment
     {
+        AssessmentId = 888, // Should be a safe number to use for testing
         AssessmentName = "C6 OA",
         AssessmentType = "Objective",
         AssessmentStartDate = new DateTime(2024, 01, 01),
         AssessmentEndDate = new DateTime(2024, 02, 29),
+        RelatedCourseId = 555,
         NotificationsEnabled = true
     };
 
     private readonly Assessment demoPA = new Assessment
     {
+        AssessmentId = 777, // Should be a safe number to use for testing
         AssessmentName = "C6 PA",
         AssessmentType = "Performance",
         AssessmentStartDate = new DateTime(2024, 03, 01),
         AssessmentEndDate = new DateTime(2024, 04, 30),
+        RelatedCourseId = 555,
         NotificationsEnabled = true
     };
+
     #endregion
+
+    private async void resetDbButton_Clicked(object sender, EventArgs e)
+    {
+        await TrackerDb.ResetDatabaseFileAsync();
+    }
 }

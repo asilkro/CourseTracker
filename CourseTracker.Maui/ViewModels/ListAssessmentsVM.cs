@@ -5,23 +5,10 @@ using CourseTracker.Maui.Services;
 
 namespace CourseTracker.Maui.ViewModels
 {
-    internal class ListAssessmentsVM : ViewModelBase
+    public class ListAssessmentsVM : ViewModelBase
     {
         private Connection _database;
-        private ObservableCollection<Assessment> _assessments = new ObservableCollection<Assessment>();
-
-        public ObservableCollection<Assessment> Assessments
-        {
-            get { return _assessments; }
-            set
-            {
-                if (_assessments != value)
-                {
-                    _assessments = value;
-                    OnPropertyChanged("Assessments");
-                }
-            }
-        }
+        public ObservableCollection<Assessment> Assessments { get; private set; } = new ObservableCollection<Assessment>();
 
         public ListAssessmentsVM()
         {

@@ -41,13 +41,13 @@ namespace CourseTracker.Maui.Services
             if (_db != null) return; // If the database is already initialized, don't do it again.
 
             _db = new SQLiteAsyncConnection(DatabasePath, Flags);
-            _dbConnection = new SQLiteConnection(DatabasePath, Flags);
 
             await SetupTables(_db); // Will create tables if they don't exist
-            if (_dbConnection.Table<Term>().Count() != 0) return; // If the database already has data, don't add more.
+            if (await _db.Table<Term>().CountAsync() != 0) return; // If the database already has data, don't add more.
+            if (await _db.Table<Course>().CountAsync() != 0) return;
+            if (await _db.Table<Assessment>().CountAsync() != 0) return;
 
-            await _db.EnableLoadExtensionAsync(true);
-            
+            await _db.EnableLoadExtensionAsync(true);   
         }
 
         public static async Task SetupTables(SQLiteAsyncConnection db)
@@ -85,27 +85,26 @@ namespace CourseTracker.Maui.Services
             return result + 1;
         }
 
-        public static void ResetDatabase()
+        public static async Task ResetDatabaseFileAsync()
         {
-            if (_connection == null)
+            try
             {
-                _connection = new Connection();
+                if (File.Exists(DatabasePath)) // If the database file exists, delete it
+                {
+                    Debug.WriteLine("Erasing file at: " + DatabasePath);
+                    File.Delete(DatabasePath);
+                }
+
+                // Re-run the initialization of the database to make a new DB file and tables
+                Debug.WriteLine("Preparing to reinitialize database at: " + DatabasePath);
+                await Initialize();
+                Debug.WriteLine("Database reinitialized at: " + DatabasePath);
             }
-
-            using var _dbConnection = _connection.GetConnection();
-
-            _dbConnection.DropTable<Term>();
-            Debug.WriteLine("Dropped Term table");
-            _dbConnection.DropTable<Course>();
-            Debug.WriteLine("Dropped Course table");
-            _dbConnection.DropTable<Assessment>();
-            Debug.WriteLine("Dropped Assessment table");
-            _dbConnection.CreateTable<Term>();
-            Debug.WriteLine("Created Term table");
-            _dbConnection.CreateTable<Course>();
-            Debug.WriteLine("Created Course table");
-            _dbConnection.CreateTable<Assessment>();
-            Debug.WriteLine("Created Assessment table");
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Failed to reset database: {ex.Message}");
+                // This should be unnecessary, but it's here for debugging purposes
+            }
         }
 
         #endregion
