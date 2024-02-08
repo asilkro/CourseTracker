@@ -33,75 +33,81 @@ namespace CourseTracker.Maui.ViewModels
                 }
             }
         }
+        private string assessmentName;
         public string AssessmentName
         {
-            get { return AssessmentName; }
+            get { return assessmentName; }
             set
             {
-                if (AssessmentName != value)
+                if (assessmentName != value)
                 {
-                    AssessmentName = value;
-                    OnPropertyChanged("AssessmentName");
+                    assessmentName = value;
+                    OnPropertyChanged(nameof(AssessmentName));
                 }
             }
         }
+        private string assessmentType;
         public string AssessmentType
         {
-            get { return AssessmentType; }
+            get { return assessmentType; }
             set
             {
-                if (AssessmentType != value)
+                if (assessmentType != value)
                 {
-                    AssessmentType = value;
-                    OnPropertyChanged("AssessmentType");
+                    assessmentType = value;
+                    OnPropertyChanged(nameof(AssessmentType));
                 }
             }
         }
+        private DateTime assessmentStartDate;
         public DateTime AssessmentStartDate
         {
-            get { return AssessmentStartDate; }
+            get { return assessmentStartDate; }
             set
             {
-                if (AssessmentStartDate != value)
+                if (assessmentStartDate != value)
                 {
-                    AssessmentStartDate = value;
-                    OnPropertyChanged("AssessmentStartDate");
+                    assessmentStartDate = value;
+                    OnPropertyChanged(nameof(AssessmentStartDate));
                 }
             }
         }
+        private DateTime assessmentEndDate;
         public DateTime AssessmentEndDate
         {
-            get { return AssessmentEndDate; }
+            get { return assessmentEndDate; }
             set
             {
-                if (AssessmentEndDate != value)
+                if (assessmentEndDate != value)
                 {
-                    AssessmentEndDate = value;
-                    OnPropertyChanged("AssessmentEndDate");
+                    assessmentEndDate = value;
+                    OnPropertyChanged(nameof(AssessmentEndDate));
                 }
             }
         }
+        private int relatedCourseId;
         public int RelatedCourseId
         {
-            get { return RelatedCourseId; }
+            get { return relatedCourseId; }
             set
             {
-                if (RelatedCourseId != value)
+                if (relatedCourseId != value)
                 {
-                    RelatedCourseId = value;
-                    OnPropertyChanged("RelatedCourseId");
+                    relatedCourseId = value;
+                    OnPropertyChanged(nameof(RelatedCourseId));
                 }
             }
         }
+        private bool notificationsEnabled;
         public bool NotificationsEnabled
         {
-            get { return NotificationsEnabled; }
+            get { return notificationsEnabled; }
             set
             {
-                if (NotificationsEnabled != value)
+                if (notificationsEnabled != value)
                 {
-                    NotificationsEnabled = value;
-                    OnPropertyChanged("NotificationsEnabled");
+                    notificationsEnabled = value;
+                    OnPropertyChanged(nameof(NotificationsEnabled));
                 }
             }
         }
@@ -118,8 +124,6 @@ namespace CourseTracker.Maui.ViewModels
                 }
             }
         }
-
-        
 
         private async Task LoadAssessmentDetails()
         {
