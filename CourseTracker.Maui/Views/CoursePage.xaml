@@ -37,20 +37,37 @@
           RowSpacing="10">
 
                 <!-- Drop down to choose a TermName since TermId is unintuitive to user-->
-                <Label Grid.Column="0" Grid.Row="0" Text="Term" HorizontalTextAlignment="Center" FontAttributes="Bold"/>
-                <Picker x:Name="termPicker" Title="Select Term" Grid.Column="0" Grid.Row="1"
+                <Label Grid.Column="0" Grid.Row="0" x:Name="termPickerLabel" Text="Term" HorizontalTextAlignment="Center" FontAttributes="Bold"/>
+                <Picker Grid.Column="0" Grid.Row="1" x:Name="termPicker" Title="Select Term"
                 ItemsSource="{Binding Terms}"
-                ItemDisplayBinding="{Binding TermName}"
+                ItemDisplayBinding="{Binding Term.TermName}"
                 SelectedItem="{Binding SelectedTerm}" />
                 
                 <!-- TODO: Add Instructor fields here-->
-                <Label Grid.Column="1" Grid.Row="0" Text="Placeholder: Instructor" HorizontalTextAlignment="Center" FontAttributes="Bold"/>
+                <Label x:Name="instructorNameLabel" HorizontalTextAlignment="Center" Text="Instructor Name:" FontAttributes="Bold"/>
+                <Entry x:Name="instructorNameEntry" Placeholder="Instructor Name Placeholder" Text="{Binding Course.InstructorName}"/>
+
+            </Grid>
+        </HorizontalStackLayout>
+
+        <!--Row 3-->
+        <HorizontalStackLayout Spacing="5" Padding="5" HorizontalOptions="CenterAndExpand">
+            <Grid ColumnDefinitions="100, *"
+          RowDefinitions="*, *"
+          ColumnSpacing="10"
+          RowSpacing="10">
+
+                <Label x:Name="instructorEmailLabel" HorizontalTextAlignment="Center" Text="Instructor Name:" FontAttributes="Bold"/>
+                <Entry x:Name="instructorEmailEntry" Placeholder="Instructor Email Placeholder" Text="{Binding Course.InstructorEmail}"/>
+
+                <Label x:Name="instructorPhoneLabel" HorizontalTextAlignment="Center" Text="Instructor Name:" FontAttributes="Bold"/>
+                <Entry x:Name="instructorPhoneEntry" Placeholder="Instructor Phone Placeholder" Text="{Binding Course.InstructorPhone}"/>
 
             </Grid>
         </HorizontalStackLayout>
 
 
-        <!--Row 3-->
+        <!--Row 4-->
         <HorizontalStackLayout
             Spacing="5"
             Padding="5"
@@ -105,7 +122,7 @@
         </HorizontalStackLayout>
 
 
-        <!--Row 3-->
+        <!--Row 6-->
         <HorizontalStackLayout
             Spacing="5"
             Padding="5"
@@ -117,6 +134,7 @@
                 <!--Course Notes-->
                 <Label x:Name="courseNoteLabel" Text="Course Notes" HorizontalTextAlignment="Center" FontAttributes="Bold" Grid.Column="0" Grid.Row="0"/>
                 <Editor x:Name="courseNoteEditor" Text="{Binding Course.CourseNotes}" AutoSize="TextChanges" Grid.Column="0" Grid.Row="1"/>
+                <Button x:Name="courseNoteShareButton" Text="Share Notes" />
             </Grid>
         </HorizontalStackLayout>
 
