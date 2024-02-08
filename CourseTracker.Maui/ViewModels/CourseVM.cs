@@ -7,7 +7,6 @@ namespace CourseTracker.Maui.ViewModels
 {
     public class CourseVM : ViewModelBase
     {
-        private int courseId;
         private Course course;
 
         public CourseVM(Course course)
@@ -165,6 +164,20 @@ namespace CourseTracker.Maui.ViewModels
                     _selectedTerm = value;
                     Course.TermId = value.TermId;
                     OnPropertyChanged(nameof(SelectedTerm));
+                }
+            }
+        }
+
+        private int courseId;
+        public int CourseId
+        {
+            get { return courseId; }
+            set
+            {
+                if (courseId != value)
+                {
+                    courseId = value;
+                    OnPropertyChanged(nameof(CourseId));
                 }
             }
         }

@@ -3,6 +3,7 @@ using CourseTracker.Maui.ViewModels;
 using CourseTracker.Maui.Services;
 using System.Collections.ObjectModel;
 using CourseTracker.Maui.Factories;
+using System.Diagnostics;
 
 namespace CourseTracker.Maui.Views;
 
@@ -10,12 +11,25 @@ public partial class ListAssessments : ContentPage
 {
 	private ListAssessmentsVM viewModel;
 	private Connection _database;
+    private ObservableCollection<Assessment> _assessments = new();
 
 	public ListAssessments()
 	{
 		InitializeComponent();
 		BindingContext = new ListAssessmentsVM();
 	}
+
+    private async Task InitializeDataAsync()
+    {
+        if (_database == null)
+        {
+            _database = new Connection();
+            _database.GetAsyncConnection();
+        }
+
+        var list = await _database.Table<Assessment>();
+        assessmentListView.ItemsSource = list;
+    }
 
     private void AssessmentListView_ItemTapped(object sender, ItemTappedEventArgs e)
     {
@@ -60,6 +74,26 @@ private async void RemoveAssessmentAsync(Assessment assessment)
             }
             await _database.DeleteAsync(assessment);
             await viewModel.LoadAssessments();
+        }
+    }
+
+    private async Task LoadAssessments()
+    {
+        try
+        {
+            _database = _database ?? new Connection();
+            _database.GetAsyncConnection();
+            var updatedAssessmentsList = await _database.Table<Assessment>();
+            _assessments.Clear();
+            foreach (var assessment in updatedAssessmentsList)
+            {
+                _assessments.Add(assessment);
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine("Issue loading assessments: " + ex.Message);
+            return;
         }
     }
 

@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModels="clr-namespace:CourseTracker.Maui.ViewModels"
              x:Class="CourseTracker.Maui.Views.ListTerms"
+             x:DataType="viewModels:ListTermsVM"
              Title="Term List">
 
     <VerticalStackLayout
@@ -20,11 +21,11 @@ Padding="20,10" Spacing="5">
                     <ViewCell>
                         <StackLayout Padding="10">
                             <!-- Display Properties of Each Term -->
-                            <Label Text="{Binding TermName}" FontAttributes="Bold" />
-                            <Label Text="{Binding TermId}"/>
+                            <Label Text="{Binding TermName, StringFormat='Name: {0}'}" FontAttributes="Bold" />
+                            <Label Text="{Binding TermId, StringFormat='ID: {0}'}"/>
                             <Label Text="{Binding TermStart, StringFormat='Start: {0:d}'}" />
                             <Label Text="{Binding TermEnd, StringFormat='End: {0:d}'}" />
-                            <Label Text="{Binding CourseCount}"/>
+                            <Label Text="{Binding CourseCount, StringFormat='Courses: {0}'}"/>
                         </StackLayout>
                     </ViewCell>
                 </DataTemplate>

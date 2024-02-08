@@ -55,8 +55,8 @@
 
                 <!-- Buttons -->
         <HorizontalStackLayout Spacing="20" HorizontalOptions="Center">
-            <Button Text="Save" Command="{Binding SaveCommand}" FontAttributes="Bold" />
-            <Button Text="Cancel" Command="{Binding CancelCommand}" FontAttributes="Bold" />
+            <Button Text="Save" FontAttributes="Bold" />
+            <Button Text="Cancel" FontAttributes="Bold" />
         </HorizontalStackLayout>
 
     </VerticalStackLayout>

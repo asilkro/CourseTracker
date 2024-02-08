@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModel="clr-namespace:CourseTracker.Maui.ViewModels"
              x:Class="CourseTracker.Maui.Views.ListAssessments"
-             Title="Assessment List">
+             x:DataType="viewModel:ListAssessmentsVM"
+             Title="Assessment(s) List">
 
     <ContentPage.BindingContext>
         <viewModel:ListAssessmentsVM />
@@ -16,9 +17,26 @@
             VerticalOptions="Center" 
             HorizontalOptions="Center" />
 
-        <Label Text="PLACEHOLDER"/>
-        
-        <!-- TODO: Display List of Assessments using ListView -->
-        
+        <!-- Display List of Assessments using ListView -->
+        <ListView x:Name="assessmentListView" ItemsSource="{Binding Assessments}" 
+              ItemTapped="AssessmentListView_ItemTapped" VerticalOptions="FillAndExpand" SelectionMode="Single">
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Padding="5,5">
+                            <!-- Display Properties of Each Term -->
+                            <Label Text="{Binding AssessmentName, StringFormat='Assessment Name: {0}'}" FontAttributes="Bold" />
+                            <Label Text="{Binding AssessmentId, StringFormat='ID: {0}'}"/>
+                            <Label Text="{Binding AssessmentType, StringFormat='Type: {0}'}"/>
+                            <Label Text="{Binding AssessmentStartDate, StringFormat='Start: {0:d}'}" />
+                            <Label Text="{Binding AssessmentEndDate, StringFormat='End: {0:d}'}" />
+                            <Label Text="{Binding RelatedCourseId, StringFormat='Assessment for CourseId: {0}'}"/>
+                            <Label Text="{Binding NotificationsEnabled, StringFormat='Notifications for Dates: {0}'}"/>
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
     </VerticalStackLayout>
 </ContentPage>

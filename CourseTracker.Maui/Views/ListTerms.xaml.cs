@@ -92,6 +92,7 @@ public partial class ListTerms : ContentPage
         catch (Exception ex)
         {
             Debug.WriteLine("Issue loading terms: " + ex.Message);
+            return;
         }
     }
 
