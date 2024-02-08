@@ -7,97 +7,100 @@ namespace CourseTracker.Maui.ViewModels
 {
     public class AssessmentVM : ViewModelBase
     {
-        private int _assessmentId = -1;
-        private string _assessmentName = string.Empty;
-        private string _assessmentType = "Objective";
-        private DateTime _assessmentStartDate = DateTime.Today.Date;
-        private DateTime _assessmentEndDate = DateTime.Today.Date.AddDays(30);
-        private int _relatedCourseId = -1;
-        private bool _notificationsEnabled = false;
-
         private Assessment assessment;
         private int assessmentId;
 
+        public AssessmentVM()
+        {
+            LoadAssessmentDetails();
+        }
+
+        public AssessmentVM(Assessment assessment)
+        {
+            AssessmentId = assessment.AssessmentId;
+            LoadAssessmentDetails();
+        }
+
         public int AssessmentId
         {
-            get { return _assessmentId; }
+            get { return assessmentId; }
             set
             {
-                if (_assessmentId != value)
+                if (assessmentId != value)
                 {
-                    _assessmentId = value;
+                    assessmentId = value;
                     OnPropertyChanged("AssessmentId");
                 }
             }
         }
         public string AssessmentName
         {
-            get { return _assessmentName; }
+            get { return AssessmentName; }
             set
             {
-                if (_assessmentName != value)
+                if (AssessmentName != value)
                 {
-                    _assessmentName = value;
+                    AssessmentName = value;
                     OnPropertyChanged("AssessmentName");
                 }
             }
         }
         public string AssessmentType
         {
-            get { return _assessmentType; }
+            get { return AssessmentType; }
             set
             {
-                if (_assessmentType != value)
+                if (AssessmentType != value)
                 {
-                    _assessmentType = value;
+                    AssessmentType = value;
                     OnPropertyChanged("AssessmentType");
                 }
             }
         }
         public DateTime AssessmentStartDate
         {
-            get { return _assessmentStartDate; }
+            get { return AssessmentStartDate; }
             set
             {
-                if (_assessmentStartDate != value)
+                if (AssessmentStartDate != value)
                 {
-                    _assessmentStartDate = value;
+                    AssessmentStartDate = value;
                     OnPropertyChanged("AssessmentStartDate");
                 }
             }
         }
         public DateTime AssessmentEndDate
         {
-            get { return _assessmentEndDate; }
+            get { return AssessmentEndDate; }
             set
             {
-                if (_assessmentEndDate != value)
+                if (AssessmentEndDate != value)
                 {
-                    _assessmentEndDate = value;
+                    AssessmentEndDate = value;
                     OnPropertyChanged("AssessmentEndDate");
                 }
             }
         }
         public int RelatedCourseId
         {
-            get { return _relatedCourseId; }
+            get { return RelatedCourseId; }
             set
             {
-                if (_relatedCourseId != value)
+                if (RelatedCourseId != value)
                 {
-                    _relatedCourseId = value;
+                    RelatedCourseId = value;
                     OnPropertyChanged("RelatedCourseId");
                 }
             }
         }
         public bool NotificationsEnabled
         {
-            get { return _notificationsEnabled; }
+            get { return NotificationsEnabled; }
             set
             {
-                if (_notificationsEnabled != value)
+                if (NotificationsEnabled != value)
                 {
-                    _notificationsEnabled = value;
+                    NotificationsEnabled = value;
                     OnPropertyChanged("NotificationsEnabled");
                 }
             }
@@ -116,22 +119,14 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
-        public AssessmentVM()
-        {
-        }
-
-        public AssessmentVM(Assessment assessment)
-        {
-            AssessmentId = assessment.AssessmentId;
-            LoadAssessmentDetails();
-        }
+        
 
         private async Task LoadAssessmentDetails()
         {
             Connection DatabaseService = new();
             DatabaseService.GetAsyncConnection();
 
-            if (assessmentId > 0)
+            if (assessmentId <= 0)
             {
                 assessment = await DatabaseService.FindAsync<Assessment>(assessmentId);
             }

@@ -1,12 +1,63 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:CourseTracker.Maui.ViewModels"
+             x:DataType="viewModels:AssessmentVM"
              x:Class="CourseTracker.Maui.Views.AssessmentPage"
-             Title="AssessmentPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+             Title="Assessment Modification">
+    <VerticalStackLayout Spacing="10" Padding="10,10">
+
+        <!-- Assessment Name -->
+        <Entry Placeholder="Assessment Name"
+               Text="{Binding AssessmentName}"
+               FontAttributes="Bold"
+               Margin="0,0,0,10"
+               x:Name="assessmentNameEntry"
+               />
+
+        <!-- Assessment Type -->
+        <Picker Title="Assessment Type"
+                SelectedItem="{Binding AssessmentType}"
+                x:Name="assessmentTypePicker">
+            <Picker.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>Objective</x:String>
+                    <x:String>Performance</x:String>
+                </x:Array>
+            </Picker.ItemsSource>
+        </Picker>
+
+        <!-- Assessment Start Date -->
+        <Label Text="Start Date" FontAttributes="Bold" Margin="0,10,0,0"/>
+        <DatePicker Date="{Binding AssessmentStartDate}"
+                    x:Name="assessmentStartDatePicker"/>
+
+        <!-- Assessment End Date -->
+        <Label Text="End Date" FontAttributes="Bold" Margin="0,10,0,0"/>
+        <DatePicker Date="{Binding AssessmentEndDate}"
+                    x:Name="assessmentEndDatePicker"/>
+
+        <!-- Related Course Id -->
+        <Entry Placeholder="Related Course ID"
+               Text="{Binding RelatedCourseId}"
+               Keyboard="Numeric"
+               FontAttributes="Bold"
+               Margin="0,10,0,10"
+               x:Name="relatedCourseIdEntry"
+               />
+
+        <!-- Notifications Enabled -->
+        <Label Text="Enable Notifications" VerticalOptions="Center" />
+        <Switch IsToggled="{Binding NotificationsEnabled}"
+                x:Name="notificationsEnabledSwitch"
+                HorizontalOptions="Start"
+                Margin="0,10,0,10"/>
+
+                <!-- Buttons -->
+        <HorizontalStackLayout Spacing="20" HorizontalOptions="Center">
+            <Button Text="Save" Command="{Binding SaveCommand}" FontAttributes="Bold" />
+            <Button Text="Cancel" Command="{Binding CancelCommand}" FontAttributes="Bold" />
+        </HorizontalStackLayout>
+
     </VerticalStackLayout>
 </ContentPage>
