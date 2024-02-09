@@ -9,16 +9,21 @@ namespace CourseTracker.Maui.Views;
 
 public partial class ListAssessments : ContentPage
 {
-	private ListAssessmentsVM viewModel;
-	private Connection _database;
+    private ListAssessmentsVM viewModel;
+    private Connection _database;
     private ObservableCollection<Assessment> _assessments = new();
 
-	public ListAssessments()
-	{
-		InitializeComponent();
+    public ListAssessments()
+    {
+        InitializeComponent();
         viewModel = new ListAssessmentsVM();
-		BindingContext = viewModel;
-	}
+        BindingContext = viewModel;
+    }
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        await InitializeDataAsync();
+    }
 
     private async Task InitializeDataAsync()
     {

@@ -2,6 +2,7 @@ using System.Diagnostics;
 using CourseTracker.Maui.ViewModels;
 using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Models;
+using CourseTracker.Maui.Supplemental;
 
 namespace CourseTracker.Maui.Views;
 
@@ -35,6 +36,35 @@ public partial class CoursePage : ContentPage
 
     private async void CancelButton_Clicked(object sender, EventArgs e)
     {
-        await Navigation.PopAsync();
+        await Navigation.PopToRootAsync();
+    }
+
+    private void courseNoteShareButton_Clicked(object sender, EventArgs e)
+    {
+        var note = viewModel.Course.CourseNotes;
+        var entry = courseNoteEditor.Text;
+        var course = viewModel.Course.CourseName;
+
+        Debug.WriteLine("Course.CourseNotes = " + note);
+        Debug.WriteLine("courseNoteEditor.Text = " + entry);
+
+        if (!Validation.NotNull(note))
+        {
+            DisplayAlert("Note Validation Error", "No course notes found to share.", "OK");
+        }
+        else
+        {
+            ShareText(note, course);
+            //ShareText(entry, course);
+        }
+    }
+
+    public async Task ShareText(string notes, string source) //
+    {
+        await Share.Default.RequestAsync(new ShareTextRequest
+        {
+            Text = notes + Environment.NewLine + "Shared on " + DateTime.Now.ToShortDateString(),
+            Title = "Course Notes for " + source,
+        });
     }
 }

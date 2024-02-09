@@ -24,6 +24,16 @@ public partial class AssessmentPage : ContentPage
         InitializeComponent();
         viewModel = new AssessmentVM(assessment);
         BindingContext = viewModel;
-        viewModel.InitializeAsync();
+		assessmentIdEntry.Text = assessment.AssessmentId.ToString();
+    }
+
+    private void submitButton_Clicked(object sender, EventArgs e)
+    {
+		//TODO: finish save logic
+    }
+
+    private void cancelButton_Clicked(object sender, EventArgs e)
+    {
+		Navigation.PopToRootAsync();
     }
 }

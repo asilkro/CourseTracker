@@ -128,26 +128,20 @@
             Padding="5"
         HorizontalOptions="CenterAndExpand">
             <Grid ColumnDefinitions="*"
-              RowDefinitions="*, 100"
+              RowDefinitions="*, 100, 100"
               ColumnSpacing="10"
               RowSpacing="10">
                 <!--Course Notes-->
                 <Label x:Name="courseNoteLabel" Text="Course Notes" HorizontalTextAlignment="Center" FontAttributes="Bold" Grid.Column="0" Grid.Row="0"/>
                 <Editor x:Name="courseNoteEditor" Text="{Binding Course.CourseNotes}" AutoSize="TextChanges" Grid.Column="0" Grid.Row="1"/>
-                <Button x:Name="courseNoteShareButton" Text="Share Notes" />
+                <Button x:Name="courseNoteShareButton" Text="Share Notes" BackgroundColor="Red" TextColor="WhiteSmoke" Clicked="courseNoteShareButton_Clicked"/>
             </Grid>
         </HorizontalStackLayout>
 
-
-        <HorizontalStackLayout
-        Spacing="20"
-        Padding="5"
-        HorizontalOptions="Center">
-            <!--Submit Button-->
-            <Button x:Name="submitButton" Text="Submit" FontSize="Medium" FontAttributes="Bold" Clicked="SubmitButton_Clicked" HorizontalOptions="FillAndExpand"/>
-
-            <!--Cancel Button-->
-            <Button x:Name="cancelButton" Text="Cancel" FontSize="Medium" FontAttributes="Bold" Clicked="CancelButton_Clicked" HorizontalOptions="FillAndExpand"/>
+        <!-- Buttons -->
+        <HorizontalStackLayout Spacing="10" Padding="10,10" HorizontalOptions="Center">
+            <Button x:Name="submitButton" Text="Submit" FontAttributes="Bold" Clicked="SubmitButton_Clicked"/>
+            <Button x:Name="cancelButton" Text="Cancel" FontAttributes="Bold" Clicked="CancelButton_Clicked"/>
         </HorizontalStackLayout>
     </VerticalStackLayout>
 </ContentPage>
