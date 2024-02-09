@@ -6,7 +6,6 @@
     xmlns:views="clr-namespace:CourseTracker.Maui.Views"
     xmlns:local="clr-namespace:CourseTracker.Maui"
     Shell.FlyoutBehavior="Flyout"
-    Title="CourseTracker.Maui"
     Padding="10,10"
     FlyoutHeaderBehavior="CollapseOnScroll">
 

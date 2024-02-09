@@ -9,11 +9,14 @@ public partial class AssessmentPage : ContentPage
 {
 	AssessmentVM viewModel;
 	readonly Connection database = new();
+	int nextAssessmentId = TrackerDb.GetNextAutoIncrementID("Assessment");
+
 	public AssessmentPage()
 	{
 		InitializeComponent();
 		viewModel = new AssessmentVM();
 		this.BindingContext = viewModel;
+		assessmentIdEntry.Text = nextAssessmentId.ToString();
 	}
 
 	public AssessmentPage(Assessment assessment)

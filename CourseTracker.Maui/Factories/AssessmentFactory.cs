@@ -23,11 +23,6 @@ namespace CourseTracker.Maui.Factories
                 return null;
             }
 
-            if (assessmentId <= 0)
-            {
-                assessmentId = RandomNumberGenerator.GetInt32(1, 5000);
-            }
-
             var assessment = new Assessment
             {
                 AssessmentId = assessmentId,
@@ -58,16 +53,12 @@ namespace CourseTracker.Maui.Factories
 
             if (!Validation.IdWasSet(id))
                 errorMessage = "Assessment ID must be greater than 0.";
-
             else if (!Validation.IdWasSet(relatedCourseId))
-                errorMessage = "Related course ID must be greater than 0.";
-            
+                errorMessage = "Related course ID must be greater than 0.";            
             else if (!Validation.NotNull(assessmentName))
-                errorMessage = "Assessment name cannot be empty.";
-            
+                errorMessage = "Assessment name cannot be empty.";            
             else if (!Validation.AssessmentTypeIsValid(assessmentType))
-                errorMessage = "Assessment type is invalid, must be Objective or Performance.";
-            
+                errorMessage = "Assessment type is invalid, must be Objective or Performance.";            
             else if (!Validation.DatesAreValid(assessmentStartDate, assessmentEndDate))
                 errorMessage = "Assessment start and end dates must be valid.";
 

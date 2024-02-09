@@ -20,7 +20,8 @@ public partial class TermPage : ContentPage
 		viewModel = new TermVM();
 		BindingContext = viewModel;
 		termIdEntry.Text = nextTermId.ToString();
-	}
+        termIdEntry.IsReadOnly = true; // keep this from being edited
+    }
 
 	public TermPage(Term termBeingEdited)
 	{
@@ -29,7 +30,8 @@ public partial class TermPage : ContentPage
         viewModel = new TermVM(termBeingEdited);
         BindingContext = viewModel;
 		termIdEntry.Text = termBeingEdited.TermId.ToString();
-	}
+        termIdEntry.IsReadOnly = true; // keep this from being edited
+    }
 
 	private async void SubmitButton_Clicked(object sender, EventArgs e)
 	{
@@ -41,13 +43,15 @@ public partial class TermPage : ContentPage
                 Debug.WriteLine(errorMessage);
                 return;
             }
-            switch (term.TermId)
+            var exists = await database.FindAsync<Term>(term.TermId);
+            
+            switch (exists)
             {
-                case <= 0:
+                case null:
                     await database.InsertAsync<Term>(term);
                     break;
                 default:
-                    await UpdateTermAsync();
+                    await database.UpdateAsync<Term>(term);
                     break;
             }
         }

@@ -16,7 +16,8 @@ public partial class ListAssessments : ContentPage
 	public ListAssessments()
 	{
 		InitializeComponent();
-		BindingContext = new ListAssessmentsVM();
+        viewModel = new ListAssessmentsVM();
+		BindingContext = viewModel;
 	}
 
     private async Task InitializeDataAsync()
@@ -62,7 +63,7 @@ public partial class ListAssessments : ContentPage
         await Navigation.PushAsync(new AssessmentPage(assessment));
     }
 
-private async void RemoveAssessmentAsync(Assessment assessment)
+    private async void RemoveAssessmentAsync(Assessment assessment)
     {
         var result = await DisplayAlert("Delete Assessment", $"Are you sure you want to delete {assessment.AssessmentName}?", "Yes", "No");
         if (result)

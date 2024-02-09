@@ -9,76 +9,28 @@ namespace CourseTracker.Maui.Factories
 {
     public class CourseFactory : FactoryBase<Course>
     {
+        readonly Connection _database = new();
         public CourseFactory(IAsyncSqLite database) : base(database)
         {
-
         }
 
-        public Course? CreateCourse(CourseVM courseVM, out string errorMessage)
+        public async Task<CourseOperationOut> CreateCourseAsync(CourseVM courseVM)
         {
-            return CreateCourse(courseVM.Course.CourseId, courseVM.Course.TermId,
+            return await CreateCourseAsync(
+                courseVM.Course.CourseId, courseVM.Course.TermId,
                 courseVM.Course.CourseName, courseVM.Course.CourseStatus,
                 courseVM.Course.CourseStart, courseVM.Course.CourseEnd,
                 courseVM.Course.CourseNotes, courseVM.Course.InstructorName,
                 courseVM.Course.InstructorEmail, courseVM.Course.InstructorPhone,
-                courseVM.Course.NotificationsEnabled, courseVM.Course.CourseAssessmentCount, out errorMessage);
+                courseVM.Course.NotificationsEnabled, courseVM.Course.CourseAssessmentCount);
         }
 
-        public Course? CreateCourse(int courseId, int termId, string courseName, string courseStatus,
-    DateTime courseStart, DateTime courseEnd, string courseNotes,
-    string instructorName, string instructorEmail, string instructorPhone,
-    bool notificationEnabled, int courseAssessmentCount, out string errorMessage)
+        public async Task<CourseOperationOut> CreateCourseAsync(int courseId, int termId, string courseName, string courseStatus, DateTime courseStart, DateTime courseEnd, string courseNotes, string instructorName, string instructorEmail, string instructorPhone, bool notificationEnabled, int courseAssessmentCount)
         {
-            if (!IsValidCourse(courseId, termId, courseName, courseStatus,
-                courseStart, courseEnd, courseNotes, instructorName,
-                instructorEmail, instructorPhone, notificationEnabled, courseAssessmentCount, out errorMessage))
+            string errorMessage;
+            if (!IsValidCourse(courseId, termId, courseName, courseStatus, courseStart, courseEnd, courseNotes, instructorName, instructorEmail, instructorPhone, notificationEnabled, courseAssessmentCount, out errorMessage))
             {
-                return null;
-            }
-
-            Course course = new()
-            {
-                TermId = termId,
-                CourseName = courseName,
-                CourseStatus = courseStatus,
-                CourseStart = courseStart,
-                CourseEnd = courseEnd,
-                CourseNotes = courseNotes,
-                InstructorName = instructorName,
-                InstructorEmail = instructorEmail,
-                InstructorPhone = instructorPhone,
-                NotificationsEnabled = notificationEnabled,
-                CourseAssessmentCount = courseAssessmentCount
-            };
-
-            if (course.NotificationsEnabled)
-            {
-                ScheduleCourseNotifications(course);
-            }
-
-            return course;
-        }
-
-        public Course? EditCourse(CourseVM courseVM, out string errorMessage)
-        {
-            return EditCourse(courseVM.Course.CourseId, courseVM.Course.TermId,
-                courseVM.Course.CourseName, courseVM.Course.CourseStatus,
-                courseVM.Course.CourseStart, courseVM.Course.CourseEnd,
-                courseVM.Course.CourseNotes, courseVM.Course.InstructorName,
-                courseVM.Course.InstructorEmail, courseVM.Course.InstructorPhone,
-                courseVM.Course.NotificationsEnabled, courseVM.Course.CourseAssessmentCount, out errorMessage);
-        }
-
-        public Course? EditCourse(int courseId, int termId, string courseName, string courseStatus,
-    DateTime courseStart, DateTime courseEnd, string courseNotes,
-    string instructorName, string instructorEmail, string instructorPhone,
-    bool notificationEnabled, int courseAssessmentCount, out string errorMessage)
-        {
-            if (!IsValidCourse(courseId, termId, courseName, courseStatus,
-                courseStart, courseEnd, courseNotes, instructorName,
-                instructorEmail, instructorPhone, notificationEnabled, courseAssessmentCount, out errorMessage))
-            {
-                return null;
+                return new CourseOperationOut { ErrorMessage = errorMessage };
             }
 
             Course course = new()
@@ -97,18 +49,89 @@ namespace CourseTracker.Maui.Factories
                 CourseAssessmentCount = courseAssessmentCount
             };
 
-            if (course.NotificationsEnabled)
+            var insertResult = await InsertCourseAndUpdateTermCount(course);
+            if (insertResult != "Course added successfully.")
             {
-                ScheduleCourseNotifications(course);
+                return new CourseOperationOut { ErrorMessage = insertResult };
             }
 
-            return course;
+            if (course.NotificationsEnabled)
+            {
+                await ScheduleCourseNotifications(course);
+            }
+
+            return new CourseOperationOut { Course = course };
         }
 
-        public bool IsValidCourse(int courseId, int termId, string courseName, string courseStatus,
-    DateTime courseStart, DateTime courseEnd, string courseNotes,
-    string instructorName, string instructorEmail, string instructorPhone,
-    bool notificationEnabled, int courseAssessmentCount, out string errorMessage)
+
+        public async Task<CourseOperationOut> EditCourseAsync(CourseVM courseVM)
+        {
+            return await EditCourseAsync(courseVM.Course.CourseId, courseVM.Course.TermId,
+                courseVM.Course.CourseName, courseVM.Course.CourseStatus,
+                courseVM.Course.CourseStart, courseVM.Course.CourseEnd,
+                courseVM.Course.CourseNotes, courseVM.Course.InstructorName,
+                courseVM.Course.InstructorEmail, courseVM.Course.InstructorPhone,
+                courseVM.Course.NotificationsEnabled, courseVM.Course.CourseAssessmentCount);
+        }
+
+        public async Task<CourseOperationOut> EditCourseAsync(int courseId, int termId, string courseName, string courseStatus, DateTime courseStart, DateTime courseEnd, string courseNotes, string instructorName, string instructorEmail, string instructorPhone, bool notificationEnabled, int courseAssessmentCount)
+        {
+            string errorMessage;
+            if (!IsValidCourse(courseId, termId, courseName, courseStatus, courseStart, courseEnd, courseNotes, instructorName, instructorEmail, instructorPhone, notificationEnabled, courseAssessmentCount, out errorMessage))
+            {
+                return new CourseOperationOut { ErrorMessage = errorMessage };
+            }
+
+            var existingCourse = await _database.FindAsync<Course>(courseId);
+            if (existingCourse == null)
+            {
+                return new CourseOperationOut { ErrorMessage = "Course not found." };
+            }
+
+            // Properties get updated here
+            existingCourse.TermId = termId;
+            existingCourse.CourseName = courseName;
+            existingCourse.CourseStatus = courseStatus;
+            existingCourse.CourseStart = courseStart;
+            existingCourse.CourseEnd = courseEnd;
+            existingCourse.CourseNotes = courseNotes;
+            existingCourse.InstructorName = instructorName;
+            existingCourse.InstructorEmail = instructorEmail;
+            existingCourse.InstructorPhone = instructorPhone;
+            existingCourse.NotificationsEnabled = notificationEnabled;
+            existingCourse.CourseAssessmentCount = courseAssessmentCount;
+
+            // Save changes to the database
+            var updateResult = await _database.UpdateAsync<Course>(existingCourse);
+            if (updateResult == 0) //
+            {
+                return new CourseOperationOut { ErrorMessage = "Failed to update the course." };
+            }
+
+            if (existingCourse.NotificationsEnabled)
+            {
+                await ScheduleCourseNotifications(existingCourse);
+            }
+
+            return new CourseOperationOut { Course = existingCourse };
+        }
+
+
+
+        public bool IsValidCourse(
+            int courseId,
+            int termId,
+            string courseName,
+            string courseStatus,
+            DateTime courseStart,
+            DateTime courseEnd,
+            string courseNotes,
+            string instructorName,
+            string instructorEmail,
+            string instructorPhone,
+            bool notificationEnabled,
+            int courseAssessmentCount,
+            out string errorMessage)
         {
             errorMessage = "";
             if (!Validation.NotNull(courseName))
@@ -119,7 +142,7 @@ namespace CourseTracker.Maui.Factories
                 errorMessage = "Course status is not valid.";
             else if (!Validation.DatesAreValid(courseStart, courseEnd))
                 errorMessage = "Course start and end dates are not valid.";
-            else if (!Validation.IdWasSet(courseAssessmentCount))
+            else if (!Validation.IdWasSet(courseId))
                 errorMessage = "Course ID must be greater than 0.";
             else if (!Validation.IdWasSet(termId))
                 errorMessage = "Term ID must be greater than 0.";
@@ -188,6 +211,13 @@ namespace CourseTracker.Maui.Factories
                 }
             }
         }
+
+        public class CourseOperationOut
+        {
+            public Course? Course { get; set; }
+            public string ErrorMessage { get; set; } = string.Empty;
+        }
+
 
     }
 }
