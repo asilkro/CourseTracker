@@ -67,7 +67,7 @@ namespace CourseTracker.Maui.ViewModels
                 if (assessment != value)
                 {
                     assessment = value;
-                    OnPropertyChanged("Assessment");
+                    OnPropertyChanged(nameof(Assessment));
                 }
             }
         }
@@ -81,7 +81,7 @@ namespace CourseTracker.Maui.ViewModels
                 if (minimumDate != value)
                 {
                     minimumDate = value;
-                    OnPropertyChanged("MinimumDate");
+                    OnPropertyChanged(nameof(MinimumDate));
                 }
             }
         }
@@ -95,7 +95,7 @@ namespace CourseTracker.Maui.ViewModels
                 if (maximumDate != value)
                 {
                     maximumDate = value;
-                    OnPropertyChanged("MaximumDate");
+                    OnPropertyChanged(nameof(MaximumDate));
                 }
             }
         }
@@ -109,7 +109,7 @@ namespace CourseTracker.Maui.ViewModels
                 if (date != value)
                 {
                     date = value;
-                    OnPropertyChanged("Date");
+                    OnPropertyChanged(nameof(Date));
                 }
             }
         }
@@ -123,7 +123,7 @@ namespace CourseTracker.Maui.ViewModels
                 if (term != value)
                 {
                     term = value;
-                    OnPropertyChanged("Term");
+                    OnPropertyChanged(nameof(Term));
                 }
             }
         }

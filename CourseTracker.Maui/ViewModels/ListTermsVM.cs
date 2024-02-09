@@ -44,7 +44,7 @@ namespace CourseTracker.Maui.ViewModels
                 if (term != value)
                 {
                     term = value;
-                    OnPropertyChanged("Term");
+                    OnPropertyChanged(nameof(Term));
                 }
             }
         }

@@ -29,7 +29,7 @@ namespace CourseTracker.Maui.ViewModels
                 if (assessmentId != value)
                 {
                     assessmentId = value;
-                    OnPropertyChanged("AssessmentId");
+                    OnPropertyChanged(nameof(AssessmentId));
                 }
             }
         }
@@ -112,7 +112,8 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
-        public Course course
+        private Course course;
+        public Course Course
         {
             get { return course; }
             set
@@ -120,7 +121,7 @@ namespace CourseTracker.Maui.ViewModels
                 if (course != value)
                 {
                     course = value;
-                    OnPropertyChanged("Course");
+                    OnPropertyChanged(nameof(Course));
                 }
             }
         }
