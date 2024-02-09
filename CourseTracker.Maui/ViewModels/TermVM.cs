@@ -22,6 +22,33 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
+        private int termId;
+        public int TermId
+        {
+            get { return termId; }
+            set
+            {
+                if (termId != value)
+                {
+                    termId = value;
+                    OnPropertyChanged(nameof(TermId));
+                }
+            }
+        }
+        private string termName;
+        public string TermName
+        {
+            get { return termName; }
+            set
+            {
+                if (termName != value)
+                {
+                    termName = value;
+                    OnPropertyChanged(nameof(TermName));
+                }
+            }
+        }
+
         private DateTime minimumDate = DateTime.Parse("01/01/2020");
         public DateTime MinimumDate
         {
@@ -50,16 +77,58 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
-        private DateTime date = DateTime.Now.Date;
-        public DateTime Date
+        private DateTime termStart;
+        public DateTime TermStart
         {
-            get { return date; }
+            get { return termStart; }
             set
             {
-                if (date != value)
+                if (termStart != value)
                 {
-                    date = value;
-                    OnPropertyChanged(nameof(Date));
+                    termStart = value;
+                    OnPropertyChanged(nameof(TermStart));
+                }
+            }
+        }
+
+        private DateTime termEnd;
+        public DateTime TermEnd
+        {
+            get { return termEnd; }
+            set
+            {
+                if (termEnd != value)
+                {
+                    termEnd = value;
+                    OnPropertyChanged(nameof(TermEnd));
+                }
+            }
+        }
+
+        private int courseCount;
+        public int CourseCount
+        {
+            get { return courseCount; }
+            set
+            {
+                if (courseCount != value)
+                {
+                    courseCount = value;
+                    OnPropertyChanged(nameof(CourseCount));
+                }
+            }
+        }
+
+        private bool notificationsEnabled;
+        public bool NotificationsEnabled
+        {
+            get { return notificationsEnabled; }
+            set
+            {
+                if (notificationsEnabled != value)
+                {
+                    notificationsEnabled = value;
+                    OnPropertyChanged(nameof(NotificationsEnabled));
                 }
             }
         }

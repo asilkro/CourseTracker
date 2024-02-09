@@ -12,28 +12,70 @@ public partial class TermPage : ContentPage
 	TermVM viewModel;
     readonly Connection database = new Connection();
     readonly TermFactory _termFactory;
+	int nextTermId = TrackerDb.GetNextAutoIncrementID("Term");
     public TermPage()
 	{
 		InitializeComponent();
+		database.GetAsyncConnection();
 		viewModel = new TermVM();
 		BindingContext = viewModel;
+		termIdEntry.Text = nextTermId.ToString();
 	}
 
 	public TermPage(Term termBeingEdited)
 	{
         InitializeComponent();
+        database.GetAsyncConnection();
         viewModel = new TermVM(termBeingEdited);
         BindingContext = viewModel;
+		termIdEntry.Text = termBeingEdited.TermId.ToString();
 	}
 
 	private async void SubmitButton_Clicked(object sender, EventArgs e)
 	{
-        Debug.WriteLine(sender + " triggered this.");
-		//TODO finish this
+		try
+		{
+			var term = _termFactory.CreateTerm(viewModel, out string errorMessage);
+            if (term == null)
+            {
+                Debug.WriteLine(errorMessage);
+                return;
+            }
+            switch (term.TermId)
+            {
+                case <= 0:
+                    await database.InsertAsync<Term>(term);
+                    break;
+                default:
+                    await UpdateTermAsync();
+                    break;
+            }
+        }
+        catch (Exception ex)
+		{
+            Debug.WriteLine(ex.Message);
+        }
+		
+		if (viewModel.TermId <= 0)
+		{
+			if(_termFactory.IsValidTerm(viewModel.TermId, viewModel.TermName, viewModel.TermStart, viewModel.TermEnd, viewModel.NotificationsEnabled, viewModel.CourseCount, out string errorMessage))
+			{
+                await database.InsertAndGetIdAsync(viewModel.Term);
+            }
+            else
+			{
+                Debug.WriteLine(errorMessage);
+            }
+		}
+		else
+		{
+			await database.UpdateAsync(viewModel.Term);
+		}
+        await Navigation.PopToRootAsync();
     }
 
 	private async void CancelButton_Clicked(object sender, EventArgs e)
 	{
-        await Navigation.PopAsync();
+        await Navigation.PopToRootAsync();
     }
 }
