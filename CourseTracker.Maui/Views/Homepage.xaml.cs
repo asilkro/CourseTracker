@@ -2,6 +2,7 @@ using System.Diagnostics;
 using CourseTracker.Maui.Factories;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
+using CourseTracker.Maui.Supplemental;
 
 namespace CourseTracker.Maui.Views;
 
@@ -22,31 +23,40 @@ public partial class Homepage : ContentPage
         await TrackerDb.Initialize();
     }
 
-    private async void LoadSampleData(Term demoTerm,
-        Course demoCourse, Assessment demoAssessment1, Assessment demoAssessment2)
+    private async Task LoadSampleDataAsync(Term demoTerm, Course demoCourse, Assessment demoAssessment1, Assessment demoAssessment2)
     {
         if (connection == null)
         {
-            connection = new Connection();
-            connection.GetAsyncConnection(); // Ensure this method sets up the connection properly
+            connection = new ();
+            connection.GetAsyncConnection(); // Ensure this method sets up the connection properly and is awaited
+        }
+        var existing = await Validation.DataExistsInTables(connection);
+        if (existing)
+        {
+            await DisplayAlert("Table Already Has Data", "Table data has already been loaded. You should reset the database to avoid errors with sample data creation.", "OK");
+            return;
         }
 
-        var termId = await connection.InsertAndGetIdAsync<Term>(demoTerm);
+        try
+        {
+            var termId = await connection.InsertAndGetIdAsync(demoTerm);
+            demoCourse.TermId = termId;
+            var courseId = await connection.InsertAndGetIdAsync(demoCourse);
 
-        demoCourse.TermId = termId;
+            demoAssessment1.RelatedCourseId = courseId;
+            demoAssessment2.RelatedCourseId = courseId;
 
-        var courseId = await connection.InsertAndGetIdAsync<Course>(demoCourse);
+            await connection.InsertAsync(demoAssessment1);
+            await connection.InsertAsync(demoAssessment2);
 
-        demoAssessment1.RelatedCourseId = courseId;
-        demoAssessment2.RelatedCourseId = courseId;
+            await DisplayAlert("Sample Data Loaded", "Sample data has been loaded successfully. Please relaunch the application to complete setup.", "OK");
+            loadSampleDataButton.IsEnabled = false; // Assume this exists in your context to disable the button
 
-        await connection.InsertAsync<Assessment>(demoAssessment1);
-        await connection.InsertAsync<Assessment>(demoAssessment2);
-
-        await DisplayAlert(
-            "Sample Data Loaded",
-            "Sample data has been loaded",
-            "OK");
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Sample Data Error", "$There was an error while loading sample data: {ex.Message}", "Ok");
+        }
     }
 
 
@@ -58,7 +68,7 @@ public partial class Homepage : ContentPage
             {
                 await StartDB();
             }
-			LoadSampleData(demoTerm, demoCourse, demoOA, demoPA);
+			await LoadSampleDataAsync(demoTerm, demoCourse, demoOA, demoPA);
 		}
 
     }

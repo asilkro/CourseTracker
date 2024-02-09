@@ -1,4 +1,5 @@
-﻿using SQLite;
+﻿using System.Diagnostics;
+using SQLite;
 
 namespace CourseTracker.Maui.Services;
 public interface IAsyncSqLite
@@ -13,6 +14,7 @@ public interface IAsyncSqLite
     Task UpdateAsync<T>(T obj);
     Task DeleteAsync<T>(T obj);
     Task<T> ExecuteScalarAsync<T>(string query);
+    Task<bool> AnyAsync<T>() where T : new();
 }
 
 class Connection : IAsyncSqLite
@@ -74,5 +76,29 @@ class Connection : IAsyncSqLite
     {
         var asyncConnection = GetAsyncConnection();
         return await asyncConnection.ExecuteScalarAsync<T>(query);
+    }
+
+    public async Task<bool> AnyAsync<T>() where T : new()
+    {
+        var asyncConnection = GetAsyncConnection();
+        try
+        {
+            var record = await asyncConnection.Table<T>().FirstOrDefaultAsync();
+            return record != null;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Error in AnyAsync: {ex.Message}");
+            return false;
+        }
+    }
+
+    public class RefreshService
+    {
+        public Action onRefreshActionRequested;
+        public void CallRequestRefresh()
+        {
+            onRefreshActionRequested?.Invoke();
+        }
     }
 }

@@ -189,7 +189,6 @@ namespace CourseTracker.Maui.Supplemental
             return true;
         }
 
-
         public async static Task<bool> IsValidNotification(NotificationRequest notification) //Non exhaustive checks
         {
             var result = true;
@@ -221,7 +220,35 @@ namespace CourseTracker.Maui.Supplemental
             return result;
                  
         }
-         
+
+        public async static Task<bool> DataExistsInTables(Connection _connection)
+        {
+            bool result;
+            if (_connection == null)
+            {
+                _connection = new Connection();
+                _connection.GetAsyncConnection();
+            }
+            var termCount = await _connection.AnyAsync<Term>();
+            var courseCount = await _connection.AnyAsync<Course>();
+            var assessmentCount = await _connection.AnyAsync<Assessment>();
+            switch (termCount, courseCount, assessmentCount)
+            {
+                // If not all three are empty, return true to avoid conflicts
+                case (true, true, true):
+                    result = true;
+                    break;
+                case (false, false, false):
+                    result = false;
+                    break;
+                default:
+                    result = true;
+                    break;
+            }
+
+            return result;
+        }
+
     }
 
 }
