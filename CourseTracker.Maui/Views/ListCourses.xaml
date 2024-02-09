@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModels="clr-namespace:CourseTracker.Maui.ViewModels"
              x:Class="CourseTracker.Maui.Views.ListCourses"
+             x:DataType="viewModels:ListCoursesVM"
              Title="Course(s) List">
     <VerticalStackLayout
     Padding="20,20,5,5" Spacing="5">

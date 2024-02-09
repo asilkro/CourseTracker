@@ -46,7 +46,155 @@ namespace CourseTracker.Maui.ViewModels
                 if (course != value)
 				{
                     course = value;
-                    OnPropertyChanged("Course");
+                    OnPropertyChanged(nameof(Course));
+                }
+            }
+        }
+
+        private int courseId;
+        public int CourseId
+        {
+            get { return courseId; }
+            set
+            {
+                if (courseId != value)
+                {
+                    courseId = value;
+                    OnPropertyChanged(nameof(CourseId));
+                }
+            }
+        }
+
+        private string courseName;
+        public string CourseName
+        {
+            get { return courseName; }
+            set
+            {
+                if (courseName != value)
+                {
+                    courseName = value;
+                    OnPropertyChanged(nameof(CourseName));
+                }
+            }
+        }
+        private int termId;
+        public int TermId
+        {
+            get { return termId; }
+            set
+            {
+                if (termId != value)
+                {
+                    termId = value;
+                    OnPropertyChanged(nameof(TermId));
+                }
+            }
+        }
+        private string instructorName;
+        public string InstructorName
+        {
+            get { return instructorName; }
+            set
+            {
+                if (instructorName != value)
+                {
+                    instructorName = value;
+                    OnPropertyChanged(nameof(InstructorName));
+                }
+            }
+        }
+        private string instructorPhone;
+        public string InstructorPhone
+        {
+            get { return instructorPhone; }
+            set
+            {
+                if (instructorPhone != value)
+                {
+                    instructorPhone = value;
+                    OnPropertyChanged(nameof(InstructorPhone));
+                }
+            }
+        }
+        private string instructorEmail;
+        public string InstructorEmail
+        {
+            get { return instructorEmail; }
+            set
+            {
+                if (instructorEmail != value)
+                {
+                    instructorEmail = value;
+                    OnPropertyChanged(nameof(InstructorEmail));
+                }
+            }
+        }
+        private string courseStatus;
+        public string CourseStatus
+        {
+            get { return courseStatus; }
+            set
+            {
+                if (courseStatus != value)
+                {
+                    courseStatus = value;
+                    OnPropertyChanged(nameof(CourseStatus));
+                }
+            }
+        }
+        private DateTime courseStart;
+        public DateTime CourseStart
+        {
+            get { return courseStart; }
+            set
+            {
+                if (courseStart != value)
+                {
+                    courseStart = value;
+                    OnPropertyChanged(nameof(CourseStart));
+                }
+            }
+        }
+
+        private DateTime courseEnd;
+        public DateTime CourseEnd
+        {
+            get { return courseEnd; }
+            set
+            {
+                if (courseEnd != value)
+                {
+                    courseEnd = value;
+                    OnPropertyChanged(nameof(CourseEnd));
+                }
+            }
+        }
+
+        public int courseAssessmentCount;
+        public int CourseAssessmentCount
+        {
+            get { return courseAssessmentCount; }
+            set
+            {
+                if (courseAssessmentCount != value)
+                {
+                    courseAssessmentCount = value;
+                    OnPropertyChanged(nameof(CourseAssessmentCount));
+                }
+            }
+        }
+
+        public bool notificationsEnabled;
+        public bool NotificationsEnabled
+        {
+            get { return notificationsEnabled; }
+            set
+            {
+                if (notificationsEnabled != value)
+                {
+                    notificationsEnabled = value;
+                    OnPropertyChanged(nameof(NotificationsEnabled));
                 }
             }
         }
