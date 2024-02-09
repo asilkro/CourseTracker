@@ -15,50 +15,17 @@
                     <ViewCell>
                         <StackLayout Padding="5,5">
                             <!-- Display Properties of Each Course -->
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="Course Name: " FontAttributes="Bold" />
-                                <Label Text="{Binding CourseName}" FontAttributes="Bold" />
-                            </StackLayout>
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="Course ID: " />
-                                <Label Text="{Binding CourseId}" />
-                            </StackLayout>
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="Term ID: " />
-                                <Label Text="{Binding TermId}" />
-                            </StackLayout>
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="Instructor Name: " />
-                                <Label Text="{Binding InstructorName}" />
-                            </StackLayout>
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="Instructor Email: " />
-                                <Label Text="{Binding InstructorEmail}" />
-                            </StackLayout>
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="Instructor Phone: " />
-                                <Label Text="{Binding InstructorPhone}" />
-                            </StackLayout>
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="Course Status: " />
-                                <Label Text="{Binding CourseStatus}" />
-                            </StackLayout>
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="Course Start Date: " />
-                                <Label Text="{Binding CourseStart, StringFormat='{0:d}'}" />
-                            </StackLayout>
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="Course End Date: " />
-                                <Label Text="{Binding CourseEnd, StringFormat='{0:d}'}" />
-                            </StackLayout>
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="Assessment Count: " />
-                                <Label Text="{Binding CourseAssessmentCount}" />
-                            </StackLayout>
-                            <StackLayout Orientation="Horizontal">
-                                <Label Text="Notifications Enabled: " />
-                                <Label Text="{Binding NotificationsEnabled}" />
-                            </StackLayout>
+                            <Label Text="{Binding CourseName, StringFormat='Course Name: {0}'}" FontAttributes="Bold" />
+                            <Label Text="{Binding CourseId, StringFormat='Course Id: {0}'}" />
+                            <Label Text="{Binding TermId, StringFormat='Term Id: {0}'}" />
+                            <Label Text="{Binding InstructorName, StringFormat='Instructor Name: {0}'}" />
+                            <Label Text="{Binding InstructorEmail, StringFormat='Instructor Email: {0}'}" />
+                            <Label Text="{Binding InstructorPhone, StringFormat='Instructor Phone: {0}'}" />
+                            <Label Text="{Binding CourseStatus, StringFormat='Course Status: {0}'}" />
+                            <Label Text="{Binding CourseStart, StringFormat='Course Start: {0:d}'}" />
+                            <Label Text="{Binding CourseEnd, StringFormat='Course End: {0:d}'}" />
+                            <Label Text="{Binding CourseAssessmentCount, StringFormat='Course Quantity in Term: {0}'}" />
+                            <Label Text="{Binding NotificationsEnabled, StringFormat='Course Notifications Enabled: {0}'}" />
                         </StackLayout>
                     </ViewCell>
                 </DataTemplate>
