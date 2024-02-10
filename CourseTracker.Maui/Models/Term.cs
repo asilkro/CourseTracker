@@ -6,7 +6,8 @@ namespace CourseTracker.Maui.Models;
     public class Term
     {
     #region Properties
-
+    [PrimaryKey]
+    [AutoIncrement]
     [Column("TermId")] public int TermId { get; set; } = -1; // -1 means new term
     [Column("TermName")] public string TermName { get; set; } = "Term Name Placeholder";
     [Column("TermStart")] public DateTime TermStart { get; set; } = DateTime.Now.Date;

@@ -145,7 +145,7 @@ public partial class Homepage : ContentPage
         AssessmentName = "Zed Pandemic OA",
         AssessmentType = "Objective",
         AssessmentStartDate = new DateTime(2023, 01, 01),
-        AssessmentEndDate = new DateTime(2023, 02, 29),
+        AssessmentEndDate = new DateTime(2023, 02, 28),
         RelatedCourseId = demoCourse2.CourseId,
         NotificationsEnabled = false
     };
@@ -190,21 +190,29 @@ public partial class Homepage : ContentPage
         {
             //First term, course for assessment C6 and C3 requirements
             var termId = await connection.InsertAndGetIdAsync(demoTerm);
+            Debug.WriteLine("Inserted " + demoTerm.TermName);
+
             demoCourse.TermId = termId;
             var courseId = await connection.InsertAndGetIdAsync(demoCourse);
+            Debug.WriteLine("Inserted " + demoCourse.CourseName);
 
             demoOA.RelatedCourseId = courseId;
             demoPA.RelatedCourseId = courseId;
             await connection.InsertAsync(demoOA);
+            Debug.WriteLine("Inserted " + demoOA.AssessmentName);
             await connection.InsertAsync(demoPA);
+            Debug.WriteLine("Inserted " + demoPA.AssessmentName);
 
             //Second term and courses to provide a more robust demo set of data for evaluator
             termId = await connection.InsertAndGetIdAsync(demoTerm2);
+            Debug.WriteLine("Inserted " + demoTerm2.TermName);
             demoCourse2.TermId = termId;
             demoCourse3.TermId = termId;
             courseId = await connection.InsertAndGetIdAsync(demoCourse2);
+            Debug.WriteLine("Inserted " + demoCourse2.CourseName);
             demoOA2.RelatedCourseId = demoCourse2.CourseId;
             courseId = await connection.InsertAndGetIdAsync(demoCourse3);
+            Debug.WriteLine("Inserted " + demoCourse3.CourseName);
             demoPA2.RelatedCourseId = demoCourse3.CourseId;
 
             //TODO: add validation for insert during debug

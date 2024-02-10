@@ -8,6 +8,7 @@ public class Course
     #region Properties
 
     [PrimaryKey]
+    [AutoIncrement]
     [Column("CourseId")] public int CourseId { get; set; } = -1; // -1 means new course
     [Column("CourseName")] public string CourseName { get; set; } = "Course Name Placeholder";
     [Column("TermId")] public int TermId { get; set; } = -1; // -1 means not set to actual term

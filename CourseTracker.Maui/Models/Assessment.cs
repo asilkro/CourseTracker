@@ -7,6 +7,7 @@ public class Assessment
 {
     #region Properties
     [PrimaryKey]
+    [AutoIncrement]
     [Column("AssessmentId")] public int AssessmentId { get; set; } = -1;
     // -1 means new assessment
     [Column("AssessmentName")] public string AssessmentName { get; set; } = "Assessment Name Placeholder";

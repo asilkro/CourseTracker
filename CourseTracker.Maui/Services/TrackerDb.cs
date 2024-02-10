@@ -72,17 +72,71 @@ namespace CourseTracker.Maui.Services
             {
                 await db.CreateTableAsync<Assessment>();
             }
+
+            // Check if the 'sqlite_sequence' table exists and create it if it doesn't.
+            // It should be getting created automatically, but this is here just in case.
+            var sqlite_sequenceTableInfo = await db.GetTableInfoAsync("sqlite_sequence");
+            if (!sqlite_sequenceTableInfo.Any())
+            {
+                await db.ExecuteAsync("CREATE TABLE sqlite_sequence(name, seq)");
+            }
         }
         
         #endregion
 
         #region Utility
 
-        public static int GetNextAutoIncrementID(string tableName)
+/*        public static int GetNextAutoIncrementID(string tableName)
         {
-            var query = $"SELECT seq FROM sqlite_sequence WHERE name = '{tableName}'";
+            if (_dbConnection == null)
+            {
+                _dbConnection = new Connection();
+                _dbConnection
+            }
+
+            try
+            {
+                var doesItExist = _db<int>($"SELECT EXISTS (SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = '{tableName}'");
+                if (doesItExist == 0)
+                {
+                   _dbConnection.CreateTable<tableName>();
+                }
+                var query = $"SELECT seq FROM sqlite_sequence WHERE name = '{tableName}'";
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
             var result = _dbConnection.ExecuteScalar<int>(query);
-            return result + 1;
+            return (result + 1);
+        }*/
+
+        public static int GetNextAutoIncrementID(string tableName) // was GetLastInsertedId
+        {
+            try
+            {
+                if (_dbConnection == null)
+                {
+                    _dbConnection = new Connection().GetConnection();
+                }
+                var query = "SELECT last_insert_rowid()";
+                var lastId =  _dbConnection.ExecuteScalar<int>(query);
+                switch (lastId)
+                {
+                    case <= 1:
+                        lastId = 1;
+                        return lastId;
+                    case > 1:
+                        lastId++;
+                        return lastId;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+                return -1; // Indicate an error.
+            }
         }
 
         public static async Task ResetDatabaseFileAsync()
