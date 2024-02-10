@@ -181,5 +181,159 @@ namespace CourseTracker.Maui.ViewModels
                 }
             }
         }
+
+        private string instructorName;
+        public string InstructorName
+        {
+            get { return instructorName; }
+            set
+            {
+                if (instructorName != value)
+                {
+                    instructorName = value;
+                    OnPropertyChanged(nameof(InstructorName));
+                }
+            }
+        }
+
+        private string instructorPhone;
+        public string InstructorPhone
+        {
+            get { return instructorPhone; }
+            set
+            {
+                if (instructorPhone != value)
+                {
+                    instructorPhone = value;
+                    OnPropertyChanged(nameof(InstructorPhone));
+                }
+            }
+        }
+
+        private string instructorEmail;
+        public string InstructorEmail
+        {
+            get { return instructorEmail; }
+            set
+            {
+                if (instructorEmail != value)
+                {
+                    instructorEmail = value;
+                    OnPropertyChanged(nameof(InstructorEmail));
+                }
+            }
+        }
+
+        private string courseName;
+        public string CourseName
+        {
+            get { return courseName; }
+            set
+            {
+                if (courseName != value)
+                {
+                    courseName = value;
+                    OnPropertyChanged(nameof(CourseName));
+                }
+            }
+        }
+
+        private string courseStatus;
+        public string CourseStatus
+        {
+            get { return courseStatus; }
+            set
+            {
+                if (courseStatus != value)
+                {
+                    courseStatus = value;
+                    OnPropertyChanged(nameof(CourseStatus));
+                }
+            }
+        }
+
+        private string termName;
+        public string TermName
+        {
+            get { return termName; }
+            set
+            {
+                if (termName != value)
+                {
+                    termName = value;
+                    OnPropertyChanged(nameof(TermName));
+                }
+            }
+        }
+
+        private string courseNotes;
+        public string CourseNotes
+        {
+            get { return courseNotes; }
+            set
+            {
+                if (courseNotes != value)
+                {
+                    courseNotes = value;
+                    OnPropertyChanged(nameof(CourseNotes));
+                }
+            }
+        }
+
+        private DateTime courseStart;
+        public DateTime CourseStart
+        {
+            get { return courseStart; }
+            set
+            {
+                if (courseStart != value)
+                {
+                    courseStart = value;
+                    OnPropertyChanged(nameof(CourseStart));
+                }
+            }
+        }
+
+        private DateTime courseEnd;
+        public DateTime CourseEnd
+        {
+            get { return courseEnd; }
+            set
+            {
+                if (courseEnd != value)
+                {
+                    courseEnd = value;
+                    OnPropertyChanged(nameof(CourseEnd));
+                }
+            }
+        }
+
+        private bool notificationsEnabled;
+        public bool NotificationsEnabled
+        {
+            get { return notificationsEnabled; }
+            set
+            {
+                if (notificationsEnabled != value)
+                {
+                    notificationsEnabled = value;
+                    OnPropertyChanged(nameof(NotificationsEnabled));
+                }
+            }
+        }
+
+        private int courseAssessmentCount;
+        public int CourseAssessmentCount
+        {
+            get { return courseAssessmentCount; }
+            set
+            {
+                if (courseAssessmentCount != value)
+                {
+                    courseAssessmentCount = value;
+                    OnPropertyChanged(nameof(CourseAssessmentCount));
+                }
+            }
+        }
     }
 }

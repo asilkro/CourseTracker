@@ -4,14 +4,10 @@
              xmlns:viewModels="clr-namespace:CourseTracker.Maui.ViewModels"
              x:Class="CourseTracker.Maui.Views.ListTerms"
              x:DataType="viewModels:ListTermsVM"
-             Title="Term List">
+             Title="Term(s) List">
 
     <VerticalStackLayout
 Padding="20,10" Spacing="5">
-        <Label 
-        Text="Terms"
-        VerticalOptions="Center" 
-        HorizontalOptions="Center" />
 
         <!-- Display List of Terms using ListView -->
         <ListView x:Name="termListView" ItemsSource="{Binding Terms}" 
@@ -22,7 +18,7 @@ Padding="20,10" Spacing="5">
                         <StackLayout Padding="10">
                             <!-- Display Properties of Each Term -->
                             <Label Text="{Binding TermName, StringFormat='Name: {0}'}" FontAttributes="Bold" />
-                            <Label Text="{Binding TermId, StringFormat='ID: {0}'}"/>
+                            <Label Text="{Binding TermId, StringFormat='Term Id: {0}'}"/>
                             <Label Text="{Binding TermStart, StringFormat='Start: {0:d}'}" />
                             <Label Text="{Binding TermEnd, StringFormat='End: {0:d}'}" />
                             <Label Text="{Binding CourseCount, StringFormat='Courses: {0}'}"/>

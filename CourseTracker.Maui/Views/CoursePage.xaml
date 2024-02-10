@@ -24,7 +24,7 @@
 
                 <!--Course Name-->
                 <Label x:Name="courseNameLabel" HorizontalTextAlignment="Center" Text="Course Name" FontAttributes="Bold" Grid.Column="1" Grid.Row="0"/>
-                <Entry x:Name="courseNameEntry" Placeholder="Course Name Placeholder" Text="{Binding Course.CourseName}" Grid.Column="1" Grid.Row="1"/>
+                <Entry x:Name="courseNameEntry" Placeholder="Course Name Placeholder" Text="{Binding CourseName}" Grid.Column="1" Grid.Row="1"/>
 
             </Grid>
         </HorizontalStackLayout>
@@ -37,15 +37,14 @@
           RowSpacing="10">
 
                 <!-- Drop down to choose a TermName since TermId is unintuitive to user-->
-                <Label Grid.Column="0" Grid.Row="0" x:Name="termPickerLabel" Text="Term" HorizontalTextAlignment="Center" FontAttributes="Bold"/>
+                <Label Grid.Column="0" Grid.Row="0" x:Name="termPickerLabel" Text="Term:" HorizontalTextAlignment="Center" FontAttributes="Bold"/>
                 <Picker Grid.Column="0" Grid.Row="1" x:Name="termPicker" Title="Select Term"
                 ItemsSource="{Binding Terms}"
-                ItemDisplayBinding="{Binding Term.TermName}"
+                ItemDisplayBinding="{Binding TermName}"
                 SelectedItem="{Binding SelectedTerm}" />
                 
-                <!-- TODO: Add Instructor fields here-->
                 <Label x:Name="instructorNameLabel" HorizontalTextAlignment="Center" Text="Instructor Name:" FontAttributes="Bold"/>
-                <Entry x:Name="instructorNameEntry" Placeholder="Instructor Name Placeholder" Text="{Binding Course.InstructorName}"/>
+                <Entry x:Name="instructorNameEntry" Placeholder="Instructor Name Placeholder" Text="{Binding InstructorName}"/>
 
             </Grid>
         </HorizontalStackLayout>
@@ -58,10 +57,10 @@
           RowSpacing="10">
 
                 <Label x:Name="instructorEmailLabel" HorizontalTextAlignment="Center" Text="Instructor Name:" FontAttributes="Bold"/>
-                <Entry x:Name="instructorEmailEntry" Placeholder="Instructor Email Placeholder" Text="{Binding Course.InstructorEmail}"/>
+                <Entry x:Name="instructorEmailEntry" Placeholder="Instructor Email Placeholder" Text="{Binding InstructorEmail}"/>
 
                 <Label x:Name="instructorPhoneLabel" HorizontalTextAlignment="Center" Text="Instructor Name:" FontAttributes="Bold"/>
-                <Entry x:Name="instructorPhoneEntry" Placeholder="Instructor Phone Placeholder" Text="{Binding Course.InstructorPhone}"/>
+                <Entry x:Name="instructorPhoneEntry" Placeholder="Instructor Phone Placeholder" Text="{Binding InstructorPhone}"/>
 
             </Grid>
         </HorizontalStackLayout>
@@ -78,7 +77,7 @@
               RowSpacing="10">
                 <!--Course Status Dropdown of valid choices-->
                 <Label x:Name="courseStatusLabel" HorizontalTextAlignment="Center" Text="Course Status" FontAttributes="Bold" Grid.Column="0" Grid.Row="0"/>
-                <Picker x:Name="courseStatusPicker"  SelectedItem="{Binding Course.CourseStatus}" Grid.Column="0" Grid.Row="1">
+                <Picker x:Name="courseStatusPicker"  SelectedItem="{Binding CourseStatus}" Grid.Column="0" Grid.Row="1">
                     <Picker.ItemsSource>
                         <x:Array Type="{x:Type x:String}">
                             <x:String>Planned</x:String>
@@ -93,7 +92,7 @@
                 <!--Course Assessment Count-->
 
                 <Label x:Name="courseAssessmentCountLabel" HorizontalTextAlignment="Center" Text="Assessment Count:" FontAttributes="Bold" Grid.Column="1" Grid.Row="0"/>
-                <Entry x:Name="courseAssessmentCountEntry" Text="{Binding Course.CourseAssessmentCount}" Grid.Column="1" Grid.Row="1"/>
+                <Entry x:Name="courseAssessmentCountEntry" Text="{Binding CourseAssessmentCount}" Grid.Column="1" Grid.Row="1"/>
 
             </Grid>
         </HorizontalStackLayout>
@@ -108,15 +107,15 @@
               RowSpacing="10">
                 <!--Course Start-->
                 <Label x:Name="courseStartLabel" Text="Course Start" HorizontalTextAlignment="Center" FontAttributes="Bold" Grid.Column="0" Grid.Row="0"/>
-                <DatePicker x:Name="courseStartPicker" Date="{Binding Course.CourseStart}" MinimumDate="{Binding MinimumDate}" MaximumDate="{Binding MaximumDate}" Grid.Column="0" Grid.Row="1"/>
+                <DatePicker x:Name="courseStartPicker" Date="{Binding CourseStart}" MinimumDate="{Binding MinimumDate}" MaximumDate="{Binding MaximumDate}" Grid.Column="0" Grid.Row="1"/>
 
                 <!--Course End-->
                 <Label x:Name="courseEndLabel" Text="Course End" HorizontalTextAlignment="Center" FontAttributes="Bold" Grid.Column="1" Grid.Row="0"/>
-                <DatePicker x:Name="courseEndPicker" Date="{Binding Course.CourseEnd}" MinimumDate="{Binding MinimumDate}" MaximumDate="{Binding MaximumDate}" Grid.Column="1" Grid.Row="1"/>
+                <DatePicker x:Name="courseEndPicker" Date="{Binding CourseEnd}" MinimumDate="{Binding MinimumDate}" MaximumDate="{Binding MaximumDate}" Grid.Column="1" Grid.Row="1"/>
 
                 <!--Notifications Enabled-->
                 <Label x:Name="courseNotificationsLabel" Text="Course Notifications" HorizontalTextAlignment="Center" FontAttributes="Bold" Grid.Column="2" Grid.Row="0"/>
-                <Switch x:Name="courseNotificationsSwitch" IsToggled="{Binding Course.NotificationsEnabled}" Grid.Column="2" Grid.Row="1" />
+                <Switch x:Name="courseNotificationsSwitch" IsToggled="{Binding NotificationsEnabled}" Grid.Column="2" Grid.Row="1" />
             </Grid>
 
         </HorizontalStackLayout>
@@ -133,7 +132,7 @@
               RowSpacing="10">
                 <!--Course Notes-->
                 <Label x:Name="courseNoteLabel" Text="Course Notes" HorizontalTextAlignment="Center" FontAttributes="Bold" Grid.Column="0" Grid.Row="0"/>
-                <Editor x:Name="courseNoteEditor" Text="{Binding Course.CourseNotes}" AutoSize="TextChanges" Grid.Column="0" Grid.Row="1"/>
+                <Editor x:Name="courseNoteEditor" Text="{Binding CourseNotes}" AutoSize="TextChanges" Grid.Column="0" Grid.Row="1"/>
                 <Button x:Name="courseNoteShareButton" Text="Share Notes" BackgroundColor="Red" TextColor="WhiteSmoke" Clicked="courseNoteShareButton_Clicked"/>
             </Grid>
         </HorizontalStackLayout>

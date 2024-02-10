@@ -6,7 +6,7 @@
              x:DataType="viewModels:ListCoursesVM"
              Title="Course(s) List">
     <VerticalStackLayout
-    Padding="20,20,5,5" Spacing="5">
+    Padding="20,10" Spacing="5">
 
         <!-- Display List of Courses using ListView -->
         <ListView x:Name="courseListView" ItemsSource="{Binding Courses}"
@@ -15,7 +15,7 @@
                 <DataTemplate>
                     <ViewCell>
                         <StackLayout Padding="5,5">
-                            <!-- Display Properties of Each Course -->
+                            <!-- Properties of each Course -->
                             <Label Text="{Binding CourseName, StringFormat='Course Name: {0}'}" FontAttributes="Bold" />
                             <Label Text="{Binding CourseId, StringFormat='Course Id: {0}'}" />
                             <Label Text="{Binding TermId, StringFormat='Term Id: {0}'}" />

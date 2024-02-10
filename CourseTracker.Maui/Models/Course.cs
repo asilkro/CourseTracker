@@ -46,7 +46,5 @@ public class Course
         CourseAssessmentCount = courseAssessmentCount;
     }
 
-
-
     #endregion
 }
