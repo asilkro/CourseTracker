@@ -9,10 +9,10 @@ namespace CourseTracker.Maui.Views;
 
 public partial class Homepage : ContentPage
 {
+    #region Fields / Properties
     TrackerDb _trackerDb = new();
 	Connection connection = new();
-
-
+    #endregion
 
     public Homepage()
 	{
@@ -26,43 +26,6 @@ public partial class Homepage : ContentPage
         await TrackerDb.Initialize();
     }
 
-    private async Task LoadSampleDataAsync(Term demoTerm, Course demoCourse, Assessment demoAssessment1, Assessment demoAssessment2)
-    {
-        if (connection == null)
-        {
-            connection = new ();
-            connection.GetAsyncConnection(); // Ensure this method sets up the connection properly and is awaited
-        }
-        var existing = await Validation.DataExistsInTables(connection);
-        if (existing)
-        {
-            await DisplayAlert("Table Already Has Data", "Table data has already been loaded. You should reset the database to avoid errors with sample data creation.", "OK");
-            return;
-        }
-
-        try
-        {
-            var termId = await connection.InsertAndGetIdAsync(demoTerm);
-            demoCourse.TermId = termId;
-            var courseId = await connection.InsertAndGetIdAsync(demoCourse);
-
-            demoAssessment1.RelatedCourseId = courseId;
-            demoAssessment2.RelatedCourseId = courseId;
-
-            await connection.InsertAsync(demoAssessment1);
-            await connection.InsertAsync(demoAssessment2);
-
-            await DisplayAlert("Sample Data Loaded", "Sample data has been loaded successfully. Please relaunch the application to complete setup.", "OK");
-            loadSampleDataButton.IsEnabled = false; // Assume this exists in your context to disable the button
-
-        }
-        catch (Exception ex)
-        {
-            await DisplayAlert("Sample Data Error", "$There was an error while loading sample data: {ex.Message}", "Ok");
-        }
-    }
-
-
     private async void loadButton_Clicked(object sender, EventArgs e)
     {
 		if (sender == loadSampleDataButton)
@@ -71,70 +34,10 @@ public partial class Homepage : ContentPage
             {
                 await StartDB();
             }
-			await LoadSampleDataAsync(demoTerm, demoCourse, demoOA, demoPA);
+			await LoadSampleDataAsync();
 		}
 
     }
-
-    #region Sample Data For Evaluation
-    private readonly Term demoTerm = new Term
-    {
-        TermId = GetNextAutoIncrementID("Term") ?? 1500,
-        TermName = "Demo Term",
-        TermStart = new DateTime(2024, 01, 01),
-        TermEnd = new DateTime(2024, 06, 30),
-        NotificationsEnabled = true,
-        CourseCount = 0
-    };
-
-    private readonly Term demoTerm2 = new Term
-    {
-        TermId = GetNextAutoIncrementID("Term") ?? 1500,
-        TermName = "Another Term",
-        TermStart = new DateTime(2023, 01, 01),
-        TermEnd = new DateTime(2023, 06, 30),
-        NotificationsEnabled = true,
-        CourseCount = 0
-    };
-
-    private Course demoCourse = new Course
-    {
-        CourseId = GetNextAutoIncrementID("Course") ?? 1600,
-        CourseName = "C6 Requirements re: C3 Course",
-        CourseStatus = "In Progress",
-        CourseStart = new DateTime(2024, 01, 01),
-        CourseEnd = new DateTime(2024, 06, 30),
-        InstructorEmail = "anika.patel@strimeuniversity.edu",
-        InstructorPhone = "555-123-4567",
-        InstructorName = "Anika Patel",
-        CourseNotes = "This addresses requirement C6",
-        NotificationsEnabled = true,
-        CourseAssessmentCount = 2
-    };
-
-    private readonly Assessment demoOA = new Assessment
-    {
-        AssessmentId = GetNextAutoIncrementID("Assessment") ?? 1700,
-        AssessmentName = "C6 OA",
-        AssessmentType = "Objective",
-        AssessmentStartDate = new DateTime(2024, 01, 01),
-        AssessmentEndDate = new DateTime(2024, 02, 29),
-        RelatedCourseId = 555,
-        NotificationsEnabled = true
-    };
-
-    private readonly Assessment demoPA = new Assessment
-    {
-        AssessmentId = GetNextAutoIncrementID("Assessment") ?? 1700,
-        AssessmentName = "C6 PA",
-        AssessmentType = "Performance",
-        AssessmentStartDate = new DateTime(2024, 03, 01),
-        AssessmentEndDate = new DateTime(2024, 04, 30),
-        RelatedCourseId = 555,
-        NotificationsEnabled = true
-    };
-
-    #endregion
 
     private async void resetDbButton_Clicked(object sender, EventArgs e)
     {
@@ -155,4 +58,166 @@ public partial class Homepage : ContentPage
                 return null;
         }
     }
+
+    #region Sample Data For Evaluation
+    private static int courseId = GetNextAutoIncrementID("Course") ?? 1600;
+
+
+    private static readonly Term demoTerm = new()
+    {
+        TermId = GetNextAutoIncrementID("Term") ?? 1500,
+        TermName = "Demo Term",
+        TermStart = new DateTime(2024, 01, 01),
+        TermEnd = new DateTime(2024, 06, 30),
+        NotificationsEnabled = true,
+        CourseCount = 0
+    };
+
+    private static readonly Term demoTerm2 = new()
+    {
+        TermId = GetNextAutoIncrementID("Term") ?? 1501,
+        TermName = "Term One 2023",
+        TermStart = new DateTime(2023, 01, 01),
+        TermEnd = new DateTime(2023, 06, 30),
+        NotificationsEnabled = true,
+        CourseCount = 0
+    };
+
+    private static readonly Course demoCourse = new()
+    {
+        CourseId = courseId,
+        CourseName = "Example Course for Evaluation",
+        CourseStatus = "In Progress",
+        CourseStart = new DateTime(2024, 01, 01),
+        CourseEnd = new DateTime(2024, 06, 30),
+        InstructorEmail = "anika.patel@strimeuniversity.edu",
+        InstructorPhone = "555-123-4567",
+        InstructorName = "Anika Patel",
+        CourseNotes = "This addresses assessment requirement C6 re: C3",
+        NotificationsEnabled = true,
+        CourseAssessmentCount = 2
+    };
+
+    private static readonly Course demoCourse2 = new()
+    {
+        CourseId = GetNextAutoIncrementID("Course") ?? 1601,
+        CourseName = "The Zed Pandemic",
+        CourseStatus = "Completed",
+        CourseStart = new DateTime(2023, 01, 01),
+        CourseEnd = new DateTime(2023, 02, 28),
+        InstructorEmail = "rickgrimes@uwalkers.edu",
+        InstructorPhone = "555-987-6543",
+        InstructorName = "Rick Grimes",
+        CourseNotes = "This is a course that was completed and covered the fictional outbreak of a zombie disease",
+        NotificationsEnabled = false,
+        CourseAssessmentCount = 1
+    };
+
+    private static readonly Course demoCourse3 = new()
+    {
+        CourseId = GetNextAutoIncrementID("Course") ?? 1602,
+        CourseName = "Screen Writing for Community",
+        CourseStatus = "Dropped",
+        CourseStart = new DateTime(2023, 03, 01),
+        CourseEnd = new DateTime(2023, 04, 30),
+        InstructorEmail = "dharmon@greendale.edu",
+        InstructorPhone = "555-424-1565",
+        InstructorName = "Dan Harmon",
+        CourseNotes = "This course was dropped due to a scheduling conflict with Dean Pelton.",
+        NotificationsEnabled = false,
+        CourseAssessmentCount = 1
+    };
+
+    private static readonly Assessment demoOA = new Assessment
+    {
+        AssessmentId = GetNextAutoIncrementID("Assessment") ?? 1700,
+        AssessmentName = "C6 OA",
+        AssessmentType = "Objective",
+        AssessmentStartDate = new DateTime(2024, 01, 01),
+        AssessmentEndDate = new DateTime(2024, 02, 29),
+        RelatedCourseId = courseId,
+        NotificationsEnabled = true
+    };
+
+    private static readonly Assessment demoOA2 = new Assessment
+    {
+        AssessmentId = GetNextAutoIncrementID("Assessment") ?? 1702,
+        AssessmentName = "Zed Pandemic OA",
+        AssessmentType = "Objective",
+        AssessmentStartDate = new DateTime(2023, 01, 01),
+        AssessmentEndDate = new DateTime(2023, 02, 29),
+        RelatedCourseId = demoCourse2.CourseId,
+        NotificationsEnabled = false
+    };
+
+    private static readonly Assessment demoPA2 = new Assessment
+    {
+        AssessmentId = GetNextAutoIncrementID("Assessment") ?? 1703,
+        AssessmentName = "Community Script PA",
+        AssessmentType = "Performance",
+        AssessmentStartDate = new DateTime(2023, 03, 01),
+        AssessmentEndDate = new DateTime(2024, 02, 29),
+        RelatedCourseId = demoCourse3.CourseId,
+        NotificationsEnabled = false
+    };
+
+    private static readonly Assessment demoPA = new Assessment
+    {
+        AssessmentId = GetNextAutoIncrementID("Assessment") ?? 1701,
+        AssessmentName = "C6 PA",
+        AssessmentType = "Performance",
+        AssessmentStartDate = new DateTime(2024, 03, 01),
+        AssessmentEndDate = new DateTime(2024, 04, 30),
+        RelatedCourseId = courseId,
+        NotificationsEnabled = true
+    };
+
+    private async Task LoadSampleDataAsync()
+    {
+        if (connection == null)
+        {
+            connection = new();
+            connection.GetAsyncConnection(); // Ensure this method sets up the connection properly and is awaited
+        }
+        var existing = await Validation.DataExistsInTables(connection);
+        if (existing)
+        {
+            await DisplayAlert("Table Already Has Data", "Table data has already been loaded. You should reset the database to avoid errors with sample data creation.", "OK");
+            return;
+        }
+
+        try
+        {
+            //First term, course for assessment C6 and C3 requirements
+            var termId = await connection.InsertAndGetIdAsync(demoTerm);
+            demoCourse.TermId = termId;
+            var courseId = await connection.InsertAndGetIdAsync(demoCourse);
+
+            demoOA.RelatedCourseId = courseId;
+            demoPA.RelatedCourseId = courseId;
+            await connection.InsertAsync(demoOA);
+            await connection.InsertAsync(demoPA);
+
+            //Second term and courses to provide a more robust demo set of data for evaluator
+            termId = await connection.InsertAndGetIdAsync(demoTerm2);
+            demoCourse2.TermId = termId;
+            demoCourse3.TermId = termId;
+            courseId = await connection.InsertAndGetIdAsync(demoCourse2);
+            demoOA2.RelatedCourseId = demoCourse2.CourseId;
+            courseId = await connection.InsertAndGetIdAsync(demoCourse3);
+            demoPA2.RelatedCourseId = demoCourse3.CourseId;
+
+            //TODO: add validation for insert during debug
+
+            await DisplayAlert("Sample Data Loaded", "Sample data has been loaded successfully. Please relaunch the application to complete setup.", "OK");
+            loadSampleDataButton.IsEnabled = false;
+
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Sample Data Error", "$There was an error while loading sample data: " + ex.Message, "OK");
+            return;
+        }
+    }
+    #endregion
 }
