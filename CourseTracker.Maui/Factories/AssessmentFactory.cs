@@ -10,20 +10,42 @@ namespace CourseTracker.Maui.Factories
 {
     public class AssessmentFactory : FactoryBase<Assessment>
     {
-
+        readonly Connection _database = new();
         public AssessmentFactory(IAsyncSqLite database) : base(database)
         {
         }
 
-        public async Task<AssessmentCreationOut> CreateAssessmentAsync(int assessmentId, string assessmentName, string assessmentType, DateTime assessmentStartDate, DateTime assessmentEndDate, int relatedCourseId, bool notificationsEnabled)
+        public async Task<AssessmentCreationOut> CreateAssessmentAsync(AssessmentVM assessmentVM)
         {
-
-            if (!IsValidAssessment(assessmentId, assessmentName, assessmentType, assessmentStartDate, assessmentEndDate, relatedCourseId, notificationsEnabled))
+            AssessmentCreationOut result = await CreateAssessmentAsync(assessmentVM.AssessmentId,
+                                               assessmentVM.AssessmentName,
+                                               assessmentVM.AssessmentType,
+                                               assessmentVM.AssessmentStartDate,
+                                               assessmentVM.AssessmentEndDate,
+                                               assessmentVM.RelatedCourseId,
+                                               assessmentVM.NotificationsEnabled);
+            if (result != null)
             {
-                return null;
+                return result;
+            }
+            else
+            {
+                return new AssessmentCreationOut { ErrorMessage = "Error creating assessment." };
+            }
+        }
+
+        public async Task<AssessmentCreationOut>? CreateAssessmentAsync(int assessmentId, string assessmentName,
+            string assessmentType, DateTime assessmentStartDate, DateTime assessmentEndDate,
+            int relatedCourseId, bool notificationsEnabled)
+        {
+            string errorMessage = string.Empty;
+            if (!IsValidAssessment(assessmentId, assessmentName, assessmentType,
+                assessmentStartDate, assessmentEndDate, relatedCourseId, notificationsEnabled))
+            {
+                return new AssessmentCreationOut { ErrorMessage = errorMessage };
             }
 
-            var assessment = new Assessment
+            Assessment assessment = new()
             {
                 AssessmentId = assessmentId,
                 AssessmentName = assessmentName,
@@ -41,10 +63,7 @@ namespace CourseTracker.Maui.Factories
                 await ScheduleAssessmentNotifications(assessment);
             }
 
-            return new AssessmentCreationOut
-            {
-                Assessment = assessment
-            };
+            return new AssessmentCreationOut  { Assessment = assessment };
         }
 
         private bool IsValidAssessment(int id, string assessmentName, string assessmentType, DateTime assessmentStartDate, DateTime assessmentEndDate, int relatedCourseId, bool notificationsEnabled)

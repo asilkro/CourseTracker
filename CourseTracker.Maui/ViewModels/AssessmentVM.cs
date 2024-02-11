@@ -2,138 +2,99 @@
 using System.Diagnostics;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
+using System.Threading.Tasks;
 
 namespace CourseTracker.Maui.ViewModels
 {
     public class AssessmentVM : ViewModelBase
     {
+        #region Fields
         private Assessment assessment;
+
         private int assessmentId;
+        private string assessmentName;
+        private string assessmentType;
+        private DateTime assessmentStartDate = DateTime.Now.Date;
+        private DateTime assessmentEndDate = DateTime.Now.Date.AddDays(90);
+        private int relatedCourseId;
+        private bool notificationsEnabled;
+        private Course course;
+        #endregion
 
-        public AssessmentVM()
+        #region Constructors
+        public AssessmentVM(Assessment assessment) 
         {
-            LoadAssessmentDetails();
+            this.assessment = assessment;
+            assessmentName = assessment.AssessmentName;
+            assessmentType = assessment.AssessmentType;
+            assessmentStartDate = assessment.AssessmentStartDate;
+            assessmentEndDate = assessment.AssessmentEndDate;
+            relatedCourseId = assessment.RelatedCourseId;
+            notificationsEnabled = assessment.NotificationsEnabled;
         }
 
-        public AssessmentVM(Assessment assessment)
-        {
-            AssessmentId = assessment.AssessmentId;
-            LoadAssessmentDetails();
-        }
+        public AssessmentVM() { }
+        #endregion
 
+        #region Properties
         public int AssessmentId
         {
-            get { return assessmentId; }
-            set
-            {
-                if (assessmentId != value)
-                {
-                    assessmentId = value;
-                    OnPropertyChanged(nameof(AssessmentId));
-                }
-            }
+            get => assessmentId;
+            set => SetProperty(ref assessmentId, value, nameof(AssessmentId));
         }
-        private string assessmentName;
+
         public string AssessmentName
         {
-            get { return assessmentName; }
-            set
-            {
-                if (assessmentName != value)
-                {
-                    assessmentName = value;
-                    OnPropertyChanged(nameof(AssessmentName));
-                }
-            }
+            get => assessmentName;
+            set => SetProperty(ref assessmentName, value, nameof(AssessmentName));
         }
-        private string assessmentType;
+
         public string AssessmentType
         {
-            get { return assessmentType; }
-            set
-            {
-                if (assessmentType != value)
-                {
-                    assessmentType = value;
-                    OnPropertyChanged(nameof(AssessmentType));
-                }
-            }
+            get => assessmentType;
+            set => SetProperty(ref assessmentType, value, nameof(AssessmentType));
         }
-        private DateTime assessmentStartDate = DateTime.Now.Date;
+
         public DateTime AssessmentStartDate
         {
-            get { return assessmentStartDate; }
-            set
-            {
-                if (assessmentStartDate != value)
-                {
-                    assessmentStartDate = value;
-                    OnPropertyChanged(nameof(AssessmentStartDate));
-                }
-            }
+            get => assessmentStartDate;
+            set => SetProperty(ref assessmentStartDate, value, nameof(AssessmentStartDate));
         }
-        private DateTime assessmentEndDate = DateTime.Now.Date.AddDays(90);
+
         public DateTime AssessmentEndDate
         {
-            get { return assessmentEndDate; }
-            set
-            {
-                if (assessmentEndDate != value)
-                {
-                    assessmentEndDate = value;
-                    OnPropertyChanged(nameof(AssessmentEndDate));
-                }
-            }
+            get => assessmentEndDate;
+            set => SetProperty(ref assessmentEndDate, value, nameof(AssessmentEndDate));
         }
-        private int relatedCourseId;
+
         public int RelatedCourseId
         {
-            get { return relatedCourseId; }
-            set
-            {
-                if (relatedCourseId != value)
-                {
-                    relatedCourseId = value;
-                    OnPropertyChanged(nameof(RelatedCourseId));
-                }
-            }
+            get => relatedCourseId;
+            set => SetProperty(ref relatedCourseId, value, nameof(RelatedCourseId));
         }
-        private bool notificationsEnabled;
+
         public bool NotificationsEnabled
         {
-            get { return notificationsEnabled; }
-            set
-            {
-                if (notificationsEnabled != value)
-                {
-                    notificationsEnabled = value;
-                    OnPropertyChanged(nameof(NotificationsEnabled));
-                }
-            }
+            get => notificationsEnabled;
+            set => SetProperty(ref notificationsEnabled, value, nameof(NotificationsEnabled));
         }
 
-        private Course course;
         public Course Course
         {
-            get { return course; }
-            set
-            {
-                if (course != value)
-                {
-                    course = value;
-                    OnPropertyChanged(nameof(Course));
-                }
-            }
+            get => course;
+            set => SetProperty(ref course, value, nameof(Course));
         }
+        #endregion
 
+        #region Methods
         private async Task LoadAssessmentDetails()
         {
-            Connection DatabaseService = new();
-            DatabaseService.GetAsyncConnection();
+            Connection database = new();
+            database.GetAsyncConnection();
 
             if (assessmentId <= 0)
             {
-                assessment = await DatabaseService.FindAsync<Assessment>(assessmentId);
+                assessment = await database.FindAsync<Assessment>(assessmentId);
             }
         }
 
@@ -141,5 +102,6 @@ namespace CourseTracker.Maui.ViewModels
         {
             await LoadAssessmentDetails();
         }
+        #endregion
     }
 }

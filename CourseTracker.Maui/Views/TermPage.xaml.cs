@@ -10,7 +10,7 @@ namespace CourseTracker.Maui.Views;
 public partial class TermPage : ContentPage
 {
 	TermVM viewModel;
-    readonly Connection database = new Connection();
+    readonly Connection database = new();
     readonly TermFactory _termFactory;
 	int nextTermId = TrackerDb.GetNextAutoIncrementID("Term");
     public TermPage()

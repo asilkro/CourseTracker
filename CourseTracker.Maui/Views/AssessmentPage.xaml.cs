@@ -11,9 +11,8 @@ public partial class AssessmentPage : ContentPage
 {
 	AssessmentVM viewModel;
 	readonly Connection database = new();
-	
-	int nextAssessmentId = TrackerDb.GetNextAutoIncrementID("Assessment");
-	AssessmentFactory assessmentFactory = new();
+    readonly AssessmentFactory _assessmentFactory;
+    int nextAssessmentId = TrackerDb.GetNextAutoIncrementID("Assessment");
 
 	public AssessmentPage()
 	{
@@ -31,13 +30,33 @@ public partial class AssessmentPage : ContentPage
 		assessmentIdEntry.Text = assessment.AssessmentId.ToString();
     }
 
-    private void submitButton_Clicked(object sender, EventArgs e)
+    private async void submitButton_Clicked(object sender, EventArgs e)
     {
-		AssessmentFactory
-    }
+        var assessment = _assessmentFactory.CreateAssessmentAsync(viewModel);
+        if (assessment == null)
+        {
+            Debug.WriteLine("Error creating assessment");
+            return;
+        }
+        try
+		{
 
-    private void cancelButton_Clicked(object sender, EventArgs e)
-    {
-		Navigation.PopToRootAsync();
+            int exists = await database.FindAsync<Assessment>(assessment);
+
+            switch (exists)
+            {
+                case null:
+                    await database.InsertAsync<Assessment>(assessment);
+                    break;
+                default:
+                    await database.UpdateAsync<Assessment>(assessment);
+                    break;
+            }
+        }
+        catch (Exception ex)
+        {
+               Debug.WriteLine("Error submitting data: " + ex.Message);
+        }
+
     }
 }
