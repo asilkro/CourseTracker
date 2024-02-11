@@ -51,7 +51,7 @@ namespace CourseTracker.Maui.ViewModels
 
             Connection DatabaseService = new();
             DatabaseService.GetAsyncConnection();
-
+            
             if (courseId > 0)
             {
                 Course = await DatabaseService.FindAsync<Course>(courseId);
@@ -280,7 +280,7 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
-        private DateTime courseStart;
+        private DateTime courseStart = DateTime.Now.Date;
         public DateTime CourseStart
         {
             get { return courseStart; }
@@ -294,7 +294,7 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
-        private DateTime courseEnd;
+        private DateTime courseEnd = DateTime.Now.Date.AddDays(90);
         public DateTime CourseEnd
         {
             get { return courseEnd; }

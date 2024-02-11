@@ -8,6 +8,7 @@
     <VerticalStackLayout
     Spacing="10"
     Padding="10,10">
+        
         <!--Row 1-->
         <HorizontalStackLayout
             Spacing="5"
@@ -43,8 +44,8 @@
                 ItemDisplayBinding="{Binding TermName}"
                 SelectedItem="{Binding SelectedTerm}" />
                 
-                <Label x:Name="instructorNameLabel" HorizontalTextAlignment="Center" Text="Instructor Name:" FontAttributes="Bold"/>
-                <Entry x:Name="instructorNameEntry" Placeholder="Instructor Name Placeholder" Text="{Binding InstructorName}"/>
+                <Label Grid.Column="1" Grid.Row="0" x:Name="instructorNameLabel" HorizontalTextAlignment="Center" Text="Instructor Name:" FontAttributes="Bold"/>
+                <Entry Grid.Column="1" Grid.Row="1" x:Name="instructorNameEntry" Placeholder="Instructor Name" Text="{Binding InstructorName}"/>
 
             </Grid>
         </HorizontalStackLayout>
@@ -56,11 +57,11 @@
           ColumnSpacing="10"
           RowSpacing="10">
 
-                <Label x:Name="instructorEmailLabel" HorizontalTextAlignment="Center" Text="Instructor Name:" FontAttributes="Bold"/>
-                <Entry x:Name="instructorEmailEntry" Placeholder="Instructor Email Placeholder" Text="{Binding InstructorEmail}"/>
+                <Label Grid.Column="0" Grid.Row="0" x:Name="instructorEmailLabel" HorizontalTextAlignment="Center" Text="Instructor Email:" FontAttributes="Bold"/>
+                <Entry Grid.Column="0" Grid.Row="1" x:Name="instructorEmailEntry" Placeholder="Instructor Email" Text="{Binding InstructorEmail}"/>
 
-                <Label x:Name="instructorPhoneLabel" HorizontalTextAlignment="Center" Text="Instructor Name:" FontAttributes="Bold"/>
-                <Entry x:Name="instructorPhoneEntry" Placeholder="Instructor Phone Placeholder" Text="{Binding InstructorPhone}"/>
+                <Label Grid.Column="1" Grid.Row="0" x:Name="instructorPhoneLabel" HorizontalTextAlignment="Center" Text="Instructor Phone:" FontAttributes="Bold"/>
+                <Entry Grid.Column="1" Grid.Row="1" x:Name="instructorPhoneEntry" Placeholder="Instructor Phone" Text="{Binding InstructorPhone}"/>
 
             </Grid>
         </HorizontalStackLayout>
@@ -133,7 +134,7 @@
                 <!--Course Notes-->
                 <Label x:Name="courseNoteLabel" Text="Course Notes" HorizontalTextAlignment="Center" FontAttributes="Bold" Grid.Column="0" Grid.Row="0"/>
                 <Editor x:Name="courseNoteEditor" Text="{Binding CourseNotes}" AutoSize="TextChanges" Grid.Column="0" Grid.Row="1"/>
-                <Button x:Name="courseNoteShareButton" Text="Share Notes" BackgroundColor="Red" TextColor="WhiteSmoke" Clicked="courseNoteShareButton_Clicked"/>
+                <Button x:Name="courseNoteShareButton" Text="Share Notes" BackgroundColor="Red" TextColor="WhiteSmoke" Clicked="courseNoteShareButton_Clicked" Grid.Column="0" Grid.Row="2"/>
             </Grid>
         </HorizontalStackLayout>
 
@@ -142,5 +143,11 @@
             <Button x:Name="submitButton" Text="Submit" FontAttributes="Bold" Clicked="SubmitButton_Clicked"/>
             <Button x:Name="cancelButton" Text="Cancel" FontAttributes="Bold" Clicked="CancelButton_Clicked"/>
         </HorizontalStackLayout>
+
+        
+        
+        
+        Grid.Column="1" Grid.Row="0"
+        Grid.Column="1" Grid.Row="1"
     </VerticalStackLayout>
 </ContentPage>

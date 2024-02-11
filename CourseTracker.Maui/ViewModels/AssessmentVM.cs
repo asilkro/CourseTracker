@@ -59,7 +59,7 @@ namespace CourseTracker.Maui.ViewModels
                 }
             }
         }
-        private DateTime assessmentStartDate;
+        private DateTime assessmentStartDate = DateTime.Now.Date;
         public DateTime AssessmentStartDate
         {
             get { return assessmentStartDate; }
@@ -72,7 +72,7 @@ namespace CourseTracker.Maui.ViewModels
                 }
             }
         }
-        private DateTime assessmentEndDate;
+        private DateTime assessmentEndDate = DateTime.Now.Date.AddDays(90);
         public DateTime AssessmentEndDate
         {
             get { return assessmentEndDate; }

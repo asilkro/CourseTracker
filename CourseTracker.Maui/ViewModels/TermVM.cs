@@ -77,7 +77,8 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
-        private DateTime termStart;
+        private static DateTime dateStart = DateTime.Now.Date;
+        private DateTime termStart = new DateTime(dateStart.Year, dateStart.Month, 1);
         public DateTime TermStart
         {
             get { return termStart; }
@@ -91,7 +92,8 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
-        private DateTime termEnd;
+        private static DateTime dateEnd = DateTime.Now.Date;
+        private DateTime termEnd = new DateTime(dateEnd.Year, dateEnd.Month, DateTime.DaysInMonth(dateEnd.Year, dateEnd.Month)).AddMonths(6).AddTicks(-1);
         public DateTime TermEnd
         {
             get { return termEnd; }
