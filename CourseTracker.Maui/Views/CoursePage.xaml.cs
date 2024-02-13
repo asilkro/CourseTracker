@@ -27,7 +27,19 @@ public partial class CoursePage : ContentPage
         InitializeComponent();
         viewModel = new CourseVM(course);
         BindingContext = viewModel;
+        
+        #region Populate fields with existing data
         courseIdEntry.Text = course.CourseId.ToString();
+        courseNameEntry.Text = course.CourseName;
+        courseStartPicker.Date = course.CourseStart;
+        courseEndPicker.Date = course.CourseEnd;
+        courseStatusPicker.SelectedItem = course.CourseStatus;
+        instructorNameEntry.Text = course.InstructorName;
+        instructorPhoneEntry.Text = course.InstructorPhone;
+        instructorEmailEntry.Text = course.InstructorEmail;
+        courseNoteEditor.Text = course.CourseNotes;
+        termPicker.SelectedItem = course.TermId;
+
         courseIdEntry.IsReadOnly = true;
     }
 

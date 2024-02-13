@@ -69,7 +69,6 @@ public partial class Homepage : ContentPage
         TermName = "Demo Term",
         TermStart = new DateTime(2024, 01, 01),
         TermEnd = new DateTime(2024, 06, 30),
-        NotificationsEnabled = true,
         CourseCount = 0
     };
 
@@ -79,7 +78,6 @@ public partial class Homepage : ContentPage
         TermName = "Term One 2023",
         TermStart = new DateTime(2023, 01, 01),
         TermEnd = new DateTime(2023, 06, 30),
-        NotificationsEnabled = true,
         CourseCount = 0
     };
 

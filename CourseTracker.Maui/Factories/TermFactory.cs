@@ -8,10 +8,9 @@ namespace CourseTracker.Maui.Factories
 {
     public class TermFactory : FactoryBase<Term>
     {
-
+        readonly Connection _database = new();
         public TermFactory(IAsyncSqLite database) : base (database)
         {
-
         }
 
         public Term? CreateTerm(TermVM termVM, out string errorMessage)
