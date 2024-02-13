@@ -18,14 +18,14 @@ namespace CourseTracker.Maui.Factories
         {
             return CreateTerm(termVM.Term.TermId, termVM.Term.TermName,
                 termVM.Term.TermStart, termVM.Term.TermEnd,
-                termVM.Term.NotificationsEnabled, termVM.Term.CourseCount,out errorMessage);
+                termVM.Term.CourseCount,out errorMessage);
         }
 
         public Term? CreateTerm(int termId, string termName, DateTime termStart, DateTime termEnd,
-            bool notificationsEnabled, int courseCount, out string errorMessage)
+            int courseCount, out string errorMessage)
         {
             if (!IsValidTerm(termId, termName, termStart, termEnd,
-                notificationsEnabled, courseCount, out errorMessage))
+                courseCount, out errorMessage))
             {
                 return null;
             }
@@ -42,14 +42,14 @@ namespace CourseTracker.Maui.Factories
         {
             return UpdateTerm(termVM.Term.TermId, termVM.Term.TermName,
                 termVM.Term.TermStart, termVM.Term.TermEnd,
-                termVM.Term.NotificationsEnabled, termVM.Term.CourseCount, out errorMessage);
+                termVM.Term.CourseCount, out errorMessage);
         }
 
         public Term? UpdateTerm(int termId, string termName, DateTime termStart, DateTime termEnd,
-            bool notificationsEnabled, int courseCount, out string errorMessage)
+            int courseCount, out string errorMessage)
         {
             if (!IsValidTerm(termId, termName, termStart, termEnd,
-                notificationsEnabled, courseCount, out errorMessage))
+                courseCount, out errorMessage))
             {
                 return null;
             }
@@ -63,7 +63,7 @@ namespace CourseTracker.Maui.Factories
         }
 
         public bool IsValidTerm(int termId, string termName, DateTime termStart,
-            DateTime termEnd, bool notificationsEnabled, int courseCount, out string errorMessage)
+            DateTime termEnd, int courseCount, out string errorMessage)
         {
             errorMessage = "";
 

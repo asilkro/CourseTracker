@@ -15,21 +15,21 @@
     </Shell.FlyoutHeader>
 
     <!-- Menu Tabs -->
-    <ShellContent Title="Home" ContentTemplate="{DataTemplate views:Homepage}" />
+    <ShellContent Route="homepage" Title="Home" ContentTemplate="{DataTemplate views:Homepage}" />
 
     <FlyoutItem Title="Terms">
-        <ShellContent Title="List Terms"  ContentTemplate="{DataTemplate views:ListTerms}"/>
-        <ShellContent Title="New Term" ContentTemplate="{DataTemplate views:TermPage}"/>
+        <ShellContent Route="termslist" Title="List Terms"  ContentTemplate="{DataTemplate views:ListTerms}"/>
+        <ShellContent Route="termspage" Title="New Term" ContentTemplate="{DataTemplate views:TermPage}"/>
     </FlyoutItem>
     
     <FlyoutItem Title="Courses">
-        <ShellContent Title="List Courses" ContentTemplate="{DataTemplate views:ListCourses}"/>
-        <ShellContent Title="New Course" ContentTemplate="{DataTemplate views:CoursePage}"/>
+        <ShellContent Route="courseslist" Title="List Courses" ContentTemplate="{DataTemplate views:ListCourses}"/>
+        <ShellContent Route="coursespage" Title="New Course" ContentTemplate="{DataTemplate views:CoursePage}"/>
     </FlyoutItem>
 
     <FlyoutItem Title="Assessments">
-        <ShellContent Title="List Assessments" ContentTemplate="{DataTemplate views:ListAssessments}"/>
-        <ShellContent Title="New Assessment" ContentTemplate="{DataTemplate views:AssessmentPage}"/>
+        <ShellContent Route="assessmentslist" Title="List Assessments" ContentTemplate="{DataTemplate views:ListAssessments}"/>
+        <ShellContent Route="assessmentspage" Title="New Assessment" ContentTemplate="{DataTemplate views:AssessmentPage}"/>
     </FlyoutItem>
 
 </Shell>

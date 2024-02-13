@@ -62,7 +62,7 @@ public partial class TermPage : ContentPage
 		
 		if (viewModel.TermId <= 0)
 		{
-			if(_termFactory.IsValidTerm(viewModel.TermId, viewModel.TermName, viewModel.TermStart, viewModel.TermEnd, viewModel.NotificationsEnabled, viewModel.CourseCount, out string errorMessage))
+			if(_termFactory.IsValidTerm(viewModel.TermId, viewModel.TermName, viewModel.TermStart, viewModel.TermEnd, viewModel.CourseCount, out string errorMessage))
 			{
                 await database.InsertAndGetIdAsync(viewModel.Term);
             }
@@ -75,11 +75,16 @@ public partial class TermPage : ContentPage
 		{
 			await database.UpdateAsync(viewModel.Term);
 		}
-        await Navigation.PopToRootAsync();
+        bool anotherTermWanted = await DisplayAlert("Term Saved", "Would you like to add another term?", "Yes", "No");
+        if (anotherTermWanted)
+        {
+            await Shell.Current.GoToAsync("//termspage");
+        }
+        await Shell.Current.GoToAsync("//homepage");
     }
 
 	private async void CancelButton_Clicked(object sender, EventArgs e)
 	{
-        await Navigation.PopToRootAsync();
+        await Shell.Current.GoToAsync("//homepage");
     }
 }

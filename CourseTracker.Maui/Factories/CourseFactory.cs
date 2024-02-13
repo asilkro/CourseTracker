@@ -185,6 +185,27 @@ namespace CourseTracker.Maui.Factories
             return "Course added successfully.";
         }
 
+        public async Task<string> UpdateCourseAndUpdateTermCount(Course course)
+        {
+            var connection = new Connection();
+            var term = await connection.FindAsync<Term>(course.TermId);
+            if (term == null)
+            {
+                return "Associated term not found.";
+            }
+
+            if (term.CourseCount >= 6)
+            {
+                return "Terms may NOT consist of more than six courses.";
+            }
+
+            term.CourseCount += 1;
+            await connection.UpdateAsync(term);
+            await connection.UpdateAsync(course);
+
+            return "Course Updated successfully.";
+        }
+
         public async Task ScheduleCourseNotifications(Course course)
         {
             if (course.NotificationsEnabled)
