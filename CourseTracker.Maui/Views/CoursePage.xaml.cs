@@ -27,6 +27,7 @@ public partial class CoursePage : ContentPage
         InitializeComponent();
         viewModel = new CourseVM(course);
         BindingContext = viewModel;
+        var selectedTerm = viewModel.Terms.Where(t => t.TermId == course.TermId).FirstOrDefault();
         
         #region Populate fields with existing data
         courseIdEntry.Text = course.CourseId.ToString();
@@ -38,7 +39,8 @@ public partial class CoursePage : ContentPage
         instructorPhoneEntry.Text = course.InstructorPhone;
         instructorEmailEntry.Text = course.InstructorEmail;
         courseNoteEditor.Text = course.CourseNotes;
-        termPicker.SelectedItem = course.TermId;
+        termPicker.SelectedItem = selectedTerm;
+        #endregion
 
         courseIdEntry.IsReadOnly = true;
     }
