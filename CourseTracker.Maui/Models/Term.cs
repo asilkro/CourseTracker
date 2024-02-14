@@ -8,11 +8,11 @@ namespace CourseTracker.Maui.Models;
     #region Properties
     [PrimaryKey]
     [AutoIncrement]
-    [Column("TermId")] public int TermId { get; set; } = -1; // -1 means new term
-    [Column("TermName")] public string TermName { get; set; } = "Term Name Placeholder";
-    [Column("TermStart")] public DateTime TermStart { get; set; } = DateTime.Now.Date;
-    [Column("TermEnd")] public DateTime TermEnd { get; set; } = DateTime.Now.Date.AddDays(90);
-    [Column("CourseCount")] public int CourseCount { get; set; } = 0;
+    public int TermId { get; set; }
+    public string TermName { get; set; } = "Term Name Placeholder";
+    public DateTime TermStart { get; set; } = DateTime.Now.Date;
+    public DateTime TermEnd { get; set; } = DateTime.Now.Date.AddDays(90);
+    public int CourseCount { get; set; } = 0;
 
     #endregion
 

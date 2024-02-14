@@ -58,10 +58,9 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+		<MauiIcon Include="Resources\AppIcon\appicon.png" />
 
 		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
@@ -76,22 +75,15 @@
 
 	<ItemGroup>
 	  <None Remove="Resources\Images\splash.png" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <MauiImage Include="Resources\Splash\splash.png" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <None Include="D:\SDNext\outputs\text\2023-12-08\owl1.png">
-	    <Pack>True</Pack>
-	    <PackagePath>\</PackagePath>
-	  </None>
+	  <None Remove="Resources\Splash\appIcon.png" />
+	  <None Remove="Resources\Splash\splash.png" />
+	  <None Remove="Resources\Splash\splashicon.webp" />
+	  <None Remove="Resources\Splash\splashowl_sd.png" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Maui" Version="7.0.1" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.6" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.7" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.6" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
 		<PackageReference Include="Plugin.LocalNotification" Version="10.1.8" />
@@ -149,6 +141,10 @@
 	    <Alias>ViewModels</Alias>
 	  </Using>
 	  <Using Include="SQLite" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiSplashScreen Include="Resources\Splash\splashicon.webp" />
 	</ItemGroup>
 
 	<ProjectExtensions><VisualStudio><UserProperties XamarinHotReloadDebuggerTimeoutExceptionCourseTrackerMauiHideInfoBar="True" /></VisualStudio></ProjectExtensions>

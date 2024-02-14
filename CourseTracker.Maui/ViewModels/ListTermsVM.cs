@@ -9,12 +9,14 @@ namespace CourseTracker.Maui.ViewModels
 {
     public class ListTermsVM : ViewModelBase
     {
-        
-
+        public List<Term> Terms { get; private set; }
         private Connection _database;
         public ListTermsVM()
         {
-            RefreshList();
+            _database = new Connection();
+            //RefreshList();
+            Terms = [];
+            LoadTerms();
         }
         public bool IsRefreshing { get; set; }
         public ICommand RefreshCommand => new Command(async () =>
@@ -27,13 +29,18 @@ namespace CourseTracker.Maui.ViewModels
         {
             try
             {
-                _database = _database ?? new Connection();
-                var updatedTermsList = await _database.Table<Term>();
-                Terms.Clear();
-                foreach (var term in updatedTermsList)
+                if(Terms.Count > 0)
+                {
+                    Terms.Clear();
+                }
+                var terms = await termsDB.GetTermsAsync();
+                Debug.WriteLine("Term count: "+ terms.Count);
+                foreach (var term in terms)
                 {
                     Terms.Add(term);
                 }
+                //Terms = new ObservableCollection<Term>(terms);
+
             }
             catch (Exception ex)
             {
@@ -56,7 +63,7 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
-        private string termName;
+        private string? termName;
         public string TermName
         {
             get { return termName; }
@@ -126,12 +133,58 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
-        public ObservableCollection<Term> Terms { get; set; } = new ObservableCollection<Term>();
-
         private void RefreshList()
         {
-            Terms = new ObservableCollection<Term>();
+            Terms = new List<Term>();
             LoadTerms();
+        }
+
+        private async void ShowActionSheet(Term term)
+        {
+            string action = await App.Current.MainPage.DisplayActionSheet("Term Actions", "Cancel", null, "Edit Term", "Delete Term");
+            switch (action)
+            {
+                case "Edit Term":
+                    await NavigateToEditTermASync(term);
+                    break;
+                case "Delete Term":
+                    await RemoveTermAsync(term);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private async Task NavigateToEditTermASync(Term term) // workaround for not being able to use await Nav
+        {
+            await App.Current.MainPage.Navigation.PushAsync(new TermPage(term));
+        }
+
+        private async Task RemoveTermAsync(Term term)
+        {
+            var result = await App.Current.MainPage.DisplayAlert("Delete Term", $"Are you sure you want to delete {term.TermName}?", "Yes", "No");
+            if (result)
+            {
+                int confirm = await termsDB.DeleteTermAsync(term);
+                if (confirm == 1)
+                {
+                    await App.Current.MainPage.DisplayAlert("Term Deleted Successfully", "", "Ok");
+                }
+            }
+        }
+
+        public void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            if (e.SelectedItem is Term selectedTerm)
+            {
+                ShowActionSheet(selectedTerm);
+            }
+        ((ListView)sender).SelectedItem = null;
+        }
+
+        public async void OnAppearing()
+        {
+            await LoadTerms();
         }
     }
 }

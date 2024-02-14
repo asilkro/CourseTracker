@@ -20,19 +20,12 @@ public partial class Homepage : ContentPage
 	{
 		InitializeComponent();
         StartDB();
-        if (isSampleDataLoaded())
-        {
-            loadSampleDataButton.IsEnabled = false;
-            loadSampleDataButton.Text = "Sample Data Already Loaded";
-        }
-        
 	}
 
 	private async Task StartDB()
 	{
         _trackerDb ??= new TrackerDb();
         await TrackerDb.Initialize();
-        connection.GetAsyncConnection();
     }
 
     private async void loadButton_Clicked(object sender, EventArgs e)
