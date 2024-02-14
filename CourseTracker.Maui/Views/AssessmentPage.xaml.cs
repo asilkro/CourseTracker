@@ -14,6 +14,7 @@ public partial class AssessmentPage : ContentPage
 	readonly Connection database = new();
     readonly AssessmentFactory _assessmentFactory;
     int nextAssessmentId = TrackerDb.GetNextAutoIncrementID("Assessment");
+    readonly int previousId;
 
 	public AssessmentPage()
 	{
@@ -29,6 +30,7 @@ public partial class AssessmentPage : ContentPage
         InitializeComponent();
         viewModel = new AssessmentVM(assessment);
         BindingContext = viewModel;
+        previousId = assessment.RelatedCourseId;
         
         #region Populate fields with existing data
         assessmentIdEntry.Text = assessment.AssessmentId.ToString();
@@ -62,16 +64,17 @@ public partial class AssessmentPage : ContentPage
 
             if (exists == null)
             {
-                await database.InsertAsync(assessment);  
+                await _assessmentFactory.InsertAssessmentAndUpdateCourseCount(assessment);
             }
             else
             {
-                await database.UpdateAsync(assessment);
+                await _assessmentFactory.LowerCourseAssessmentCount(previousId);
+                await _assessmentFactory.UpdateAssessmentAndUpdateCourseCount(assessment);
             }
             bool anotherAssessmentWanted = await DisplayAlert("Assessment Saved", "Would you like to add another assessment?", "Yes", "No");
             if (anotherAssessmentWanted) 
             {
-                await Shell.Current.GoToAsync("//assessmentspage");
+                await Shell.Current.GoToAsync(nameof(AssessmentPage));
             }
             else
             {

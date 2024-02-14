@@ -4,7 +4,6 @@ using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Supplemental;
 using System.Diagnostics;
 using Plugin.LocalNotification;
-using System.Security.Cryptography;
 
 namespace CourseTracker.Maui.Factories
 {
@@ -109,6 +108,43 @@ namespace CourseTracker.Maui.Factories
             await connection.InsertAsync(newAssessment);
 
             return "Assessment added successfully.";
+        }
+
+        public async Task LowerCourseAssessmentCount(int courseId) // Used when an assessment is deleted or moved to another course
+        {
+            var connection = new Connection().GetAsyncConnection();
+            var course = await connection.FindAsync<Course>(courseId);
+            if (course == null)
+            {
+                return;
+            }
+
+            if (course.CourseAssessmentCount > 0)
+            {
+                course.CourseAssessmentCount -= 1;
+                await connection.UpdateAsync(course);
+            }
+        }
+
+        public async Task<string> UpdateAssessmentAndUpdateCourseCount(Assessment newAssessment)
+        {
+            var connection = new Connection();
+            var course = await connection.FindAsync<Course>(newAssessment.RelatedCourseId);
+            if (course == null)
+            {
+                return "Course not found.";
+            }
+
+            if (course.CourseAssessmentCount >= 2)
+            {
+                return "Courses may have no more than two assessments.";
+            }
+
+            course.CourseAssessmentCount += 1;
+            await connection.UpdateAsync(course);
+            await connection.UpdateAsync(newAssessment);
+
+            return "Assessment updated successfully.";
         }
 
         public async Task ScheduleAssessmentNotifications(Assessment assessment)

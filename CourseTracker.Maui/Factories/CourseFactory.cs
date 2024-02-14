@@ -135,23 +135,29 @@ namespace CourseTracker.Maui.Factories
         {
             errorMessage = "";
             if (!Validation.NotNull(courseName))
-                errorMessage = "Course name cannot be empty.";
+                errorMessage = "Course name cannot be empty or undefined.";
             else if (!Validation.NotNull(courseStatus))
-                errorMessage = "Course status cannot be empty.";
+                errorMessage = "Course status cannot be empty or undefined.";
             else if (!Validation.CourseStatusIsValid(courseStatus))
                 errorMessage = "Course status is not valid.";
             else if (!Validation.DatesAreValid(courseStart, courseEnd))
                 errorMessage = "Course start and end dates are not valid.";
             else if (!Validation.IdWasSet(courseId))
-                errorMessage = "Course ID must be greater than 0.";
+                errorMessage = "Valid Course ID must be greater than 0.";
             else if (!Validation.IdWasSet(termId))
-                errorMessage = "Term ID must be greater than 0.";
+                errorMessage = "Valid Term ID must be greater than 0.";
             else if (!Validation.NotNull(instructorName))
                 errorMessage = "Instructor name cannot be empty.";
             else if (!Validation.NotNull(instructorEmail))
                 errorMessage = "Instructor email cannot be empty.";
+            else if (!Validation.EmailIsValid(instructorEmail))
+                errorMessage = "Instructor email format is not valid.";
+            else if (!Validation.NotTryingToDropTables(courseNotes)) // Not particularly robust, but it's a start
+                errorMessage = "Invalid input in notes detected.";
             else if (!Validation.NotNull(instructorPhone))
                 errorMessage = "Instructor phone cannot be empty.";
+            else if (!Validation.ValidPhoneNumber(instructorPhone))
+                errorMessage = "Instructor phone is not valid. Use xxx-xxx-xxxx format.";
             else if (!Validation.ValidCourseAssessmentCount(courseAssessmentCount))
                 errorMessage = "Course can only have 1 or 2 assessments.";
 

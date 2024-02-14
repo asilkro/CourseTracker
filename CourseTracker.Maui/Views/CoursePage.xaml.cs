@@ -80,7 +80,7 @@ public partial class CoursePage : ContentPage
             bool anotherCourseWanted = await DisplayAlert("Course Added", "Would you like to add another course?", "Yes", "No");
             if (anotherCourseWanted)
             {
-                await Shell.Current.GoToAsync("//coursepage");
+                await Shell.Current.GoToAsync(nameof(CoursePage));
             }
             else
             {

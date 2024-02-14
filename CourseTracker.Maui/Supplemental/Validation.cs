@@ -38,6 +38,13 @@ namespace CourseTracker.Maui.Supplemental
             return true;
         }
 
+        public static bool NotTryingToDropTables(string textBeingEvaluated)
+        {
+            var dropTable = "DROP TABLE";
+            textBeingEvaluated.IndexOf(dropTable, StringComparison.OrdinalIgnoreCase);
+            return textBeingEvaluated.IndexOf(dropTable, StringComparison.OrdinalIgnoreCase) == -1;
+        }
+
         public static bool EmailIsValid(string email)
         {
             try

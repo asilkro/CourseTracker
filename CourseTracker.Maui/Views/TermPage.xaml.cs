@@ -93,7 +93,7 @@ public partial class TermPage : ContentPage
         bool anotherTermWanted = await DisplayAlert("Term Saved", "Would you like to add another term?", "Yes", "No");
         if (anotherTermWanted)
         {
-            await Shell.Current.GoToAsync("//termspage");
+            await Shell.Current.GoToAsync(nameof(TermPage));
         }
         await Shell.Current.GoToAsync("//homepage");
     }

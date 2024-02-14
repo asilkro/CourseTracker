@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Windows.Input;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Views;
@@ -8,14 +9,20 @@ namespace CourseTracker.Maui.ViewModels
 {
     public class ListTermsVM : ViewModelBase
     {
-        public ObservableCollection<Term> Terms { get; private set; } = new ObservableCollection<Term>();
+        
 
         private Connection _database;
         public ListTermsVM()
         {
-            LoadTerms();
+            RefreshList();
         }
-
+        public bool IsRefreshing { get; set; }
+        public ICommand RefreshCommand => new Command(async () =>
+        {
+            IsRefreshing = true;
+            RefreshList();
+            IsRefreshing = false;
+        });
         public async Task LoadTerms()
         {
             try
@@ -119,27 +126,12 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
+        public ObservableCollection<Term> Terms { get; set; } = new ObservableCollection<Term>();
 
-        private async Task NavigateToEditTermASync(Term term)
+        private void RefreshList()
         {
-            await Application.Current.MainPage.Navigation.PushAsync(new TermPage(term));
+            Terms = new ObservableCollection<Term>();
+            LoadTerms();
         }
-
-        private async Task RemoveTermAsync(Term term)
-        {
-            if (_database == null)
-            {
-                _database = new Connection();
-                _database.GetAsyncConnection();
-            }
-
-            var result = await Application.Current.MainPage.DisplayAlert("Delete Term", $"Are you sure you want to delete {term.TermName}?", "Yes", "No");
-            if (result)
-            {
-                await _database.DeleteAsync(term);
-                await LoadTerms();
-            }
-        }
-
     }
 }

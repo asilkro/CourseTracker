@@ -1,9 +1,11 @@
 using System.Diagnostics;
+using System.Security.Cryptography.X509Certificates;
 using System.Text.RegularExpressions;
 using CourseTracker.Maui.Factories;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Supplemental;
+using Microsoft.Maui.Layouts;
 
 namespace CourseTracker.Maui.Views;
 
@@ -18,12 +20,19 @@ public partial class Homepage : ContentPage
 	{
 		InitializeComponent();
         StartDB();
+        if (isSampleDataLoaded())
+        {
+            loadSampleDataButton.IsEnabled = false;
+            loadSampleDataButton.Text = "Sample Data Already Loaded";
+        }
+        
 	}
 
 	private async Task StartDB()
 	{
         _trackerDb ??= new TrackerDb();
         await TrackerDb.Initialize();
+        connection.GetAsyncConnection();
     }
 
     private async void loadButton_Clicked(object sender, EventArgs e)
@@ -62,14 +71,13 @@ public partial class Homepage : ContentPage
     #region Sample Data For Evaluation
     private static int courseId = GetNextAutoIncrementID("Course") ?? 1600;
 
-
     private static readonly Term demoTerm = new()
     {
         TermId = GetNextAutoIncrementID("Term") ?? 1500,
         TermName = "Demo Term",
         TermStart = new DateTime(2024, 01, 01),
         TermEnd = new DateTime(2024, 06, 30),
-        CourseCount = 0
+        CourseCount = 1
     };
 
     private static readonly Term demoTerm2 = new()
@@ -78,7 +86,7 @@ public partial class Homepage : ContentPage
         TermName = "Term One 2023",
         TermStart = new DateTime(2023, 01, 01),
         TermEnd = new DateTime(2023, 06, 30),
-        CourseCount = 0
+        CourseCount = 2
     };
 
     private static readonly Course demoCourse = new()
@@ -93,6 +101,7 @@ public partial class Homepage : ContentPage
         InstructorName = "Anika Patel",
         CourseNotes = "This addresses assessment requirement C6 re: C3",
         NotificationsEnabled = true,
+        TermId = demoTerm.TermId,
         CourseAssessmentCount = 2
     };
 
@@ -108,6 +117,7 @@ public partial class Homepage : ContentPage
         InstructorName = "Rick Grimes",
         CourseNotes = "This is a course that was completed and covered the fictional outbreak of a zombie disease",
         NotificationsEnabled = false,
+        TermId = demoTerm2.TermId,
         CourseAssessmentCount = 1
     };
 
@@ -123,6 +133,7 @@ public partial class Homepage : ContentPage
         InstructorName = "Dan Harmon",
         CourseNotes = "This course was dropped due to a scheduling conflict with Dean Pelton.",
         NotificationsEnabled = false,
+        TermId = demoTerm2.TermId,
         CourseAssessmentCount = 1
     };
 
@@ -136,7 +147,17 @@ public partial class Homepage : ContentPage
         RelatedCourseId = courseId,
         NotificationsEnabled = true
     };
-
+    
+    private static readonly Assessment demoPA = new Assessment
+    {
+        AssessmentId = GetNextAutoIncrementID("Assessment") ?? 1701,
+        AssessmentName = "C6 PA",
+        AssessmentType = "Performance",
+        AssessmentStartDate = new DateTime(2024, 03, 01),
+        AssessmentEndDate = new DateTime(2024, 04, 30),
+        RelatedCourseId = courseId,
+        NotificationsEnabled = true
+    };
     private static readonly Assessment demoOA2 = new Assessment
     {
         AssessmentId = GetNextAutoIncrementID("Assessment") ?? 1702,
@@ -158,18 +179,7 @@ public partial class Homepage : ContentPage
         RelatedCourseId = demoCourse3.CourseId,
         NotificationsEnabled = false
     };
-
-    private static readonly Assessment demoPA = new Assessment
-    {
-        AssessmentId = GetNextAutoIncrementID("Assessment") ?? 1701,
-        AssessmentName = "C6 PA",
-        AssessmentType = "Performance",
-        AssessmentStartDate = new DateTime(2024, 03, 01),
-        AssessmentEndDate = new DateTime(2024, 04, 30),
-        RelatedCourseId = courseId,
-        NotificationsEnabled = true
-    };
-
+    
     private async Task LoadSampleDataAsync()
     {
         if (connection == null)
@@ -216,14 +226,34 @@ public partial class Homepage : ContentPage
             //TODO: add validation for insert during debug
 
             await DisplayAlert("Sample Data Loaded", "Sample data has been loaded successfully. Please relaunch the application to complete setup.", "OK");
-            loadSampleDataButton.IsEnabled = false;
-
+            isSampleDataLoaded();
         }
         catch (Exception ex)
         {
             await DisplayAlert("Sample Data Error", "$There was an error while loading sample data: " + ex.Message, "OK");
             return;
         }
+    }
+
+    public bool isSampleDataLoaded()
+    {
+        bool result = false;
+        if (connection == null)
+        {
+            connection = new();
+            connection.GetAsyncConnection();
+        }
+        var demotermexists = connection.FindAsync<Term>(demoTerm.TermId);
+        var democourseexists = connection.FindAsync<Course>(demoCourse.CourseId);
+        var demoOAexists = connection.FindAsync<Assessment>(demoOA.AssessmentId);
+        var demoPAexists = connection.FindAsync<Assessment>(demoPA.AssessmentId);
+
+        if (demotermexists != null && democourseexists != null && demoOAexists != null && demoPAexists != null)
+        {
+            result = true;
+        }
+
+        return result;
     }
     #endregion
 }

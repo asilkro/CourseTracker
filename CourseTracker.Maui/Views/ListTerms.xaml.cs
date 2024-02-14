@@ -17,20 +17,6 @@ public partial class ListTerms : ContentPage
         InitializeComponent();
         BindingContext = new ListTermsVM();
     }
-
-    private async Task InitializeDataAsync()
-    {
-        if (_database == null)
-        {
-            _database = new Connection();
-            _database.GetAsyncConnection();
-        }
-
-        var list = await _database.Table<Term>();
-        termListView.ItemsSource = list;
-    }
-
-
     private void TermListView_ItemTapped(object sender, ItemTappedEventArgs e)
     {
 		if (e.Item is Term selectedTerm)

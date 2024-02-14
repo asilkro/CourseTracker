@@ -5,19 +5,7 @@ namespace CourseTracker.Maui.ViewModels
 {
     public class HomepageVM : INotifyPropertyChanged
     {
-        private double _sliderValue;
         private string _labelText;
-
-        public double SliderValue
-        {
-            get => _sliderValue;
-            set
-            {
-                _sliderValue = value;
-                LabelText = ((int)value).ToString();
-                OnPropertyChanged();
-            }
-        }
 
         public string LabelText
         {
