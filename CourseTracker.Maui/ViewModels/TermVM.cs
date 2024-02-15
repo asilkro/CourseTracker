@@ -1,13 +1,19 @@
-﻿using CourseTracker.Maui.Models;
+﻿using System.Diagnostics;
+using CourseTracker.Maui.Data;
+using CourseTracker.Maui.Factories;
+using CourseTracker.Maui.Models;
 
 namespace CourseTracker.Maui.ViewModels
 {
+    [QueryProperty(nameof(EditTermId), nameof(EditTermId))]
     public class TermVM : ViewModelBase
     {
-        public TermVM(Term term) { }
-        public TermVM() { }
-
+        TermFactory termFactory;
         private Term term = new();
+        public TermVM() { }
+        public int termId;
+        public int editTermId;
+
 
         public Term Term
         {
@@ -22,7 +28,7 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
-        private int termId;
+        
         public int TermId
         {
             get { return termId; }
@@ -35,6 +41,29 @@ namespace CourseTracker.Maui.ViewModels
                 }
             }
         }
+        public int EditTermId
+        {
+            get { return editTermId; }
+            set
+            {
+                if (editTermId != value)
+                {
+                    editTermId = value;
+                    PerformOperation(value);
+                }
+            }
+        }
+        private async Task PerformOperation(int Id)
+        {
+            Debug.WriteLine("TermId: " + Id);
+            Term temp = await termsDB.GetTermByIdAsync(Id);
+            TermName = temp.TermName;
+            TermStart = temp.TermStart;
+            TermEnd = temp.TermEnd;
+            CourseCount = temp.CourseCount;
+            TermId = temp.TermId;
+        }
+
         private string termName;
         public string TermName
         {

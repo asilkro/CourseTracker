@@ -22,6 +22,28 @@ namespace CourseTracker.Maui.Data
             await Init();
             return await _database.Table<Term>().ToListAsync();
         }
+        public async Task<Term> GetTermByIdAsync(int id)
+        {
+            await Init();
+            return await _database.Table<Term>()
+                .Where(i => i.TermId == id)
+                .FirstOrDefaultAsync();
+        }
+        public async Task<int> GetNextId()
+        {
+            await Init();
+            List<Term> terms = await GetTermsAsync();
+            if (terms.Count == 0)
+            {
+                return 1;
+            }
+            else
+            {
+                int maxId = terms.Max(t => t.TermId);
+                maxId++;
+                return maxId;
+            }
+        }
         public async Task SaveTermAsync(Term term)
         {
             await Init();
@@ -39,12 +61,6 @@ namespace CourseTracker.Maui.Data
             await Init();
             return await _database.DeleteAsync(term);
         }
-        public async Task<Term> GetTermByIdAsync(int id)
-        {
-            await Init();
-            return await _database.Table<Term>()
-                .Where(i => i.TermId == id)
-                .FirstOrDefaultAsync();
-        }
+
     }
 }

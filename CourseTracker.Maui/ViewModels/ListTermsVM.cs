@@ -9,27 +9,23 @@ namespace CourseTracker.Maui.ViewModels
 {
     public class ListTermsVM : ViewModelBase
     {
-        public List<Term> Terms { get; private set; }
-        private Connection _database;
+        public List<Term> Terms { get; set; }
+        
         public ListTermsVM()
         {
-            _database = new Connection();
-            //RefreshList();
-            Terms = [];
-            LoadTerms();
+           Terms = [];
         }
         public bool IsRefreshing { get; set; }
-        public ICommand RefreshCommand => new Command(async () =>
-        {
-            IsRefreshing = true;
-            RefreshList();
-            IsRefreshing = false;
-        });
         public async Task LoadTerms()
         {
+            IsRefreshing = true;
             try
             {
-                if(Terms.Count > 0)
+                if (Terms == null)
+                {
+                    Terms = new List<Term>();
+                }
+                if (Terms.Count > 0)
                 {
                     Terms.Clear();
                 }
@@ -45,6 +41,10 @@ namespace CourseTracker.Maui.ViewModels
             catch (Exception ex)
             {
                 Debug.WriteLine("Issue loading terms: " + ex.Message);
+            }
+            finally
+            {
+                IsRefreshing = false;
             }
         }
 
@@ -133,19 +133,14 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
-        private void RefreshList()
-        {
-            Terms = new List<Term>();
-            LoadTerms();
-        }
-
-        private async void ShowActionSheet(Term term)
+        public async void ShowActionSheet(Term term)
         {
             string action = await App.Current.MainPage.DisplayActionSheet("Term Actions", "Cancel", null, "Edit Term", "Delete Term");
             switch (action)
             {
                 case "Edit Term":
-                    await NavigateToEditTermASync(term);
+                    //await NavigateToEditTermASync(term);
+                    await Shell.Current.GoToAsync($"{nameof(TermPage)}?{nameof(TermVM.EditTermId)}={term.TermId}");
                     break;
                 case "Delete Term":
                     await RemoveTermAsync(term);
@@ -157,7 +152,9 @@ namespace CourseTracker.Maui.ViewModels
 
         private async Task NavigateToEditTermASync(Term term) // workaround for not being able to use await Nav
         {
-            await App.Current.MainPage.Navigation.PushAsync(new TermPage(term));
+            //var TermId = term.TermId;
+            //await App.Current.MainPage.Navigation.PushAsync(new TermPage(term));
+            //await Shell.Current.GoToAsync($"{nameof(TermPage)}?{nameof(TermPage.TermId)}={term.TermId}");
         }
 
         private async Task RemoveTermAsync(Term term)

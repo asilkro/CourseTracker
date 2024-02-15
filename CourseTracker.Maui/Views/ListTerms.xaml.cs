@@ -20,4 +20,13 @@ public partial class ListTerms : ContentPage
         base.OnAppearing();
         _listTermsVM.OnAppearing();
     }
+
+    private void termListView_ItemTapped(object sender, ItemTappedEventArgs e)
+    {
+        if (e.Item is Term selectedTerm)
+        {
+            _listTermsVM.ShowActionSheet(selectedTerm);
+        }
+        ((ListView)sender).SelectedItem = null;
+    }
 }

@@ -21,7 +21,7 @@
 
                 <!--Term Id-->
                 <Label x:Name="termIdLabel"  Text="Term Id" HorizontalTextAlignment="Center" Grid.Column="0" Grid.Row="0"/>
-                <Entry x:Name="termIdEntry" Placeholder="-1" Text="{Binding TermId}" Grid.Column="0" Grid.Row="1"/>
+                <Entry x:Name="termIdEntry" Text="{Binding TermId}" Grid.Column="0" Grid.Row="1"/>
 
                 <!--Term Name-->
                 <Label x:Name="termNameLabel" Text="Term Name" HorizontalTextAlignment="Center"  Grid.Column="1" Grid.Row="0"/>
