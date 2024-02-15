@@ -139,7 +139,6 @@ namespace CourseTracker.Maui.ViewModels
             switch (action)
             {
                 case "Edit Term":
-                    //await NavigateToEditTermASync(term);
                     await Shell.Current.GoToAsync($"{nameof(TermPage)}?{nameof(TermVM.EditTermId)}={term.TermId}");
                     break;
                 case "Delete Term":
@@ -148,13 +147,6 @@ namespace CourseTracker.Maui.ViewModels
                 default:
                     break;
             }
-        }
-
-        private async Task NavigateToEditTermASync(Term term) // workaround for not being able to use await Nav
-        {
-            //var TermId = term.TermId;
-            //await App.Current.MainPage.Navigation.PushAsync(new TermPage(term));
-            //await Shell.Current.GoToAsync($"{nameof(TermPage)}?{nameof(TermPage.TermId)}={term.TermId}");
         }
 
         private async Task RemoveTermAsync(Term term)

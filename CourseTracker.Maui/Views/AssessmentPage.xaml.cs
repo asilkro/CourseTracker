@@ -25,26 +25,6 @@ public partial class AssessmentPage : ContentPage
         assessmentIdEntry.IsReadOnly = true;
 	}
 
-	public AssessmentPage(Assessment assessment)
-	{
-        InitializeComponent();
-        viewModel = new AssessmentVM(assessment);
-        BindingContext = viewModel;
-        previousId = assessment.RelatedCourseId;
-        
-        #region Populate fields with existing data
-        assessmentIdEntry.Text = assessment.AssessmentId.ToString();
-        assessmentNameEntry.Text = assessment.AssessmentName;
-        assessmentTypePicker.SelectedItem = assessment.AssessmentType;
-        assessmentStartDatePicker.Date = assessment.AssessmentStartDate;
-        assessmentEndDatePicker.Date = assessment.AssessmentEndDate;
-        relatedCourseIdEntry.Text = assessment.RelatedCourseId.ToString();
-        notificationsEnabledSwitch.IsToggled = assessment.NotificationsEnabled;
-        #endregion
-        
-        assessmentIdEntry.IsReadOnly = true;
-    }
-
     private async void submitButton_Clicked(object sender, EventArgs e)
     {
         var assessmentResult = await _assessmentFactory.CreateAssessmentAsync(viewModel);

@@ -2,12 +2,12 @@
 using System.Diagnostics;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
+using CourseTracker.Maui.Views;
 
 namespace CourseTracker.Maui.ViewModels
 {
     public class ListAssessmentsVM : ViewModelBase
     {
-        private Connection _database;
         public ObservableCollection<Assessment> Assessments { get; private set; } = new ObservableCollection<Assessment>();
 
         public ListAssessmentsVM()
@@ -15,14 +15,21 @@ namespace CourseTracker.Maui.ViewModels
             LoadAssessments();
         }
 
+        public bool IsRefreshing { get; set; }
         public async Task LoadAssessments()
         {
+            IsRefreshing = true;
             try
             {
-                _database = _database ?? new Connection();
-                _database.GetAsyncConnection();
-                var updatedAssessmentsList = await _database.Table<Assessment>();
-                Assessments.Clear();
+                if (Assessments == null)
+                {
+                    Assessments = new ObservableCollection<Assessment>();
+                }
+                if (Assessments.Count > 0)
+                {
+                    Assessments.Clear();
+                }
+                var updatedAssessmentsList = await assessmentDB.GetAssessmentsAsync();
                 foreach (var assessment in updatedAssessmentsList)
                 {
                     Assessments.Add(assessment);
@@ -32,6 +39,10 @@ namespace CourseTracker.Maui.ViewModels
             {
                 Debug.WriteLine("Issue loading assessments: " + ex.Message);
                 return;
+            }
+            finally
+            {
+                IsRefreshing = false;
             }
         }
 
@@ -148,5 +159,49 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
+
+        private async void ShowActionSheet(Assessment assessment)
+        {
+            string action = await App.Current.MainPage.DisplayActionSheet("Assessment Actions", "Cancel", null, "Edit Assessment", "Delete Assessment");
+            switch (action)
+            {
+                case "Edit Assessment":
+                    await Shell.Current.GoToAsync($"{nameof(AssessmentPage)}?{nameof(AssessmentVM.EditAssessmentId)}={assessment.AssessmentId}");
+                    break;
+                case "Delete Assessment":
+                    RemoveAssessmentAsync(assessment);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private async void RemoveAssessmentAsync(Assessment assessment)
+        {
+            var result = await App.Current.MainPage.DisplayAlert("Delete Assessment", $"Are you sure you want to delete {assessment.AssessmentName}?", "Yes", "No");
+            if (result)
+            {
+                int confirm = await assessmentDB.DeleteAssessmentAsync(assessment);
+                //TODO: Update course assessment count
+                if (confirm == 1)
+                {
+                    await App.Current.MainPage.DisplayAlert("Assessment Deleted Successfully", "", "Ok");
+                }
+            }
+        }
+
+        public void OnItemSelected(object sender, SelectedItemChangedEventArgs e)
+        {
+            if (e.SelectedItem is Assessment selectedAssessment)
+            {
+                ShowActionSheet(selectedAssessment);
+            }
+        ((ListView)sender).SelectedItem = null;
+        }
+
+        public async void OnAppearing()
+        {
+            await LoadAssessments();
+        }
     }
 }

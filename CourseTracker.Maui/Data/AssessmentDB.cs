@@ -22,6 +22,15 @@ namespace CourseTracker.Maui.Data
             await Init();
             return await _database.Table<Assessment>().ToListAsync();
         }
+
+        public async Task<Assessment> GetAssessmentsAsync(int id)
+        {
+            await Init();
+            return await _database.Table<Assessment>()
+                .Where(i => i.AssessmentId == id)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task SaveAssessmentAsync(Assessment assessment)
         {
             await Init();

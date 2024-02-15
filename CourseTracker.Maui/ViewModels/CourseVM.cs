@@ -5,9 +5,11 @@ using CourseTracker.Maui.Services;
 
 namespace CourseTracker.Maui.ViewModels
 {
+    [QueryProperty(nameof(EditCourseId), nameof(EditCourseId))]
     public class CourseVM : ViewModelBase
     {
         private Course course;
+        public int editCourseId;
 
         public CourseVM(Course course)
         {
@@ -178,6 +180,49 @@ namespace CourseTracker.Maui.ViewModels
                 {
                     courseId = value;
                     OnPropertyChanged(nameof(CourseId));
+                }
+            }
+        }
+        public int EditCourseId
+        {
+            get { return editCourseId; }
+            set
+            {
+                if (editCourseId != value)
+                {
+                    editCourseId = value;
+                    PerformOperation(value);
+                }
+            }
+        }
+
+        private async Task PerformOperation(int Id)
+        {
+            Debug.WriteLine("CourseId: " + Id);
+            Course temp = await courseDB.GetCourseByIdAsync(Id);
+            CourseName = temp.CourseName;
+            InstructorName = temp.InstructorName;
+            InstructorPhone = temp.InstructorPhone;
+            InstructorEmail = temp.InstructorEmail;
+            CourseStatus = temp.CourseStatus;
+            CourseStart = temp.CourseStart;
+            CourseEnd = temp.CourseEnd;
+            CourseNotes = temp.CourseNotes;
+            NotificationsEnabled = temp.NotificationsEnabled;
+            CourseId = temp.CourseId;
+            TermId = temp.TermId;
+        }
+
+        private int termId;
+        public int TermId
+        {
+            get { return termId; }
+            set
+            {
+                if (termId != value)
+                {
+                    termId = value;
+                    OnPropertyChanged(nameof(TermId));
                 }
             }
         }
