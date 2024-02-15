@@ -162,6 +162,64 @@ namespace CourseTracker.Maui.ViewModels
         {
             await LoadAssessmentDetails();
         }
+
+        public async void ShowActionSheet(Assessment assessment)
+        {
+            string action = await Application.Current.MainPage.DisplayActionSheet("Assessment Options", "Cancel", null, "Edit", "Delete");
+            switch (action)
+            {
+                case "Edit":
+                    await Shell.Current.GoToAsync($"editassessment?assessmentId={assessment.AssessmentId}");
+                    break;
+                case "Delete":
+                    bool answer = await Application.Current.MainPage.DisplayAlert("Delete Assessment", "Are you sure you want to delete this assessment?", "Yes", "No");
+                    if (answer)
+                    {
+                        await assessmentDB.DeleteAssessmentAsync(assessment);
+                        await Shell.Current.GoToAsync("..");
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public async void submitButton_Clicked()
+        {
+            var assessmentResult = await assessmentDB.CreateAssessmentAsync(this);
+            if (assessmentResult?.Assessment == null)
+            {
+                Debug.WriteLine("Error creating assessment: " + assessmentResult?.ErrorMessage);
+                return;
+            }
+            var assessment = assessmentResult.Assessment;
+            var searchId = assessment.AssessmentId;
+            try
+            {
+                var exists = await assessmentDB.GetAssessmentsAsync(searchId);
+                if (exists == null)
+                {
+                    await assessmentDB.SaveAssessmentAsync(assessment);
+                }
+                else
+                {
+                    await assessmentDB.SaveAssessmentAsync(assessment);
+                }
+                bool anotherAssessmentWanted = await Application.Current.MainPage.DisplayAlert("Assessment Saved", "Would you like to add another assessment?", "Yes", "No");
+                if (anotherAssessmentWanted)
+                {
+                    await Shell.Current.GoToAsync("assessment");
+                }
+                else
+                {
+                    await Shell.Current.GoToAsync("//homepage");
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error submitting data: " + ex.Message);
+            }
+        }
         #endregion
     }
 }

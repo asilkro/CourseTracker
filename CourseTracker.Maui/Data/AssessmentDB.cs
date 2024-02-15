@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using CourseTracker.Maui.Factories;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
 
@@ -37,10 +38,14 @@ namespace CourseTracker.Maui.Data
             if (assessment.AssessmentId != 0)
             {
                 await _database.UpdateAsync(assessment);
+                //TODO: Update assessment count on courses, return error if course not found or over limit of 2
+
             }
             else
             {
                 await _database.InsertAsync(assessment);
+                //TODO: Update assessment count on courses, return error if course not found or over limit of 2
+
             }
         }
         public async Task<int> DeleteAssessmentAsync(Assessment assessment)
@@ -48,5 +53,6 @@ namespace CourseTracker.Maui.Data
             await Init();
             return await _database.DeleteAsync(assessment);
         }
+
     }
 }
