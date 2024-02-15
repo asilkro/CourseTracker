@@ -10,11 +10,16 @@ namespace CourseTracker.Maui.ViewModels
     public class ViewModelBase : INotifyPropertyChanged
     {
         public TermsDB termsDB;
+        public CourseDB courseDB;
+        public AssessmentDB assessmentDB;
+
         protected IDispatcher Dispatcher => DispatcherProvider.Current.GetForCurrentThread();
         public event PropertyChangedEventHandler PropertyChanged;
         public ViewModelBase()
         {
             termsDB = new TermsDB();
+            courseDB = new CourseDB();
+            assessmentDB = new AssessmentDB();
         }
         protected bool SetProperty<T>(ref T backingStore, T value, [CallerMemberName] string propertyName = "", Action onChanged = null)
         {

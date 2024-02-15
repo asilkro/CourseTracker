@@ -19,9 +19,13 @@ Padding="20,10" Spacing="5">
                         <ViewCell>
                             <Grid Padding="10" ColumnDefinitions="*">
                                 <!-- Display Properties of Each Term -->
-                                <Label Text="{Binding TermName}" FontAttributes="Bold" Grid.Column="1"/>
+                            <Label Text="{Binding TermName, StringFormat='TermName: {0}'}" FontAttributes="Bold" Grid.Column="1"/>
+                            <Label Text="{Binding TermId, StringFormat='TermId: {0}'}" Grid.Column="1"/>
+                            <Label Text="{Binding TermStart, StringFormat='Term Start: {0:d}'}" Grid.Column="1"/>
+                            <Label Text="{Binding TermEnd, StringFormat='Term End: {0:d}'}" Grid.Column="1"/>
+                            <Label Text="{Binding CourseCount, StringFormat='Course Count: {0}'}" Grid.Column="1"/>
 
-                            </Grid>
+                        </Grid>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>

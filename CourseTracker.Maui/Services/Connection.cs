@@ -6,7 +6,6 @@ public interface IAsyncSqLite
 {
     SQLiteAsyncConnection GetAsyncConnection(); //Async Connection
     SQLiteConnection GetConnection(); //Non-Async Connection
-    
     Task InsertAsync<T>(T obj);
     Task<List<T>> Table<T>() where T : new();
     Task<T> FindAsync<T>(int id) where T : new();
