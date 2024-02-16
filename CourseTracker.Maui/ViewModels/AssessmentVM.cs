@@ -3,16 +3,25 @@ using System.Diagnostics;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using CourseTracker.Maui.Supplemental;
+using CourseTracker.Maui.Views;
 
 namespace CourseTracker.Maui.ViewModels
 {
     [QueryProperty(nameof(EditAssessmentId), nameof(EditAssessmentId))]
     public class AssessmentVM : ViewModelBase
     {
+        public int editAssessmentId;
+        public Command OnAssessmentSubmitButtonClick { get; set; }
+        public Command OnAssessmentCancelButtonClick { get; set; }
         public AssessmentVM()
         {
+            OnAssessmentSubmitButtonClick = new Command(async () => await submitButton_Clicked());
+            OnAssessmentCancelButtonClick = new Command(async () => await cancelButton_Clicked());
         }
-        public int editAssessmentId;
+
+
 
         private Assessment assessment;
         public Assessment Assessment
@@ -43,7 +52,7 @@ namespace CourseTracker.Maui.ViewModels
 
         private async Task PerformOperation(int Id)
         {
-               Debug.WriteLine("AssessmentId: " + Id);
+            Debug.WriteLine("AssessmentId: " + Id);
             Assessment temp = await assessmentDB.GetAssessmentsAsync(Id);
             AssessmentId = temp.AssessmentId;
             AssessmentName = temp.AssessmentName;
@@ -146,6 +155,8 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
+
+
         #region Methods
         private async Task LoadAssessmentDetails()
         {
@@ -184,42 +195,51 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
-        public async void submitButton_Clicked()
+        public async Task submitButton_Clicked()
         {
-            var assessmentResult = await assessmentDB.CreateAssessmentAsync(this);
-            if (assessmentResult?.Assessment == null)
+           
+            Assessment assessment = new()
             {
-                Debug.WriteLine("Error creating assessment: " + assessmentResult?.ErrorMessage);
+                AssessmentId = AssessmentId,
+                AssessmentName = AssessmentName,
+                AssessmentType = AssessmentType,
+                AssessmentStartDate = AssessmentStartDate,
+                AssessmentEndDate = AssessmentEndDate,
+                RelatedCourseId = RelatedCourseId,
+                NotificationsEnabled = NotificationsEnabled
+            };
+            string message = assessmentDB.IsValidAssessment(assessment);
+            if (!string.IsNullOrEmpty(message))
+            {
+                ShowToast(message);
                 return;
             }
-            var assessment = assessmentResult.Assessment;
-            var searchId = assessment.AssessmentId;
-            try
+            await assessmentDB.SaveAssessmentAsync(assessment);
+
+            bool anotherAssessmentWanted = await Application.Current.MainPage.DisplayAlert("Assessment Saved", "Would you like to add another assessment?", "Yes", "No");
+            if (anotherAssessmentWanted)
             {
-                var exists = await assessmentDB.GetAssessmentsAsync(searchId);
-                if (exists == null)
-                {
-                    await assessmentDB.SaveAssessmentAsync(assessment);
-                }
-                else
-                {
-                    await assessmentDB.SaveAssessmentAsync(assessment);
-                }
-                bool anotherAssessmentWanted = await Application.Current.MainPage.DisplayAlert("Assessment Saved", "Would you like to add another assessment?", "Yes", "No");
-                if (anotherAssessmentWanted)
-                {
-                    await Shell.Current.GoToAsync("assessment");
-                }
-                else
-                {
-                    await Shell.Current.GoToAsync("//homepage");
-                }
+                await Shell.Current.GoToAsync(nameof(AssessmentPage));
             }
-            catch (Exception ex)
+            else
             {
-                Debug.WriteLine("Error submitting data: " + ex.Message);
+                await Shell.Current.GoToAsync("//homepage");
             }
         }
+
+        private async Task cancelButton_Clicked()
+        {
+            await Shell.Current.GoToAsync("//homepage");
+        }
+
+        public async void OnAppearing()
+        {
+            if (EditAssessmentId <= 0)
+            {
+                AssessmentId = await assessmentDB.GetNextId();
+            }
+        }
+
         #endregion
     }
 }

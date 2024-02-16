@@ -6,29 +6,24 @@
              x:DataType="viewModel:ListAssessmentsVM"
              Title="Assessment(s) List">
 
-    <VerticalStackLayout
-    Padding="20,10" Spacing="5">
-
-        <!-- Display List of Assessments using ListView -->
-        <ListView x:Name="assessmentListView" ItemsSource="{Binding Assessments}" 
-              ItemTapped="AssessmentListView_ItemTapped" VerticalOptions="FillAndExpand" SelectionMode="Single">
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <ViewCell>
-                        <StackLayout Padding="5,5">
-                            <!-- Properties of each Term -->
-                            <Label Text="{Binding AssessmentName, StringFormat='Assessment Name: {0}'}" FontAttributes="Bold" />
-                            <Label Text="{Binding AssessmentId, StringFormat='Assessment Id: {0}'}"/>
-                            <Label Text="{Binding AssessmentType, StringFormat='Type: {0}'}"/>
-                            <Label Text="{Binding AssessmentStartDate, StringFormat='Start: {0:d}'}" />
-                            <Label Text="{Binding AssessmentEndDate, StringFormat='End: {0:d}'}" />
-                            <Label Text="{Binding RelatedCourseId, StringFormat='Assessment for CourseId: {0}'}"/>
-                            <Label Text="{Binding NotificationsEnabled, StringFormat='Notifications for Dates: {0}'}"/>
-                        </StackLayout>
-                    </ViewCell>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-
-    </VerticalStackLayout>
+    <!-- Display List of Assessments using ListView -->
+    <ListView x:Name="assessmentListView" ItemsSource="{Binding Assessments}" 
+              VerticalOptions="FillAndExpand" CachingStrategy="RecycleElement" SelectionMode="Single">
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <ViewCell>
+                    <StackLayout Padding="5,5">
+                        <!-- Properties of each Term -->
+                        <Label Text="{Binding AssessmentName, StringFormat='Assessment Name: {0}'}" FontAttributes="Bold" />
+                        <Label Text="{Binding AssessmentId, StringFormat='Assessment Id: {0}'}"/>
+                        <Label Text="{Binding AssessmentType, StringFormat='Type: {0}'}"/>
+                        <Label Text="{Binding AssessmentStartDate, StringFormat='Start: {0:d}'}" />
+                        <Label Text="{Binding AssessmentEndDate, StringFormat='End: {0:d}'}" />
+                        <Label Text="{Binding RelatedCourseId, StringFormat='Assessment for CourseId: {0}'}"/>
+                        <Label Text="{Binding NotificationsEnabled, StringFormat='Notifications for Dates: {0}'}"/>
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
 </ContentPage>

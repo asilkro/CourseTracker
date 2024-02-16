@@ -8,7 +8,6 @@ namespace CourseTracker.Maui.ViewModels
     [QueryProperty(nameof(EditTermId), nameof(EditTermId))]
     public class TermVM : ViewModelBase
     {
-        TermFactory termFactory;
         private Term term = new();
         public TermVM() { }
         public int termId;
@@ -78,33 +77,6 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
-        private DateTime minimumDate = DateTime.Parse("01/01/2020");
-        public DateTime MinimumDate
-        {
-            get { return minimumDate; }
-            set
-            {
-                if (minimumDate != value)
-                {
-                    minimumDate = value;
-                    OnPropertyChanged(nameof(MinimumDate));
-                }
-            }
-        }
-
-        private DateTime maximumDate = DateTime.Parse("12/31/4020");
-        public DateTime MaximumDate
-        {
-            get { return maximumDate; }
-            set
-            {
-                if (maximumDate != value)
-                {
-                    maximumDate = value;
-                    OnPropertyChanged(nameof(MaximumDate));
-                }
-            }
-        }
 
         private static DateTime dateStart = DateTime.Now.Date;
         private DateTime termStart = new DateTime(dateStart.Year, dateStart.Month, 1);

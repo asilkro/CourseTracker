@@ -25,7 +25,7 @@
                />
 
         <!-- Assessment Type -->
-        <Picker Title="Assessment Name: "
+        <Picker Title="Assessment Type: "
                 SelectedItem="{Binding AssessmentType}"
                 x:Name="assessmentTypePicker">
             <Picker.ItemsSource>
@@ -39,15 +39,15 @@
         <!-- Assessment Start Date -->
         <Label Text="Start Date" FontAttributes="Bold" Margin="0,10,0,0"/>
         <DatePicker Date="{Binding AssessmentStartDate}"
-                    x:Name="assessmentStartDatePicker"/>
+                    x:Name="assessmentStartDatePicker" MinimumDate="{Binding MinimumDate}" MaximumDate="{Binding MaximumDate}"/>
 
         <!-- Assessment End Date -->
         <Label Text="End Date" FontAttributes="Bold" Margin="0,10,0,0"/>
         <DatePicker Date="{Binding AssessmentEndDate}"
-                    x:Name="assessmentEndDatePicker"/>
+                    x:Name="assessmentEndDatePicker" MinimumDate="{Binding MinimumDate}" MaximumDate="{Binding MaximumDate}"/>
 
         <!-- Related Course Id -->
-        <Entry Placeholder="Related Course Id: "
+        <Entry Placeholder="Related Course Id: 0"
                Text="{Binding RelatedCourseId}"
                Keyboard="Numeric"
                FontAttributes="Bold"
@@ -55,17 +55,17 @@
                x:Name="relatedCourseIdEntry"
                />
 
-        <!-- Notifications Enabled -->
+        <!-- Notifications Enabled --><!--
         <Label Text="Enable Notifications" VerticalOptions="Center" />
         <Switch IsToggled="{Binding NotificationsEnabled}"
                 x:Name="notificationsEnabledSwitch"
                 HorizontalOptions="Start"
-                Margin="0,10,0,10"/>
+                Margin="0,10,0,10"/>-->
 
         <!-- Buttons -->
         <HorizontalStackLayout Spacing="10" Padding="10,10" HorizontalOptions="Center">
-            <Button x:Name="submitButton" Text="Submit" Clicked="submitButton_Clicked" FontAttributes="Bold" />
-            <Button x:Name="cancelButton" Text="Cancel" Clicked="cancelButton_Clicked"  FontAttributes="Bold" />
+            <Button x:Name="submitButton" Text="Submit" Command="{Binding OnAssessmentSubmitButtonClick}" FontAttributes="Bold" />
+            <Button x:Name="cancelButton" Text="Cancel" Command="{Binding OnAssessmentCancelButtonClick}"  FontAttributes="Bold" />
         </HorizontalStackLayout>
 
     </VerticalStackLayout>

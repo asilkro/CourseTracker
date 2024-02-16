@@ -43,6 +43,7 @@ public partial class Homepage : ContentPage
 
     private async void resetDbButton_Clicked(object sender, EventArgs e)
     {
+        //TODO: add confirmation to reset DB
         await TrackerDb.ResetDatabaseFileAsync();
     }
 

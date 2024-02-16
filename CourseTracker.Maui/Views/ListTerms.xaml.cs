@@ -8,7 +8,7 @@ namespace CourseTracker.Maui.Views;
 
 public partial class ListTerms : ContentPage
 {
-    private readonly ListTermsVM _listTermsVM;
+    private ListTermsVM _listTermsVM;
     public ListTerms()
     {
         InitializeComponent();

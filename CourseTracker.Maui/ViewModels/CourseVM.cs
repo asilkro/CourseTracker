@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
+using CourseTracker.Maui.Supplemental;
 
 namespace CourseTracker.Maui.ViewModels
 {
@@ -10,12 +11,6 @@ namespace CourseTracker.Maui.ViewModels
     {
         private Course course;
         public int editCourseId;
-
-        public CourseVM(Course course)
-        {
-            courseId = course.CourseId;
-            LoadCourseDetails();
-        }
 
         public CourseVM()
         {
@@ -378,6 +373,74 @@ namespace CourseTracker.Maui.ViewModels
                     courseAssessmentCount = value;
                     OnPropertyChanged(nameof(CourseAssessmentCount));
                 }
+            }
+        }
+
+        private async void SubmitButton_Clicked(object sender, EventArgs e)
+        {
+            Course course = new Course()
+            {
+                CourseId = CourseId,
+                CourseName = CourseName,
+                TermId = TermId,
+                CourseStatus = CourseStatus,
+                CourseStart = CourseStart,
+                CourseEnd = CourseEnd,
+                CourseNotes = CourseNotes,
+                InstructorName = InstructorName,
+                InstructorEmail = InstructorEmail,
+                InstructorPhone = InstructorPhone,
+                NotificationsEnabled = NotificationsEnabled,
+                CourseAssessmentCount = CourseAssessmentCount
+            };
+            string message = courseDB.IsValidCourse(course);
+            if (!string.IsNullOrEmpty(message))
+            {
+                ShowToast(message);
+                return;
+            }
+            await courseDB.SaveCourseAsync(course);
+            
+        }
+            
+        private async void CancelButton_Clicked(object sender, EventArgs e)
+        {
+            await Shell.Current.GoToAsync("//homepage");
+        }
+
+        private async void courseNoteShareButton_Clicked(object sender, EventArgs e)
+        {
+            var notes = Course.CourseNotes;
+            var course = Course.CourseName;
+
+            Debug.WriteLine("Course.CourseNotes = " + notes);
+
+
+            if (!Validation.NotNull(notes))
+            {
+                App.Current.MainPage.DisplayAlert("Note Validation Error", "No course notes found to share.", "OK");
+            }
+            else
+            {
+                await ShareText(notes, course);
+            }
+        }
+
+        public async Task ShareText(string notes, string source) //
+        {
+            try 
+            {
+                await Share.Default.RequestAsync(new ShareTextRequest
+                {
+                    Text = notes + Environment.NewLine + "Shared on " + DateTime.Now.ToShortDateString(),
+                    Title = "Course Notes for " + source,
+                });
+                ShowToast("Notes shared successfully.");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("Error sharing notes: " + ex.Message);
+                ShowToast("Error sharing notes. " + ex.Message);
             }
         }
     }

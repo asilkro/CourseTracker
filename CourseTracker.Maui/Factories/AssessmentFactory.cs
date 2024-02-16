@@ -66,7 +66,7 @@ namespace CourseTracker.Maui.Factories
             return new AssessmentCreationOut  { Assessment = assessment };
         }
 
-        private bool IsValidAssessment(int id, string assessmentName, string assessmentType, DateTime assessmentStartDate, DateTime assessmentEndDate, int relatedCourseId, bool notificationsEnabled)
+        public bool IsValidAssessment(int id, string assessmentName, string assessmentType, DateTime assessmentStartDate, DateTime assessmentEndDate, int relatedCourseId, bool notificationsEnabled)
         {
             var errorMessage = "";
 

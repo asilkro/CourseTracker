@@ -10,14 +10,14 @@
         Padding="10,10">
 
         <!--Row 1-->
-        <HorizontalStackLayout
-        Spacing="5"
-        Padding="5"
-    HorizontalOptions="CenterAndExpand">
+        <HorizontalStackLayout 
+            Spacing="5" 
+            Padding="5"
+            HorizontalOptions="CenterAndExpand">
             <Grid ColumnDefinitions="*, Auto"
-          RowDefinitions="*, 50"
-          ColumnSpacing="10"
-          RowSpacing="10">
+                  RowDefinitions="*, 50"
+                  ColumnSpacing="10"
+                  RowSpacing="10">
 
                 <!--Term Id-->
                 <Label x:Name="termIdLabel"  Text="Term Id" HorizontalTextAlignment="Center" Grid.Column="0" Grid.Row="0"/>

@@ -10,7 +10,7 @@ namespace CourseTracker.Maui.Data
         public TermsDB()
         {
         }
-        async Task Init()
+        public async Task Init()
         {
             if (_database != null)
                 return;

@@ -3,6 +3,10 @@ using System.Runtime.CompilerServices;
 using Microsoft.Maui.Dispatching;
 using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Data;
+using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
+using static System.Net.Mime.MediaTypeNames;
+using System.Threading;
 
 
 namespace CourseTracker.Maui.ViewModels
@@ -49,5 +53,46 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
-    }
+        private DateTime minimumDate = DateTime.Parse("01/01/2020");
+        public DateTime MinimumDate
+        {
+            get { return minimumDate; }
+            set
+            {
+                if (minimumDate != value)
+                {
+                    minimumDate = value;
+                    OnPropertyChanged(nameof(MinimumDate));
+                }
+            }
+        }
+
+        private DateTime maximumDate = DateTime.Parse("12/31/4020");
+        public DateTime MaximumDate
+        {
+            get { return maximumDate; }
+            set
+            {
+                if (maximumDate != value)
+                {
+                    maximumDate = value;
+                    OnPropertyChanged(nameof(MaximumDate));
+                }
+            }
+        }
+
+
+        public async void ShowToast(string message)
+        {
+            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+
+            string text = message;
+            ToastDuration duration = ToastDuration.Short;
+            double fontSize = 14;
+
+            var toast = Toast.Make(text, duration, fontSize);
+
+            await toast.Show(cancellationTokenSource.Token);
+        }
+}
 }

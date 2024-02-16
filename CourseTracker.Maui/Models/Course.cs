@@ -9,18 +9,18 @@ public class Course
 
     [PrimaryKey]
     [AutoIncrement]
-    [Column("CourseId")] public int CourseId { get; set; } = -1; // -1 means new course
-    [Column("CourseName")] public string CourseName { get; set; } = "Course Name Placeholder";
-    [Column("TermId")] public int TermId { get; set; } = -1; // -1 means not set to actual term
-    [Column("CourseStatus")] public string CourseStatus { get; set; } = "In Progress";
-    [Column("CourseStart")] public DateTime CourseStart { get; set; } = DateTime.Now.Date;
-    [Column("CourseEnd")] public DateTime CourseEnd { get; set; } = DateTime.Now.Date.AddDays(90);
-    [Column("CourseNotes")] public string CourseNotes { get; set; } = "Course Notes Placeholder";
-    [Column("InstructorName")] public string InstructorName { get; set; } = "Instructor Name Placeholder";
-    [Column("InstructorEmail")] public string InstructorEmail { get; set; } = "placeholder@school.edu";
-    [Column("InstructorPhone")] public string InstructorPhone { get; set; } = "555-555-1234";
-    [Column("NotificationsEnabled")] public bool NotificationsEnabled { get; set; } = false;
-    [Column("CourseAssessmentCount")] public int CourseAssessmentCount { get; set; } = 0; // 0 will never be a valid count, can only be 1/2
+    public int CourseId { get; set; } = -1; // -1 means new course
+    public string CourseName { get; set; } = "Course Name Placeholder";
+    public int TermId { get; set; } = -1; // -1 means not set to actual term
+    public string CourseStatus { get; set; } = "In Progress";
+    public DateTime CourseStart { get; set; } = DateTime.Now.Date;
+    public DateTime CourseEnd { get; set; } = DateTime.Now.Date.AddDays(90);
+    public string CourseNotes { get; set; } = "Course Notes Placeholder";
+    public string InstructorName { get; set; } = "Instructor Name Placeholder";
+    public string InstructorEmail { get; set; } = "placeholder@school.edu";
+    public string InstructorPhone { get; set; } = "555-555-1234";
+    public bool NotificationsEnabled { get; set; } = false;
+    public int CourseAssessmentCount { get; set; } = 0; // 0 will never be a valid count, can only be 1/2
 
     #endregion
 

@@ -16,8 +16,7 @@ public partial class ListAssessments : ContentPage
     public ListAssessments()
     {
         InitializeComponent();
-        viewModel = new ListAssessmentsVM();
-        BindingContext = viewModel;
+        BindingContext = viewModel = new ListAssessmentsVM();
     }
 
 }

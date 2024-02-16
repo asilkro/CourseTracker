@@ -5,6 +5,7 @@
              x:DataType="viewModels:CourseVM"
              x:Class="CourseTracker.Maui.Views.CoursePage"
              Title="Course Modification">
+    <ScrollView>
     <VerticalStackLayout
     Spacing="10"
     Padding="10,10">
@@ -16,8 +17,8 @@
         HorizontalOptions="CenterAndExpand">
             <Grid ColumnDefinitions="*, Auto"
               RowDefinitions="*, 50"
-              ColumnSpacing="10"
-              RowSpacing="10">
+              ColumnSpacing="5"
+              RowSpacing="5">
 
                 <!--Course Id-->
                 <Label x:Name="courseIdLabel" HorizontalTextAlignment="Center" Text="Course Id" FontAttributes="Bold" Grid.Column="0" Grid.Row="0"/>
@@ -32,10 +33,10 @@
 
         <!--Row 2-->
         <HorizontalStackLayout Spacing="5" Padding="5" HorizontalOptions="CenterAndExpand">
-            <Grid ColumnDefinitions="100, *"
+            <Grid ColumnDefinitions="75, *"
           RowDefinitions="*, *"
-          ColumnSpacing="10"
-          RowSpacing="10">
+          ColumnSpacing="5"
+          RowSpacing="5">
 
                 <!-- Drop down to choose a TermName since TermId is unintuitive to user-->
                 <Label Grid.Column="0" Grid.Row="0" x:Name="termPickerLabel" Text="Term:" HorizontalTextAlignment="Center" FontAttributes="Bold"/>
@@ -52,10 +53,10 @@
 
         <!--Row 3-->
         <HorizontalStackLayout Spacing="5" Padding="5" HorizontalOptions="CenterAndExpand">
-            <Grid ColumnDefinitions="100, *"
-          RowDefinitions="*, *"
-          ColumnSpacing="10"
-          RowSpacing="10">
+            <Grid ColumnDefinitions="75, *"
+                  RowDefinitions="*, *"
+                  ColumnSpacing="5"
+                  RowSpacing="5">
 
                 <Label Grid.Column="0" Grid.Row="0" x:Name="instructorEmailLabel" HorizontalTextAlignment="Center" Text="Instructor Email:" FontAttributes="Bold"/>
                 <Entry Grid.Column="0" Grid.Row="1" x:Name="instructorEmailEntry" Placeholder="Instructor Email" Text="{Binding InstructorEmail}"/>
@@ -68,14 +69,11 @@
 
 
         <!--Row 4-->
-        <HorizontalStackLayout
-            Spacing="5"
-            Padding="5"
-        HorizontalOptions="CenterAndExpand">
+        <HorizontalStackLayout Spacing="5" Padding="5" HorizontalOptions="CenterAndExpand">
             <Grid ColumnDefinitions="*, 100"
-              RowDefinitions="*, 50"
-              ColumnSpacing="10"
-              RowSpacing="10">
+                  RowDefinitions="*, 50"
+                  ColumnSpacing="10"
+                  RowSpacing="10">
                 <!--Course Status Dropdown of valid choices-->
                 <Label x:Name="courseStatusLabel" HorizontalTextAlignment="Center" Text="Course Status" FontAttributes="Bold" Grid.Column="0" Grid.Row="0"/>
                 <Picker x:Name="courseStatusPicker"  SelectedItem="{Binding CourseStatus}" Grid.Column="0" Grid.Row="1">
@@ -145,4 +143,5 @@
         </HorizontalStackLayout>
 
     </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

@@ -1,21 +1,19 @@
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.ViewModels;
 using CourseTracker.Maui.Services;
-using System.Collections.ObjectModel;
-using CourseTracker.Maui.Factories;
+using CourseTracker.Maui.Data;
 
 namespace CourseTracker.Maui.Views;
 
 public partial class ListCourses : ContentPage
 {
     private ListCoursesVM viewModel;
-    private Connection _database;
+    SQLiteAsyncConnection _database;
 
     public ListCourses()
     {
         InitializeComponent();
-        viewModel = new ListCoursesVM();
-        BindingContext = viewModel;
+        BindingContext = viewModel = new ListCoursesVM();
     }
 
     private void CourseListView_ItemTapped(object sender, ItemTappedEventArgs e)
@@ -34,46 +32,13 @@ public partial class ListCourses : ContentPage
         switch (action)
         {
             case "Edit Course":
-                NavigateToEditCourseASync(course);
+                await Shell.Current.GoToAsync($"{nameof(CoursePage)}?{nameof(CourseVM.EditCourseId)}={course.CourseId}");
                 break;
             case "Delete Course":
-                RemoveCourseAsync(course);
+                await CourseDB.RemoveCourseAsync(course);
                 break;
             default:
                 break;
         }
     }
-
-    private async void NavigateToEditCourseASync(Course course)
-    {
-        await Navigation.PushAsync(new CoursePage(course));
-    }
-
-    private async void RemoveCourseAsync(Course course)
-    {
-        var result = await DisplayAlert("Delete Course", $"Are you sure you want to delete {course.CourseName}?", "Yes", "No");
-        if (result)
-        {
-            if (_database == null)
-            {
-                _database = new Connection();
-                _database.GetAsyncConnection();
-            }
-            await _database.DeleteAsync(course);
-            await viewModel.LoadCourses();
-        }
-    }
-
-    private async Task InitializeDataAsync()
-    {
-        if (_database == null)
-        {
-            _database = new Connection();
-            _database.GetAsyncConnection();
-        }
-
-        var list = await _database.Table<Course>();
-        courseListView.ItemsSource = list;
-    }
-
 }
