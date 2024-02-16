@@ -22,7 +22,7 @@
 
                 <!--Course Id-->
                 <Label x:Name="courseIdLabel" HorizontalTextAlignment="Center" Text="Course Id" FontAttributes="Bold" Grid.Column="0" Grid.Row="0"/>
-                <Entry x:Name="courseIdEntry" Placeholder="-1" Text="{Binding CourseId}" Grid.Column="0" Grid.Row="1"/>
+                <Entry x:Name="courseIdEntry" Placeholder="-1" Text="{Binding CourseId}" IsReadOnly="True" Grid.Column="0" Grid.Row="1"/>
 
                 <!--Course Name-->
                 <Label x:Name="courseNameLabel" HorizontalTextAlignment="Center" Text="Course Name" FontAttributes="Bold" Grid.Column="1" Grid.Row="0"/>
@@ -132,14 +132,14 @@
                 <!--Course Notes-->
                 <Label x:Name="courseNoteLabel" Text="Course Notes" HorizontalTextAlignment="Center" FontAttributes="Bold" Grid.Column="0" Grid.Row="0"/>
                 <Editor x:Name="courseNoteEditor" Text="{Binding CourseNotes}" AutoSize="TextChanges" Grid.Column="0" Grid.Row="1"/>
-                <Button x:Name="courseNoteShareButton" Text="Share Notes" BackgroundColor="Red" TextColor="WhiteSmoke" Clicked="courseNoteShareButton_Clicked" Grid.Column="0" Grid.Row="2"/>
+                <Button x:Name="courseNoteShareButton" Text="Share Notes" BackgroundColor="Red" TextColor="WhiteSmoke" Command="{Binding CourseNoteShareButton_Clicked}" Grid.Column="0" Grid.Row="2"/>
             </Grid>
         </HorizontalStackLayout>
 
         <!-- Buttons -->
         <HorizontalStackLayout Spacing="10" Padding="10,10" HorizontalOptions="Center">
-            <Button x:Name="submitButton" Text="Submit" FontAttributes="Bold" Clicked="SubmitButton_Clicked"/>
-            <Button x:Name="cancelButton" Text="Cancel" FontAttributes="Bold" Clicked="CancelButton_Clicked"/>
+                <Button x:Name="submitButton" Text="Submit" FontAttributes="Bold" Command="{Binding OnCourseSubmitButtonClick}"/>
+                <Button x:Name="cancelButton" Text="Cancel" FontAttributes="Bold" Command="{Binding OnCourseCancelButtonClick}"/>
         </HorizontalStackLayout>
 
     </VerticalStackLayout>

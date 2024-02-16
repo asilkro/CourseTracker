@@ -11,10 +11,17 @@ namespace CourseTracker.Maui.ViewModels
     {
         private Course course;
         public int editCourseId;
+        public Command CourseNoteShareButton_Clicked { get; set; }
+        public Command OnCourseSubmitButtonClick { get; set; }
+        public Command OnCourseCancelButtonClick { get; set; }
 
         public CourseVM()
         {
             LoadTerms();
+            CourseNoteShareButton_Clicked = new Command(async () => await CourseNoteShareButtonClicked());
+            OnCourseSubmitButtonClick = new Command(async () => await SubmitButtonClicked());
+            OnCourseCancelButtonClick = new Command(async () => await CancelButtonClicked());
+            
         }
 
         public async Task InitializeAsync()
@@ -376,7 +383,7 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
-        private async void SubmitButton_Clicked(object sender, EventArgs e)
+        public async Task SubmitButtonClicked()
         {
             Course course = new Course()
             {
@@ -393,7 +400,7 @@ namespace CourseTracker.Maui.ViewModels
                 NotificationsEnabled = NotificationsEnabled,
                 CourseAssessmentCount = CourseAssessmentCount
             };
-            string message = courseDB.IsValidCourse(course);
+            string message = IsValidCourse(course);
             if (!string.IsNullOrEmpty(message))
             {
                 ShowToast(message);
@@ -402,13 +409,8 @@ namespace CourseTracker.Maui.ViewModels
             await courseDB.SaveCourseAsync(course);
             
         }
-            
-        private async void CancelButton_Clicked(object sender, EventArgs e)
-        {
-            await Shell.Current.GoToAsync("//homepage");
-        }
 
-        private async void courseNoteShareButton_Clicked(object sender, EventArgs e)
+        private async Task CourseNoteShareButtonClicked()
         {
             var notes = Course.CourseNotes;
             var course = Course.CourseName;
@@ -441,6 +443,66 @@ namespace CourseTracker.Maui.ViewModels
             {
                 Debug.WriteLine("Error sharing notes: " + ex.Message);
                 ShowToast("Error sharing notes. " + ex.Message);
+            }
+        }
+        public string IsValidCourse(Course course)
+        {
+            var errorMessage = string.Empty;
+            if (!Validation.NotNull(course.CourseName))
+                errorMessage = "Course name cannot be empty or undefined.";
+            else if (!Validation.NotNull(course.CourseStatus))
+                errorMessage = "Course status cannot be empty or undefined.";
+            else if (!Validation.CourseStatusIsValid(course.CourseStatus))
+                errorMessage = "Course status is not valid.";
+            else if (!Validation.DatesAreValid(course.CourseStart, course.CourseEnd))
+                errorMessage = "Course start and end dates are not valid.";
+            else if (!Validation.IdWasSet(course.CourseId))
+                errorMessage = "Valid Course ID must be greater than 0.";
+            else if (!Validation.IdWasSet(course.TermId))
+                errorMessage = "Valid Term ID must be greater than 0.";
+            else if (!Validation.NotNull(course.InstructorName))
+                errorMessage = "Instructor name cannot be empty.";
+            else if (!Validation.NotNull(course.InstructorEmail))
+                errorMessage = "Instructor email cannot be empty.";
+            else if (!Validation.EmailIsValid(course.InstructorEmail))
+                errorMessage = "Instructor email format is not valid.";
+            else if (!Validation.NotTryingToDropTables(course.CourseNotes)) // Not particularly robust, but it's a start
+                errorMessage = "Invalid input in notes detected.";
+            else if (!Validation.NotNull(course.InstructorPhone))
+                errorMessage = "Instructor phone cannot be empty.";
+            else if (!Validation.ValidPhoneNumber(course.InstructorPhone))
+                errorMessage = "Instructor phone is not valid. Use xxx-xxx-xxxx format.";
+            else if (!Validation.ValidCourseAssessmentCount(course.CourseAssessmentCount))
+                errorMessage = "Course can only have 1 or 2 assessments.";
+
+            Debug.WriteLine(errorMessage);
+            return errorMessage;
+        }
+        public async Task<string> InsertCourseAndUpdateTermCount(Course course)
+        {
+            Term term = await termsDB.GetTermByIdAsync(course.TermId);
+            if (term == null)
+            {
+                return "Associated term not found.";
+            }
+
+            if (term.CourseCount >= 6)
+            {
+                return "Terms may NOT consist of more than six courses.";
+            }
+
+            term.CourseCount += 1;
+            await termsDB.SaveTermAsync(term);
+            await courseDB.SaveCourseAsync(course);
+
+            return "Course added successfully.";
+        }
+
+        public async void OnAppearing()
+        {
+            if (EditCourseId <= 0)
+            {
+                CourseId = await courseDB.GetNextId();
             }
         }
     }

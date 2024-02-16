@@ -17,8 +17,8 @@ namespace CourseTracker.Maui.ViewModels
         public Command OnAssessmentCancelButtonClick { get; set; }
         public AssessmentVM()
         {
-            OnAssessmentSubmitButtonClick = new Command(async () => await submitButton_Clicked());
-            OnAssessmentCancelButtonClick = new Command(async () => await cancelButton_Clicked());
+            OnAssessmentSubmitButtonClick = new Command(async () => await SubmitButtonClicked());
+            OnAssessmentCancelButtonClick = new Command(async () => await CancelButtonClicked());
         }
 
 
@@ -52,6 +52,12 @@ namespace CourseTracker.Maui.ViewModels
 
         private async Task PerformOperation(int Id)
         {
+            if (Id <= 0)
+            {
+                AssessmentId = await assessmentDB.GetNextId();
+                return;
+            }
+
             Debug.WriteLine("AssessmentId: " + Id);
             Assessment temp = await assessmentDB.GetAssessmentsAsync(Id);
             AssessmentId = temp.AssessmentId;
@@ -195,7 +201,7 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
-        public async Task submitButton_Clicked()
+        public async Task SubmitButtonClicked()
         {
            
             Assessment assessment = new()
@@ -225,11 +231,6 @@ namespace CourseTracker.Maui.ViewModels
             {
                 await Shell.Current.GoToAsync("//homepage");
             }
-        }
-
-        private async Task cancelButton_Clicked()
-        {
-            await Shell.Current.GoToAsync("//homepage");
         }
 
         public async void OnAppearing()

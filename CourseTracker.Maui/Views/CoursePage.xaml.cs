@@ -10,7 +10,11 @@ public partial class CoursePage : ContentPage
     {
         InitializeComponent();
         BindingContext = viewModel = new CourseVM();
-        courseIdEntry.IsReadOnly = true;
     }
 
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        viewModel.OnAppearing();
+    }
 }

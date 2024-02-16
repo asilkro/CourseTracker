@@ -84,7 +84,7 @@ namespace CourseTracker.Maui.ViewModels
 
         public async void ShowToast(string message)
         {
-            CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
+            CancellationTokenSource cancellationTokenSource = new();
 
             string text = message;
             ToastDuration duration = ToastDuration.Short;
@@ -94,5 +94,10 @@ namespace CourseTracker.Maui.ViewModels
 
             await toast.Show(cancellationTokenSource.Token);
         }
-}
+
+        public async Task CancelButtonClicked() //Used by all cancel buttons
+        {
+            await Shell.Current.GoToAsync("//homepage");
+        }
+    }
 }

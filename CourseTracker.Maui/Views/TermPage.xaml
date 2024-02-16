@@ -21,7 +21,7 @@
 
                 <!--Term Id-->
                 <Label x:Name="termIdLabel"  Text="Term Id" HorizontalTextAlignment="Center" Grid.Column="0" Grid.Row="0"/>
-                <Entry x:Name="termIdEntry" Text="{Binding TermId}" Grid.Column="0" Grid.Row="1"/>
+                <Entry x:Name="termIdEntry" Text="{Binding TermId}" IsReadOnly="True" Grid.Column="0" Grid.Row="1"/>
 
                 <!--Term Name-->
                 <Label x:Name="termNameLabel" Text="Term Name" HorizontalTextAlignment="Center"  Grid.Column="1" Grid.Row="0"/>
@@ -63,7 +63,7 @@
 
                 <!--Course Count-->
                 <Label x:Name="termCourseCountLabel" Text="Number of Courses in Term" HorizontalTextAlignment="Center" FontAttributes="Bold" Grid.Column="0" Grid.Row="0"/>
-                <Entry x:Name="termCourseCountEntry" Placeholder="-1" Text="{Binding CourseCount}" FontAttributes="Bold" Grid.Column="0" Grid.Row="1"/>
+                <Entry x:Name="termCourseCountEntry" Placeholder="-1" Text="{Binding CourseCount}" IsReadOnly="True" FontAttributes="Bold" Grid.Column="0" Grid.Row="1"/>
             </Grid>
         </HorizontalStackLayout>
 
@@ -74,10 +74,10 @@
             Padding="5"
             HorizontalOptions="Center">
             <!--Submit Button-->
-            <Button x:Name="submitButton" Text="Submit" FontSize="Medium" FontAttributes="Bold" Clicked="SubmitButton_Clicked" HorizontalOptions="FillAndExpand"/>
+            <Button x:Name="submitButton" Text="Submit" FontSize="Medium" FontAttributes="Bold" Command="{Binding OnTermSubmitButtonClick}" HorizontalOptions="FillAndExpand"/>
 
             <!--Cancel Button-->
-            <Button x:Name="cancelButton" Text="Cancel" FontSize="Medium" FontAttributes="Bold" Clicked="CancelButton_Clicked" HorizontalOptions="FillAndExpand"/>
+            <Button x:Name="cancelButton" Text="Cancel" FontSize="Medium" FontAttributes="Bold" Command="{Binding OnTermCancelButtonClick}" HorizontalOptions="FillAndExpand"/>
         </HorizontalStackLayout>
 
     </VerticalStackLayout>

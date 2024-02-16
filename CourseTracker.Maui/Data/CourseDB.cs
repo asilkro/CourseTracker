@@ -41,59 +41,6 @@ namespace CourseTracker.Maui.Data
             return await _database.DeleteAsync(course);
         }
 
-        public string IsValidCourse(Course course)
-        {
-            var errorMessage = string.Empty;
-            if (!Validation.NotNull(course.CourseName))
-                errorMessage = "Course name cannot be empty or undefined.";
-            else if (!Validation.NotNull(course.CourseStatus))
-                errorMessage = "Course status cannot be empty or undefined.";
-            else if (!Validation.CourseStatusIsValid(course.CourseStatus))
-                errorMessage = "Course status is not valid.";
-            else if (!Validation.DatesAreValid(course.CourseStart, course.CourseEnd))
-                errorMessage = "Course start and end dates are not valid.";
-            else if (!Validation.IdWasSet(course.CourseId))
-                errorMessage = "Valid Course ID must be greater than 0.";
-            else if (!Validation.IdWasSet(course.TermId))
-                errorMessage = "Valid Term ID must be greater than 0.";
-            else if (!Validation.NotNull(course.InstructorName))
-                errorMessage = "Instructor name cannot be empty.";
-            else if (!Validation.NotNull(course.InstructorEmail))
-                errorMessage = "Instructor email cannot be empty.";
-            else if (!Validation.EmailIsValid(course.InstructorEmail))
-                errorMessage = "Instructor email format is not valid.";
-            else if (!Validation.NotTryingToDropTables(course.CourseNotes)) // Not particularly robust, but it's a start
-                errorMessage = "Invalid input in notes detected.";
-            else if (!Validation.NotNull(course.InstructorPhone))
-                errorMessage = "Instructor phone cannot be empty.";
-            else if (!Validation.ValidPhoneNumber(course.InstructorPhone))
-                errorMessage = "Instructor phone is not valid. Use xxx-xxx-xxxx format.";
-            else if (!Validation.ValidCourseAssessmentCount(course.CourseAssessmentCount))
-                errorMessage = "Course can only have 1 or 2 assessments.";
-
-            Debug.WriteLine(errorMessage);
-            return errorMessage;
-        }
-        public async Task<string> InsertCourseAndUpdateTermCount(Course course)
-        {
-            var connection = new Connection();
-            var term = await connection.FindAsync<Term>(course.TermId);
-            if (term == null)
-            {
-                return "Associated term not found.";
-            }
-
-            if (term.CourseCount >= 6)
-            {
-                return "Terms may NOT consist of more than six courses.";
-            }
-
-            term.CourseCount += 1;
-            await connection.UpdateAsync(term);
-            await connection.InsertAsync(course);
-
-            return "Course added successfully.";
-        }
 
         public async Task<string> UpdateCourseAndUpdateTermCount(Course course)
         {
@@ -116,7 +63,7 @@ namespace CourseTracker.Maui.Data
             return "Course Updated successfully.";
         }
 
-        public async void RemoveCourseAsync(Course course)
+        public async Task RemoveCourseAsync(Course course)
         {
             if (course == null)
                 return;
@@ -174,6 +121,22 @@ namespace CourseTracker.Maui.Data
             else
             {
                 await _database.InsertAsync(course);
+            }
+        }
+
+        public async Task<int> GetNextId()
+        {
+            await Init();
+            List<Course> courses = await GetCoursesAsync();
+            if (courses.Count == 0)
+            {
+                return 1;
+            }
+            else
+            {
+                int maxId = courses.Max(t => t.CourseId);
+                maxId++;
+                return maxId;
             }
         }
     }

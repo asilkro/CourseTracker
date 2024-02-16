@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
+using CourseTracker.Maui.Views;
+
 
 namespace CourseTracker.Maui.ViewModels
 {
@@ -198,5 +200,20 @@ namespace CourseTracker.Maui.ViewModels
                 }
             }
         }
-	}
+        public async void ShowActionSheet(Course course)
+        {
+            string action = await App.Current.MainPage.DisplayActionSheet("Course Actions", "Cancel", null, "Edit Course", "Delete Course");
+            switch (action)
+            {
+                case "Edit Course":
+                    await Shell.Current.GoToAsync($"{nameof(CoursePage)}?{nameof(CourseVM.EditCourseId)}={course.CourseId}");
+                    break;
+                case "Delete Course":
+                    await courseDB.RemoveCourseAsync(course);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 }

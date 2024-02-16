@@ -9,9 +9,21 @@ namespace CourseTracker.Maui.ViewModels
     public class TermVM : ViewModelBase
     {
         private Term term = new();
-        public TermVM() { }
+        public TermVM()
+        {
+            OnTermSubmitButtonClick = new Command(async () => await SubmitButtonClicked());
+            OnTermCancelButtonClick = new Command(async () => await CancelButtonClicked());
+        }
+
+        private async Task SubmitButtonClicked()
+        {
+            throw new NotImplementedException();
+        }
+
         public int termId;
         public int editTermId;
+        public Command OnTermSubmitButtonClick { get; set; }
+        public Command OnTermCancelButtonClick { get; set; }
 
 
         public Term Term
@@ -54,13 +66,24 @@ namespace CourseTracker.Maui.ViewModels
         }
         private async Task PerformOperation(int Id)
         {
-            Debug.WriteLine("TermId: " + Id);
-            Term temp = await termsDB.GetTermByIdAsync(Id);
-            TermName = temp.TermName;
-            TermStart = temp.TermStart;
-            TermEnd = temp.TermEnd;
-            CourseCount = temp.CourseCount;
-            TermId = temp.TermId;
+            if (Id <= 0)
+            {
+                TermId = await termsDB.GetNextId();
+            }
+            else
+            {
+                Debug.WriteLine("TermId: " + Id);
+                Term temp = await termsDB.GetTermByIdAsync(Id);
+                if (temp == null)
+                {
+                    return;
+                }
+                TermName = temp.TermName;
+                TermStart = temp.TermStart;
+                TermEnd = temp.TermEnd;
+                CourseCount = temp.CourseCount;
+                TermId = temp.TermId;
+            }
         }
 
         private string termName;
@@ -133,6 +156,14 @@ namespace CourseTracker.Maui.ViewModels
                     notificationsEnabled = value;
                     OnPropertyChanged(nameof(NotificationsEnabled));
                 }
+            }
+        }
+
+        public async void OnAppearing()
+        {
+            if (EditTermId <= 0)
+            {
+                TermId = await termsDB.GetNextId();
             }
         }
     }

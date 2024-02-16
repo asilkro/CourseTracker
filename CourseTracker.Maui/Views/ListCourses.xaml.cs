@@ -20,25 +20,11 @@ public partial class ListCourses : ContentPage
     {
         if (e.Item is Course selectedCourse)
         {
-            ShowActionSheet(selectedCourse);
+            viewModel.ShowActionSheet(selectedCourse);
         }
 
         ((ListView)sender).SelectedItem = null;
     }
 
-    private async void ShowActionSheet(Course course)
-    {
-        string action = await DisplayActionSheet("Course Actions", "Cancel", null, "Edit Course", "Delete Course");
-        switch (action)
-        {
-            case "Edit Course":
-                await Shell.Current.GoToAsync($"{nameof(CoursePage)}?{nameof(CourseVM.EditCourseId)}={course.CourseId}");
-                break;
-            case "Delete Course":
-                await CourseDB.RemoveCourseAsync(course);
-                break;
-            default:
-                break;
-        }
-    }
+
 }

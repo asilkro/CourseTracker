@@ -16,8 +16,6 @@ public partial class AssessmentPage : ContentPage
 	{
 		InitializeComponent();
         BindingContext = viewModel = new AssessmentVM();
-        
-        assessmentIdEntry.IsReadOnly = true;
 	}
 
 	protected override void OnAppearing()

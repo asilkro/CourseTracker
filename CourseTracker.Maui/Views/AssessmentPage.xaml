@@ -18,7 +18,7 @@
         <!-- Assessment Id -->
         <Entry Placeholder="Assessment Id: "
                Text="{Binding AssessmentId}"
-               Keyboard="Numeric"
+               IsReadOnly="True"
                FontAttributes="Bold"
                Margin="0,0,0,10"
                x:Name="assessmentIdEntry"
