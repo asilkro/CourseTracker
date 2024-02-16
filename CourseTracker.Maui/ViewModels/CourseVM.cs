@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
+using CourseTracker.Maui.Data;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Supplemental;
@@ -133,16 +134,12 @@ namespace CourseTracker.Maui.ViewModels
         }
 
         public ObservableCollection<Term> Terms { get; } = new ObservableCollection<Term>();
-        Connection _connection;
-
 
         private async Task LoadTerms()
         {
             try
             {
-                _connection = _connection ?? new Connection();
-                _connection.GetAsyncConnection();
-                var terms = await _connection.Table<Term>();
+                var terms = await termsDB.GetTermsAsync();
                 Terms.Clear();
                 foreach (var term in terms)
                 {
@@ -154,8 +151,6 @@ namespace CourseTracker.Maui.ViewModels
                 Debug.WriteLine("Issue loading terms: " + ex.Message);
             }
         }
-
-
 
         private Term _selectedTerm;
         public Term SelectedTerm

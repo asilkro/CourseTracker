@@ -12,7 +12,7 @@
 
     <!-- Flyout Menu -->
     <Shell.FlyoutHeader>
-        <Label Text="Menu" FontSize="Large" HorizontalTextAlignment="Center" FontAttributes="Bold"/>
+        <Label Text="Main Menu" FontSize="Large" HorizontalTextAlignment="Center" FontAttributes="Bold"/>
     </Shell.FlyoutHeader>
 
     <!-- Menu Tabs -->
@@ -33,4 +33,5 @@
         <ShellContent Route="assessmentspage" Title="New Assessment" ContentTemplate="{DataTemplate views:AssessmentPage}"/>
     </FlyoutItem>
 
+    <ShellContent Route="userguide" Title="Evaluation User Guide" ContentTemplate="{DataTemplate views:UserGuide}" />
 </Shell>

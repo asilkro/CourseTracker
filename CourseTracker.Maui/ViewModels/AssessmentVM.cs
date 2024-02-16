@@ -17,11 +17,28 @@ namespace CourseTracker.Maui.ViewModels
         public Command OnAssessmentCancelButtonClick { get; set; }
         public AssessmentVM()
         {
+            LoadCourses();
             OnAssessmentSubmitButtonClick = new Command(async () => await SubmitButtonClicked());
             OnAssessmentCancelButtonClick = new Command(async () => await CancelButtonClicked());
         }
 
-
+        public ObservableCollection<Course> Courses { get; } = new ObservableCollection<Course>();
+        private async Task LoadCourses()
+        {
+            try
+            {
+                var courses = await courseDB.GetCoursesAsync();
+                Courses.Clear();
+                foreach (var course in courses)
+                {
+                    Courses.Add(course);
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowToast("Issue loading courses: " + ex.Message);
+            }
+        }
 
         private Assessment assessment;
         public Assessment Assessment
@@ -175,11 +192,20 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
-        public async Task InitializeAsync()
+        private Course _selectedCourse;
+        public Course SelectedCourse
         {
-            await LoadAssessmentDetails();
+            get { return _selectedCourse; }
+            set
+            {
+                if (_selectedCourse != value)
+                {
+                    _selectedCourse = value;
+                    Assessment.RelatedCourseId = _selectedCourse.CourseId;
+                    OnPropertyChanged(nameof(SelectedCourse));
+                }
+            }
         }
-
         public async void ShowActionSheet(Assessment assessment)
         {
             string action = await Application.Current.MainPage.DisplayActionSheet("Assessment Options", "Cancel", null, "Edit", "Delete");

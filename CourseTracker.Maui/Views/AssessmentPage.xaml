@@ -55,6 +55,13 @@
                x:Name="relatedCourseIdEntry"
                />
 
+        <!-- Drop down to choose a TermName since TermId is unintuitive to user-->
+        <Label Grid.Column="0" Grid.Row="0" x:Name="relatedCourseLabel" Text="Term:" HorizontalTextAlignment="Center" FontAttributes="Bold"/>
+        <Picker Grid.Column="0" Grid.Row="1" x:Name="relatedCoursePicker" Title="Select Term"
+                ItemsSource="{Binding Courses}"
+                ItemDisplayBinding="{Binding CourseName}"
+                SelectedItem="{Binding SelectedCourse}" />
+
         <!-- Notifications Enabled --><!--
         <Label Text="Enable Notifications" VerticalOptions="Center" />
         <Switch IsToggled="{Binding NotificationsEnabled}"

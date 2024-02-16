@@ -21,11 +21,11 @@
               RowSpacing="5">
 
                 <!--Course Id-->
-                <Label x:Name="courseIdLabel" HorizontalTextAlignment="Center" Text="Course Id" FontAttributes="Bold" Grid.Column="0" Grid.Row="0"/>
+                <Label x:Name="courseIdLabel" HorizontalTextAlignment="Center" Text="Course Id:" FontAttributes="Bold" Grid.Column="0" Grid.Row="0"/>
                 <Entry x:Name="courseIdEntry" Placeholder="-1" Text="{Binding CourseId}" IsReadOnly="True" Grid.Column="0" Grid.Row="1"/>
 
                 <!--Course Name-->
-                <Label x:Name="courseNameLabel" HorizontalTextAlignment="Center" Text="Course Name" FontAttributes="Bold" Grid.Column="1" Grid.Row="0"/>
+                <Label x:Name="courseNameLabel" HorizontalTextAlignment="Center" Text="Course Name:" FontAttributes="Bold" Grid.Column="1" Grid.Row="0"/>
                 <Entry x:Name="courseNameEntry" Placeholder="Course Name Placeholder" Text="{Binding CourseName}" Grid.Column="1" Grid.Row="1"/>
 
             </Grid>
@@ -73,9 +73,9 @@
             <Grid ColumnDefinitions="*, 100"
                   RowDefinitions="*, 50"
                   ColumnSpacing="10"
-                  RowSpacing="10">
+                  RowSpacing="5">
                 <!--Course Status Dropdown of valid choices-->
-                <Label x:Name="courseStatusLabel" HorizontalTextAlignment="Center" Text="Course Status" FontAttributes="Bold" Grid.Column="0" Grid.Row="0"/>
+                <Label x:Name="courseStatusLabel" HorizontalTextAlignment="Center" Text="Course Status:" FontAttributes="Bold" Grid.Column="0" Grid.Row="0"/>
                 <Picker x:Name="courseStatusPicker"  SelectedItem="{Binding CourseStatus}" Grid.Column="0" Grid.Row="1">
                     <Picker.ItemsSource>
                         <x:Array Type="{x:Type x:String}">
@@ -103,7 +103,7 @@
             <Grid ColumnDefinitions="*, *, 100"
               RowDefinitions="*, 100*"
               ColumnSpacing="10"
-              RowSpacing="10">
+              RowSpacing="5">
                 <!--Course Start-->
                 <Label x:Name="courseStartLabel" Text="Course Start" HorizontalTextAlignment="Center" FontAttributes="Bold" Grid.Column="0" Grid.Row="0"/>
                 <DatePicker x:Name="courseStartPicker" Date="{Binding CourseStart}" MinimumDate="{Binding MinimumDate}" MaximumDate="{Binding MaximumDate}" Grid.Column="0" Grid.Row="1"/>
@@ -124,11 +124,12 @@
         <HorizontalStackLayout
             Spacing="5"
             Padding="5"
-        HorizontalOptions="CenterAndExpand">
+        HorizontalOptions="Fill">
             <Grid ColumnDefinitions="*"
               RowDefinitions="*, 100, 100"
               ColumnSpacing="10"
-              RowSpacing="10">
+              RowSpacing="5"
+                  >
                 <!--Course Notes-->
                 <Label x:Name="courseNoteLabel" Text="Course Notes" HorizontalTextAlignment="Center" FontAttributes="Bold" Grid.Column="0" Grid.Row="0"/>
                 <Editor x:Name="courseNoteEditor" Text="{Binding CourseNotes}" AutoSize="TextChanges" Grid.Column="0" Grid.Row="1"/>
@@ -137,7 +138,7 @@
         </HorizontalStackLayout>
 
         <!-- Buttons -->
-        <HorizontalStackLayout Spacing="10" Padding="10,10" HorizontalOptions="Center">
+        <HorizontalStackLayout Spacing="5" Padding="5" HorizontalOptions="Center">
                 <Button x:Name="submitButton" Text="Submit" FontAttributes="Bold" Command="{Binding OnCourseSubmitButtonClick}"/>
                 <Button x:Name="cancelButton" Text="Cancel" FontAttributes="Bold" Command="{Binding OnCourseCancelButtonClick}"/>
         </HorizontalStackLayout>

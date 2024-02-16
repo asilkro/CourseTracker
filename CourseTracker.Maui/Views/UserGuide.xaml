@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:CourseTracker.Maui.ViewModels"
+             x:DataType="viewModels:UserGuideVM"
+             x:Class="CourseTracker.Maui.Views.UserGuide"
+             Title="User Guide">
+
+        <VerticalStackLayout
+    Spacing="10"
+    Padding="10,10">
+        <Border StrokeThickness="2" BackgroundColor="LightGray" Padding="10">
+            <ScrollView>
+                <Editor Text="{Binding UserGuideText}" IsReadOnly="True" AutoSize="TextChanges"/>
+            </ScrollView>
+        </Border>
+    </VerticalStackLayout>
+
+</ContentPage>
