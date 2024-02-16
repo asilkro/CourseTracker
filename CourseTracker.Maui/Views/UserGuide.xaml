@@ -6,14 +6,10 @@
              x:Class="CourseTracker.Maui.Views.UserGuide"
              Title="User Guide">
 
-        <VerticalStackLayout
-    Spacing="10"
-    Padding="10,10">
-        <Border StrokeThickness="2" BackgroundColor="LightGray" Padding="10">
-            <ScrollView>
-                <Editor Text="{Binding UserGuideText}" IsReadOnly="True" AutoSize="TextChanges"/>
-            </ScrollView>
-        </Border>
-    </VerticalStackLayout>
+    <ScrollView Padding="5,5">
+        <Editor Text="{Binding UserGuideText}"  HorizontalOptions="Center"
+                IsReadOnly="True" AutoSize="TextChanges" 
+                FontAutoScalingEnabled="True"/>
+    </ScrollView>
 
 </ContentPage>
