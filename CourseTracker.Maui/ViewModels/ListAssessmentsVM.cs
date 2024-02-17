@@ -9,11 +9,13 @@ namespace CourseTracker.Maui.ViewModels
     public class ListAssessmentsVM : ViewModelBase
     {
         public ObservableCollection<Assessment> Assessments { get; private set; } = new ObservableCollection<Assessment>();
+        public Command OnAssessmentTap { get; }
 
         public ListAssessmentsVM()
         {
             LoadAssessments();
         }
+
 
         public bool IsRefreshing { get; set; }
         public async Task LoadAssessments()
@@ -196,6 +198,15 @@ namespace CourseTracker.Maui.ViewModels
                 ShowActionSheet(selectedAssessment);
             }
         ((ListView)sender).SelectedItem = null;
+        }
+
+        public void assessmentListView_ItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            if (e.Item is Assessment selectedAssessment)
+            {
+                ShowActionSheet(selectedAssessment);
+            }
+    ((ListView)sender).SelectedItem = null;
         }
 
         public async void OnAppearing()

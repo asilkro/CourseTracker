@@ -1,3 +1,4 @@
+using CourseTracker.Maui.Models;
 using CourseTracker.Maui.ViewModels;
 
 namespace CourseTracker.Maui.Views;
@@ -12,4 +13,12 @@ public partial class ListCourses : ContentPage
         BindingContext = viewModel = new ListCoursesVM();
     }
 
+    public void courseListView_ItemTapped(object sender, ItemTappedEventArgs e)
+    {
+        if (e.Item is Course selectedCourse)
+        {
+            viewModel.ShowActionSheet(selectedCourse);
+        }
+        ((ListView)sender).SelectedItem = null;
+    }
 }

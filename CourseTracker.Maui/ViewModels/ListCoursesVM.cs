@@ -38,6 +38,15 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
+        public void courseListView_ItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            if (e.Item is Course selectedCourse)
+            {
+                ShowActionSheet(selectedCourse);
+            }
+    ((ListView)sender).SelectedItem = null;
+        }
+
         private Course course = new();
 
 		public Course Course

@@ -99,5 +99,37 @@ namespace CourseTracker.Maui.ViewModels
         {
             await Shell.Current.GoToAsync("//homepage");
         }
+
+        private static DateTime dateStart = DateTime.Now.Date;
+        private static DateTime dateEnd = DateTime.Now.Date.AddDays(90);
+
+        private DateTime courseassessmentStart = dateStart;
+        public DateTime CourseAssessmentStart
+        {
+            get { return courseassessmentStart; }
+            set
+            {
+                if (courseassessmentStart != value)
+                {
+                    courseassessmentStart = value;
+                    OnPropertyChanged(nameof(CourseAssessmentStart));
+                }
+            }
+        }
+
+        private DateTime courseassessmentEnd = dateEnd;
+        public DateTime CourseAssessmentEnd
+        {
+            get { return courseassessmentEnd; }
+            set
+            {
+                if (courseassessmentEnd != value)
+                {
+                    courseassessmentEnd = value;
+                    OnPropertyChanged(nameof(CourseAssessmentEnd));
+                }
+            }
+        }
+
     }
 }

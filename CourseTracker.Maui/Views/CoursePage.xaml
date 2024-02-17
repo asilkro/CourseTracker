@@ -69,12 +69,12 @@
 
             <HorizontalStackLayout HorizontalOptions="FillAndExpand" Spacing="10" Padding="5">
                 <Label x:Name="courseStartLabel" Margin="12" Text="Course Start" FontAttributes="Bold"/>
-                <DatePicker x:Name="courseStartPicker" Date="{Binding CourseStart}" MinimumDate="{Binding MinimumDate}" MaximumDate="{Binding MaximumDate}"/>
+                <DatePicker x:Name="courseStartPicker" Date="{Binding CourseAssessmentStart}" MinimumDate="{Binding MinimumDate}" MaximumDate="{Binding MaximumDate}"/>
             </HorizontalStackLayout>
 
             <HorizontalStackLayout HorizontalOptions="FillAndExpand" Spacing="10" Padding="5">
                 <Label x:Name="courseEndLabel" Margin="12" Text="Course End" FontAttributes="Bold"/>
-                <DatePicker x:Name="courseEndPicker" Date="{Binding CourseEnd}" MinimumDate="{Binding MinimumDate}" MaximumDate="{Binding MaximumDate}"/>
+                <DatePicker x:Name="courseEndPicker" Date="{Binding CourseAssessmentEnd}" MinimumDate="{Binding MinimumDate}" MaximumDate="{Binding MaximumDate}"/>
             </HorizontalStackLayout>
 
             <HorizontalStackLayout HorizontalOptions="FillAndExpand" Spacing="10" Padding="5">

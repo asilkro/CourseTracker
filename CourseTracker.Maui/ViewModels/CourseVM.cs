@@ -56,18 +56,6 @@ namespace CourseTracker.Maui.ViewModels
             set => SetProperty(ref assessment, value);
         }
 
-/*        public DateTime MinimumDate
-        {
-            get => minimumDate;
-            set => SetProperty(ref minimumDate, value);
-        }
-
-        public DateTime MaximumDate
-        {
-            get => maximumDate;
-            set => SetProperty(ref maximumDate, value);
-        }*/ // These can probably be removed as they are inherited from the base class.
-
         public DateTime Date
         {
             get => date;
