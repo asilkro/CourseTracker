@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:viewModels="clr-namespace:CourseTracker.Maui.ViewModels"
+             xmlns:viewModel="clr-namespace:CourseTracker.Maui.ViewModels"
              x:Class="CourseTracker.Maui.Views.ListCourses"
-             x:DataType="viewModels:ListCoursesVM"
+             x:DataType="viewModel:ListCoursesVM"
              Title="Course(s) List">
-    <VerticalStackLayout
-    Padding="20,10" Spacing="5">
 
         <!-- Display List of Courses using ListView -->
         <ListView x:Name="courseListView" ItemsSource="{Binding Courses}"
-                  ItemTapped="CourseListView_ItemTapped" VerticalOptions="FillAndExpand" SelectionMode="Single">
+                  VerticalOptions="FillAndExpand" CachingStrategy="RecycleElement" SelectionMode="Single">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
@@ -33,5 +31,4 @@
             </ListView.ItemTemplate>
         </ListView>
 
-    </VerticalStackLayout>
 </ContentPage>

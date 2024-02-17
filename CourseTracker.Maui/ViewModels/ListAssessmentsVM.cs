@@ -159,8 +159,7 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
-
-        private async void ShowActionSheet(Assessment assessment)
+        public async void ShowActionSheet(Assessment assessment)
         {
             string action = await App.Current.MainPage.DisplayActionSheet("Assessment Actions", "Cancel", null, "Edit Assessment", "Delete Assessment");
             switch (action)
@@ -169,7 +168,7 @@ namespace CourseTracker.Maui.ViewModels
                     await Shell.Current.GoToAsync($"{nameof(AssessmentPage)}?{nameof(AssessmentVM.EditAssessmentId)}={assessment.AssessmentId}");
                     break;
                 case "Delete Assessment":
-                    RemoveAssessmentAsync(assessment);
+                    await assessmentDB.DeleteAssessmentAsync(assessment);
                     break;
                 default:
                     break;
@@ -185,7 +184,7 @@ namespace CourseTracker.Maui.ViewModels
                 //TODO: Update course assessment count
                 if (confirm == 1)
                 {
-                    await App.Current.MainPage.DisplayAlert("Assessment Deleted Successfully", "", "Ok");
+                    ShowToast("Assessment Deleted Successfully");
                 }
             }
         }

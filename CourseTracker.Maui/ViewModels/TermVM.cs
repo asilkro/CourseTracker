@@ -2,6 +2,7 @@
 using CourseTracker.Maui.Data;
 using CourseTracker.Maui.Factories;
 using CourseTracker.Maui.Models;
+using CourseTracker.Maui.Supplemental;
 
 namespace CourseTracker.Maui.ViewModels
 {
@@ -17,7 +18,23 @@ namespace CourseTracker.Maui.ViewModels
 
         private async Task SubmitButtonClicked()
         {
-            throw new NotImplementedException();
+            Term term = new()
+            {
+                TermId = TermId,
+                TermName = TermName,
+                TermStart = TermStart,
+                TermEnd = TermEnd,
+                CourseCount = CourseCount
+            };
+            string message = IsValidTerm(term);
+            if (!string.IsNullOrEmpty(message))
+                {
+                ShowToast(message);
+                return;
+                }
+          
+                var termId = termsDB.GetTermByIdAsync(term.TermId);
+                await termsDB.SaveTermAsync(term);
         }
 
         public int termId;
@@ -165,6 +182,28 @@ namespace CourseTracker.Maui.ViewModels
             {
                 TermId = await termsDB.GetNextId();
             }
+        }
+
+        public string IsValidTerm(Term term)
+        {
+           var errorMessage = string.Empty;
+
+            if (!Validation.IdWasSet(termId))
+                errorMessage = "Term ID must be greater than 0.";
+            else if (!Validation.NotNull(termName))
+                errorMessage = "Term name cannot be empty.";
+            else if (!Validation.TermsAreValid(termStart, termEnd))
+                errorMessage = "Term start and end dates must be the first and last days of the month, respectively.";
+            else if (!Validation.CourseCountIsValid(courseCount))
+                errorMessage = "Terms must have between 1 and 6 courses.";
+            else if (!Validation.DatesAreValid(termStart, termEnd))
+                errorMessage = "Term start and end dates are not valid.";
+            else if (Validation.IsUniqueTermName(termName, new()).Result == false)
+                errorMessage = "Term name must be unique.";
+
+            if (!string.IsNullOrEmpty(errorMessage))
+                ShowToast(errorMessage);
+            return errorMessage;
         }
     }
 }

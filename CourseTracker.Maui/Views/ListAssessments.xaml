@@ -4,7 +4,7 @@
              xmlns:viewModel="clr-namespace:CourseTracker.Maui.ViewModels"
              x:Class="CourseTracker.Maui.Views.ListAssessments"
              x:DataType="viewModel:ListAssessmentsVM"
-             Title="Assessment(s) List">
+             Title="Assessment List">
 
     <!-- Display List of Assessments using ListView -->
     <ListView x:Name="assessmentListView" ItemsSource="{Binding Assessments}" 

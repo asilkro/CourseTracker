@@ -11,19 +11,17 @@ Padding="20,10" Spacing="5">
         
 
         <!-- Display List of Terms using ListView -->
-        <!--<RefreshView IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}"> -->
-            <ListView x:Name="termListView" CachingStrategy="RecycleElement" ItemsSource="{Binding Terms}" 
+        <ListView x:Name="termListView" CachingStrategy="RecycleElement" ItemsSource="{Binding Terms}" 
               ItemTapped="termListView_ItemTapped" IsRefreshing="{Binding IsRefreshing}" SelectionMode="Single">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
                         <Grid Padding="10" RowDefinitions="Auto">
                             <Label Text="{Binding TermName, StringFormat='Term Name: {0}'}" FontAttributes="Bold"/>
                         </Grid>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        <!--</RefreshView> -->
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
     </VerticalStackLayout>
 </ContentPage>

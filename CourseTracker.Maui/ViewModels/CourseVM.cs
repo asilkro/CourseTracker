@@ -1,5 +1,7 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using CourseTracker.Maui.Data;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
@@ -10,11 +12,169 @@ namespace CourseTracker.Maui.ViewModels
     [QueryProperty(nameof(EditCourseId), nameof(EditCourseId))]
     public class CourseVM : ViewModelBase
     {
+        #region Fields
+
         private Course course;
-        public int editCourseId;
+        private int editCourseId;
+        private Assessment assessment = new();
+        private DateTime minimumDate = DateTime.Parse("01/01/2020");
+        private DateTime maximumDate = DateTime.Parse("12/31/4020");
+        private DateTime date = DateTime.Now.Date;
+        private Term term = new();
+        private Term _selectedTerm;
+        private int courseId;
+        private int termId;
+        private string instructorName;
+        private string instructorPhone;
+        private string instructorEmail;
+        private string courseName;
+        private string courseStatus;
+        private string termName;
+        private string courseNotes;
+        private DateTime courseStart = DateTime.Now.Date;
+        private DateTime courseEnd = DateTime.Now.Date.AddDays(90);
+        private bool notificationsEnabled;
+        private int courseAssessmentCount;
+
+        #endregion
+
+        #region Properties
+
         public Command CourseNoteShareButton_Clicked { get; set; }
         public Command OnCourseSubmitButtonClick { get; set; }
         public Command OnCourseCancelButtonClick { get; set; }
+
+        public Course Course
+        {
+            get => course;
+            set => SetProperty(ref course, value);
+        }
+
+        public Assessment Assessment
+        {
+            get => assessment;
+            set => SetProperty(ref assessment, value);
+        }
+
+/*        public DateTime MinimumDate
+        {
+            get => minimumDate;
+            set => SetProperty(ref minimumDate, value);
+        }
+
+        public DateTime MaximumDate
+        {
+            get => maximumDate;
+            set => SetProperty(ref maximumDate, value);
+        }*/ // These can probably be removed as they are inherited from the base class.
+
+        public DateTime Date
+        {
+            get => date;
+            set => SetProperty(ref date, value);
+        }
+
+        public Term Term
+        {
+            get => term;
+            set => SetProperty(ref term, value);
+        }
+
+        public ObservableCollection<Term> Terms { get; } = new ObservableCollection<Term>();
+
+        public Term SelectedTerm
+        {
+            get => _selectedTerm;
+            set => SetProperty(ref _selectedTerm, value, onChanged: () => Course.TermId = value.TermId);
+        }
+
+        public int CourseId
+        {
+            get => courseId;
+            set => SetProperty(ref courseId, value);
+        }
+
+        public int EditCourseId
+        {
+            get => editCourseId;
+            set => SetProperty(ref editCourseId, value, onChanged: () => PerformOperation(value));
+        }
+
+        public int TermId
+        {
+            get => termId;
+            set => SetProperty(ref termId, value);
+        }
+
+        public string InstructorName
+        {
+            get => instructorName;
+            set => SetProperty(ref instructorName, value);
+        }
+
+        public string InstructorPhone
+        {
+            get => instructorPhone;
+            set => SetProperty(ref instructorPhone, value);
+        }
+
+        public string InstructorEmail
+        {
+            get => instructorEmail;
+            set => SetProperty(ref instructorEmail, value);
+        }
+
+        public string CourseName
+        {
+            get => courseName;
+            set => SetProperty(ref courseName, value);
+        }
+
+        public string CourseStatus
+        {
+            get => courseStatus;
+            set => SetProperty(ref courseStatus, value);
+        }
+
+        public string TermName
+        {
+            get => termName;
+            set => SetProperty(ref termName, value);
+        }
+
+        public string CourseNotes
+        {
+            get => courseNotes;
+            set => SetProperty(ref courseNotes, value);
+        }
+
+        public DateTime CourseStart
+        {
+            get => courseStart;
+            set => SetProperty(ref courseStart, value);
+        }
+
+        public DateTime CourseEnd
+        {
+            get => courseEnd;
+            set => SetProperty(ref courseEnd, value);
+        }
+
+        public bool NotificationsEnabled
+        {
+            get => notificationsEnabled;
+            set => SetProperty(ref notificationsEnabled, value);
+        }
+
+        public int CourseAssessmentCount
+        {
+            get => courseAssessmentCount;
+            set => SetProperty(ref courseAssessmentCount, value);
+        }
+
+        #endregion
+
+        #region Constructors
 
         public CourseVM()
         {
@@ -22,118 +182,11 @@ namespace CourseTracker.Maui.ViewModels
             CourseNoteShareButton_Clicked = new Command(async () => await CourseNoteShareButtonClicked());
             OnCourseSubmitButtonClick = new Command(async () => await SubmitButtonClicked());
             OnCourseCancelButtonClick = new Command(async () => await CancelButtonClicked());
-            
         }
 
-        public async Task InitializeAsync()
-        {
-            if (courseId > 0)
-            {
-                await LoadCourseDetails();
-            }
-            else
-            {
-                await LoadTerms();
-            }
-        }
+        #endregion
 
-        public Course Course
-        {
-            get => course;
-            set
-            {
-                if (course != value)
-                {
-                    course = value;
-                    OnPropertyChanged(nameof(Course));
-                }
-            }
-        }
-
-
-        private async Task LoadCourseDetails()
-        {
-
-            Connection DatabaseService = new();
-            DatabaseService.GetAsyncConnection();
-            
-            if (courseId > 0)
-            {
-                Course = await DatabaseService.FindAsync<Course>(courseId);
-            }
-        }
-
-        private Assessment assessment = new();
-        public Assessment Assessment
-        {
-            get { return assessment; }
-            set
-            {
-                if (assessment != value)
-                {
-                    assessment = value;
-                    OnPropertyChanged(nameof(Assessment));
-                }
-            }
-        }
-
-        private DateTime minimumDate = DateTime.Parse("01/01/2020");
-        public DateTime MinimumDate
-        {
-            get { return minimumDate; }
-            set
-            {
-                if (minimumDate != value)
-                {
-                    minimumDate = value;
-                    OnPropertyChanged(nameof(MinimumDate));
-                }
-            }
-        }
-
-        private DateTime maximumDate = DateTime.Parse("12/31/4020");
-        public DateTime MaximumDate
-        {
-            get { return maximumDate; }
-            set
-            {
-                if (maximumDate != value)
-                {
-                    maximumDate = value;
-                    OnPropertyChanged(nameof(MaximumDate));
-                }
-            }
-        }
-
-        private DateTime date = DateTime.Now.Date;
-        public DateTime Date
-        {
-            get { return date; }
-            set
-            {
-                if (date != value)
-                {
-                    date = value;
-                    OnPropertyChanged(nameof(Date));
-                }
-            }
-        }
-
-        private Term term = new();
-        public Term Term
-        {
-            get { return term; }
-            set
-            {
-                if (term != value)
-                {
-                    term = value;
-                    OnPropertyChanged(nameof(Term));
-                }
-            }
-        }
-
-        public ObservableCollection<Term> Terms { get; } = new ObservableCollection<Term>();
+        #region Commands and Methods
 
         private async Task LoadTerms()
         {
@@ -148,48 +201,7 @@ namespace CourseTracker.Maui.ViewModels
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Issue loading terms: " + ex.Message);
-            }
-        }
-
-        private Term _selectedTerm;
-        public Term SelectedTerm
-        {
-            get => _selectedTerm;
-            set
-            {
-                if (_selectedTerm != value)
-                {
-                    _selectedTerm = value;
-                    Course.TermId = value.TermId;
-                    OnPropertyChanged(nameof(SelectedTerm));
-                }
-            }
-        }
-
-        private int courseId;
-        public int CourseId
-        {
-            get { return courseId; }
-            set
-            {
-                if (courseId != value)
-                {
-                    courseId = value;
-                    OnPropertyChanged(nameof(CourseId));
-                }
-            }
-        }
-        public int EditCourseId
-        {
-            get { return editCourseId; }
-            set
-            {
-                if (editCourseId != value)
-                {
-                    editCourseId = value;
-                    PerformOperation(value);
-                }
+                ShowToast(ex.Message);
             }
         }
 
@@ -208,174 +220,6 @@ namespace CourseTracker.Maui.ViewModels
             NotificationsEnabled = temp.NotificationsEnabled;
             CourseId = temp.CourseId;
             TermId = temp.TermId;
-        }
-
-        private int termId;
-        public int TermId
-        {
-            get { return termId; }
-            set
-            {
-                if (termId != value)
-                {
-                    termId = value;
-                    OnPropertyChanged(nameof(TermId));
-                }
-            }
-        }
-
-        private string instructorName;
-        public string InstructorName
-        {
-            get { return instructorName; }
-            set
-            {
-                if (instructorName != value)
-                {
-                    instructorName = value;
-                    OnPropertyChanged(nameof(InstructorName));
-                }
-            }
-        }
-
-        private string instructorPhone;
-        public string InstructorPhone
-        {
-            get { return instructorPhone; }
-            set
-            {
-                if (instructorPhone != value)
-                {
-                    instructorPhone = value;
-                    OnPropertyChanged(nameof(InstructorPhone));
-                }
-            }
-        }
-
-        private string instructorEmail;
-        public string InstructorEmail
-        {
-            get { return instructorEmail; }
-            set
-            {
-                if (instructorEmail != value)
-                {
-                    instructorEmail = value;
-                    OnPropertyChanged(nameof(InstructorEmail));
-                }
-            }
-        }
-
-        private string courseName;
-        public string CourseName
-        {
-            get { return courseName; }
-            set
-            {
-                if (courseName != value)
-                {
-                    courseName = value;
-                    OnPropertyChanged(nameof(CourseName));
-                }
-            }
-        }
-
-        private string courseStatus;
-        public string CourseStatus
-        {
-            get { return courseStatus; }
-            set
-            {
-                if (courseStatus != value)
-                {
-                    courseStatus = value;
-                    OnPropertyChanged(nameof(CourseStatus));
-                }
-            }
-        }
-
-        private string termName;
-        public string TermName
-        {
-            get { return termName; }
-            set
-            {
-                if (termName != value)
-                {
-                    termName = value;
-                    OnPropertyChanged(nameof(TermName));
-                }
-            }
-        }
-
-        private string courseNotes;
-        public string CourseNotes
-        {
-            get { return courseNotes; }
-            set
-            {
-                if (courseNotes != value)
-                {
-                    courseNotes = value;
-                    OnPropertyChanged(nameof(CourseNotes));
-                }
-            }
-        }
-
-        private DateTime courseStart = DateTime.Now.Date;
-        public DateTime CourseStart
-        {
-            get { return courseStart; }
-            set
-            {
-                if (courseStart != value)
-                {
-                    courseStart = value;
-                    OnPropertyChanged(nameof(CourseStart));
-                }
-            }
-        }
-
-        private DateTime courseEnd = DateTime.Now.Date.AddDays(90);
-        public DateTime CourseEnd
-        {
-            get { return courseEnd; }
-            set
-            {
-                if (courseEnd != value)
-                {
-                    courseEnd = value;
-                    OnPropertyChanged(nameof(CourseEnd));
-                }
-            }
-        }
-
-        private bool notificationsEnabled;
-        public bool NotificationsEnabled
-        {
-            get { return notificationsEnabled; }
-            set
-            {
-                if (notificationsEnabled != value)
-                {
-                    notificationsEnabled = value;
-                    OnPropertyChanged(nameof(NotificationsEnabled));
-                }
-            }
-        }
-
-        private int courseAssessmentCount;
-        public int CourseAssessmentCount
-        {
-            get { return courseAssessmentCount; }
-            set
-            {
-                if (courseAssessmentCount != value)
-                {
-                    courseAssessmentCount = value;
-                    OnPropertyChanged(nameof(CourseAssessmentCount));
-                }
-            }
         }
 
         public async Task SubmitButtonClicked()
@@ -401,8 +245,9 @@ namespace CourseTracker.Maui.ViewModels
                 ShowToast(message);
                 return;
             }
-            await courseDB.SaveCourseAsync(course);
-            
+
+            ShowToast(await InsertCourseAndUpdateTermCount(course));
+            return;
         }
 
         private async Task CourseNoteShareButtonClicked()
@@ -410,12 +255,9 @@ namespace CourseTracker.Maui.ViewModels
             var notes = Course.CourseNotes;
             var course = Course.CourseName;
 
-            Debug.WriteLine("Course.CourseNotes = " + notes);
-
-
             if (!Validation.NotNull(notes))
             {
-                App.Current.MainPage.DisplayAlert("Note Validation Error", "No course notes found to share.", "OK");
+                ShowToast("No course notes found to share.");
             }
             else
             {
@@ -423,9 +265,9 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
-        public async Task ShareText(string notes, string source) //
+        public async Task ShareText(string notes, string source)
         {
-            try 
+            try
             {
                 await Share.Default.RequestAsync(new ShareTextRequest
                 {
@@ -440,6 +282,7 @@ namespace CourseTracker.Maui.ViewModels
                 ShowToast("Error sharing notes. " + ex.Message);
             }
         }
+
         public string IsValidCourse(Course course)
         {
             var errorMessage = string.Empty;
@@ -470,9 +313,11 @@ namespace CourseTracker.Maui.ViewModels
             else if (!Validation.ValidCourseAssessmentCount(course.CourseAssessmentCount))
                 errorMessage = "Course can only have 1 or 2 assessments.";
 
-            Debug.WriteLine(errorMessage);
+            if (!string.IsNullOrEmpty(errorMessage))
+                ShowToast(errorMessage);
             return errorMessage;
         }
+
         public async Task<string> InsertCourseAndUpdateTermCount(Course course)
         {
             Term term = await termsDB.GetTermByIdAsync(course.TermId);
@@ -485,10 +330,16 @@ namespace CourseTracker.Maui.ViewModels
             {
                 return "Terms may NOT consist of more than six courses.";
             }
-
-            term.CourseCount += 1;
-            await termsDB.SaveTermAsync(term);
-            await courseDB.SaveCourseAsync(course);
+            try
+            {
+                await termsDB.SaveTermAsync(term);
+                term.CourseCount += 1;
+                await courseDB.SaveCourseAsync(course);
+            }
+            catch
+            {
+                return "There was an error.";
+            }
 
             return "Course added successfully.";
         }
@@ -500,5 +351,7 @@ namespace CourseTracker.Maui.ViewModels
                 CourseId = await courseDB.GetNextId();
             }
         }
+
+        #endregion
     }
 }

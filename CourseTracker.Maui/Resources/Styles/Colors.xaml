@@ -12,6 +12,7 @@
     <Color x:Key="Secondary">#aaaaaa</Color>
     <Color x:Key="SecondaryDarkText">#fff4f1</Color>
     <Color x:Key="Tertiary">#ffc24b</Color>
+    <Color x:Key="DarkGreen">DarkGreen</Color>
 
     <Color x:Key="White">White</Color>
     <Color x:Key="Black">Black</Color>
