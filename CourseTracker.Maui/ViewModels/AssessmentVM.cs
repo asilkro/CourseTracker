@@ -72,6 +72,8 @@ namespace CourseTracker.Maui.ViewModels
             if (Id <= 0)
             {
                 AssessmentId = await assessmentDB.GetNextId();
+                AssessmentStartDate = dateStart;
+                AssessmentEndDate = dateEnd;
                 return;
             }
 
@@ -201,7 +203,11 @@ namespace CourseTracker.Maui.ViewModels
                 if (_selectedCourse != value)
                 {
                     _selectedCourse = value;
-                    Assessment.RelatedCourseId = _selectedCourse.CourseId;
+                    
+                    if (_selectedCourse != null && Assessment != null)
+                    {
+                        Assessment.RelatedCourseId = _selectedCourse.CourseId;
+                    }
                     OnPropertyChanged(nameof(SelectedCourse));
                 }
             }
@@ -229,7 +235,6 @@ namespace CourseTracker.Maui.ViewModels
 
         public async Task SubmitButtonClicked()
         {
-           
             Assessment assessment = new()
             {
                 AssessmentId = AssessmentId,
@@ -237,7 +242,7 @@ namespace CourseTracker.Maui.ViewModels
                 AssessmentType = AssessmentType,
                 AssessmentStartDate = AssessmentStartDate,
                 AssessmentEndDate = AssessmentEndDate,
-                RelatedCourseId = RelatedCourseId,
+                RelatedCourseId = SelectedCourse.CourseId,
                 NotificationsEnabled = NotificationsEnabled
             };
             string message = assessmentDB.IsValidAssessment(assessment);
@@ -246,7 +251,7 @@ namespace CourseTracker.Maui.ViewModels
                 ShowToast(message);
                 return;
             }
-            await assessmentDB.SaveAssessmentAsync(assessment);
+            await assessmentDB.InsertAssessmentAndUpdateCourseCount(assessment);
 
             bool anotherAssessmentWanted = await Application.Current.MainPage.DisplayAlert("Assessment Saved", "Would you like to add another assessment?", "Yes", "No");
             if (anotherAssessmentWanted)

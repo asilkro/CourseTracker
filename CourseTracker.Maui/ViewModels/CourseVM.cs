@@ -6,6 +6,7 @@ using CourseTracker.Maui.Data;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Supplemental;
+using CourseTracker.Maui.Views;
 
 namespace CourseTracker.Maui.ViewModels
 {
@@ -17,8 +18,8 @@ namespace CourseTracker.Maui.ViewModels
         private Course course;
         private int editCourseId;
         private Assessment assessment = new();
-        private DateTime minimumDate = DateTime.Parse("01/01/2020");
-        private DateTime maximumDate = DateTime.Parse("12/31/4020");
+        private readonly DateTime minimumDate = DateTime.Parse("01/01/2020");
+        private readonly DateTime maximumDate = DateTime.Parse("12/31/4020");
         private DateTime date = DateTime.Now.Date;
         private Term term = new();
         private Term _selectedTerm;
@@ -73,7 +74,16 @@ namespace CourseTracker.Maui.ViewModels
         public Term SelectedTerm
         {
             get => _selectedTerm;
-            set => SetProperty(ref _selectedTerm, value, onChanged: () => Course.TermId = value.TermId);
+            set
+            {
+                SetProperty(ref _selectedTerm, value, onChanged: () =>
+                {
+                    if (Course != null && value != null)
+                    {
+                        Course.TermId = value.TermId;
+                    }
+                });
+            }
         }
 
         public int CourseId
@@ -195,6 +205,13 @@ namespace CourseTracker.Maui.ViewModels
 
         private async Task PerformOperation(int Id)
         {
+            if (Id <= 0)
+            {
+                CourseId = await courseDB.GetNextId();
+                CourseStart = dateStart;
+                CourseEnd = dateEnd;
+                return;
+            }
             Debug.WriteLine("CourseId: " + Id);
             Course temp = await courseDB.GetCourseByIdAsync(Id);
             CourseName = temp.CourseName;
@@ -216,7 +233,7 @@ namespace CourseTracker.Maui.ViewModels
             {
                 CourseId = CourseId,
                 CourseName = CourseName,
-                TermId = TermId,
+                TermId = SelectedTerm.TermId,
                 CourseStatus = CourseStatus,
                 CourseStart = CourseStart,
                 CourseEnd = CourseEnd,
@@ -235,7 +252,16 @@ namespace CourseTracker.Maui.ViewModels
             }
 
             ShowToast(await InsertCourseAndUpdateTermCount(course));
-            return;
+           
+            bool anotherCourseWanted = await Application.Current.MainPage.DisplayAlert("Course Saved", "Would you like to add another Course?", "Yes", "No");
+            if (anotherCourseWanted)
+            {
+                await Shell.Current.GoToAsync(nameof(CoursePage));
+            }
+            else
+            {
+                await Shell.Current.GoToAsync("//homepage");
+            }
         }
 
         private async Task CourseNoteShareButtonClicked()
@@ -273,6 +299,7 @@ namespace CourseTracker.Maui.ViewModels
 
         public string IsValidCourse(Course course)
         {
+            Debug.WriteLine(course.TermId + " is your TermId");
             var errorMessage = string.Empty;
             if (!Validation.NotNull(course.CourseName))
                 errorMessage = "Course name cannot be empty or undefined.";
@@ -292,8 +319,6 @@ namespace CourseTracker.Maui.ViewModels
                 errorMessage = "Instructor email cannot be empty.";
             else if (!Validation.EmailIsValid(course.InstructorEmail))
                 errorMessage = "Instructor email format is not valid.";
-            else if (!Validation.NotTryingToDropTables(course.CourseNotes)) // Not particularly robust, but it's a start
-                errorMessage = "Invalid input in notes detected.";
             else if (!Validation.NotNull(course.InstructorPhone))
                 errorMessage = "Instructor phone cannot be empty.";
             else if (!Validation.ValidPhoneNumber(course.InstructorPhone))

@@ -3,6 +3,7 @@ using CourseTracker.Maui.Data;
 using CourseTracker.Maui.Factories;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Supplemental;
+using CourseTracker.Maui.Views;
 
 namespace CourseTracker.Maui.ViewModels
 {
@@ -28,20 +29,27 @@ namespace CourseTracker.Maui.ViewModels
             };
             string message = IsValidTerm(term);
             if (!string.IsNullOrEmpty(message))
-                {
+            {
                 ShowToast(message);
                 return;
-                }
-          
-                var termId = termsDB.GetTermByIdAsync(term.TermId);
-                await termsDB.SaveTermAsync(term);
+            }
+
+            await termsDB.SaveTermAsync(term);
+            bool anotherTermWanted = await Application.Current.MainPage.DisplayAlert("Another Term?", "Would you like to add another term?", "Yes", "No");
+            if (anotherTermWanted)
+            {
+                await Shell.Current.GoToAsync(nameof(TermPage));
+            }
+            else
+            {
+                await Shell.Current.GoToAsync("//homepage");
+            }
         }
 
         public int termId;
         public int editTermId;
         public Command OnTermSubmitButtonClick { get; set; }
         public Command OnTermCancelButtonClick { get; set; }
-
 
         public Term Term
         {
@@ -56,7 +64,7 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
-        
+
         public int TermId
         {
             get { return termId; }
@@ -118,7 +126,7 @@ namespace CourseTracker.Maui.ViewModels
         }
 
 
-        private static DateTime dateStart = DateTime.Now.Date;
+        private static readonly DateTime dateStart = DateTime.Now.Date;
         private DateTime termStart = new DateTime(dateStart.Year, dateStart.Month, 1);
         public DateTime TermStart
         {
@@ -133,7 +141,7 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
-        private static DateTime dateEnd = DateTime.Now.Date;
+        private static readonly DateTime dateEnd = DateTime.Now.Date;
         private DateTime termEnd = new DateTime(dateEnd.Year, dateEnd.Month, DateTime.DaysInMonth(dateEnd.Year, dateEnd.Month)).AddMonths(6).AddTicks(-1);
         public DateTime TermEnd
         {
@@ -186,7 +194,7 @@ namespace CourseTracker.Maui.ViewModels
 
         public string IsValidTerm(Term term)
         {
-           var errorMessage = string.Empty;
+            var errorMessage = string.Empty;
 
             if (!Validation.IdWasSet(termId))
                 errorMessage = "Term ID must be greater than 0.";

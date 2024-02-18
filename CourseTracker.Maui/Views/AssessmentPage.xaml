@@ -46,14 +46,14 @@
         <HorizontalStackLayout HorizontalOptions="FillAndExpand" Spacing="10" Padding="5">
             <!-- Assessment Start Date -->
             <Label Margin="12" Text="Assessment Start Date:" FontAttributes="Bold"/>
-            <DatePicker Date="{Binding CourseAssessmentStart}"
+            <DatePicker Date="{Binding AssessmentStartDate}"
                     x:Name="assessmentStartDatePicker" MinimumDate="{Binding MinimumDate}" MaximumDate="{Binding MaximumDate}"/>
         </HorizontalStackLayout>
 
             <HorizontalStackLayout HorizontalOptions="FillAndExpand" Spacing="10" Padding="5">
                 <!-- Assessment End Date -->
                 <Label Margin="12" Text="Assessment End Date:" FontAttributes="Bold"/>
-                <DatePicker Date="{Binding CourseAssessmentEnd}"
+                <DatePicker Date="{Binding AssessmentEndDate}"
                     x:Name="assessmentEndDatePicker" MinimumDate="{Binding MinimumDate}" MaximumDate="{Binding MaximumDate}"/>
             </HorizontalStackLayout>
 

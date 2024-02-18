@@ -4,7 +4,7 @@ namespace CourseTracker.Maui.Views;
 
 public partial class CoursePage : ContentPage
 {
-    CourseVM viewModel;
+    readonly CourseVM viewModel;
 
     public CoursePage()
     {

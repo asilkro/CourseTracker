@@ -1,11 +1,8 @@
 using System.Diagnostics;
-using System.Security.Cryptography.X509Certificates;
-using System.Text.RegularExpressions;
-using CourseTracker.Maui.Factories;
+using CourseTracker.Maui.Data;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Supplemental;
-using Microsoft.Maui.Layouts;
 
 namespace CourseTracker.Maui.Views;
 
@@ -14,6 +11,9 @@ public partial class Homepage : ContentPage
     #region Fields / Properties
     TrackerDb _trackerDb = new();
 	Connection connection = new();
+    CourseDB courseDB;
+    TermsDB termsDB;
+    AssessmentDB assessmentDB;
     #endregion
 
     public Homepage()
@@ -43,136 +43,193 @@ public partial class Homepage : ContentPage
 
     private async void resetDbButton_Clicked(object sender, EventArgs e)
     {
-        //TODO: add confirmation to reset DB
-        await TrackerDb.ResetDatabaseFileAsync();
+        bool confirmed = await DisplayAlert("Reset Database", "This will delete all data in the database. Are you sure you want to continue?", "Yes", "No");
+        if (confirmed)
+        {
+            await TrackerDb.ResetDatabaseFileAsync();
+
+        }  
     }
 
-    private static int? GetNextAutoIncrementID(string tableName)
+    private int? GetNextAutoIncrementID(string tableName)
     {
         switch (tableName)
         {
             case "Term":
-                return TrackerDb.GetNextAutoIncrementID("Term");
+                return termsDB.GetNextId().Result;
             case "Course":
-                return TrackerDb.GetNextAutoIncrementID("Course");
+                return courseDB.GetNextId().Result;
             case "Assessment":
-                return TrackerDb.GetNextAutoIncrementID("Assessment");
+                return assessmentDB.GetNextId().Result;
             default:
                 return null;
         }
     }
 
     #region Sample Data For Evaluation
-    private static int courseId = GetNextAutoIncrementID("Course") ?? 1600;
 
-    private static readonly Term demoTerm = new()
+    private Term MakeDemoTerm()
     {
-        TermId = GetNextAutoIncrementID("Term") ?? 1500,
-        TermName = "Demo Term",
-        TermStart = new DateTime(2024, 01, 01),
-        TermEnd = new DateTime(2024, 06, 30),
-        CourseCount = 1
-    };
+        Term demoTerm = new()
+        {
+            TermId = GetNextAutoIncrementID("Term") ?? 1500,
+            TermName = "Demo Term",
+            TermStart = new DateTime(2024, 01, 01),
+            TermEnd = new DateTime(2024, 06, 30),
+            CourseCount = 1
+        };
+        return demoTerm;
+    }
 
-    private static readonly Term demoTerm2 = new()
+    private Term MakeDemoTerm2()
     {
-        TermId = GetNextAutoIncrementID("Term") ?? 1501,
-        TermName = "Term One 2023",
-        TermStart = new DateTime(2023, 01, 01),
-        TermEnd = new DateTime(2023, 06, 30),
-        CourseCount = 2
-    };
+        Term demoTerm2 = new()
+        {
+            TermId = termsDB.GetNextId().Result,
+            TermName = "Term One 2023",
+            TermStart = new DateTime(2023, 01, 01),
+            TermEnd = new DateTime(2023, 06, 30),
+            CourseCount = 2
+        };
+        return demoTerm2;
+    }
 
-    private static readonly Course demoCourse = new()
+    private int GetNextCourseId()
     {
-        CourseId = courseId,
-        CourseName = "Example Course for Evaluation",
-        CourseStatus = "In Progress",
-        CourseStart = new DateTime(2024, 01, 01),
-        CourseEnd = new DateTime(2024, 06, 30),
-        InstructorEmail = "anika.patel@strimeuniversity.edu",
-        InstructorPhone = "555-123-4567",
-        InstructorName = "Anika Patel",
-        CourseNotes = "This addresses assessment requirement C6 re: C3",
-        NotificationsEnabled = true,
-        TermId = demoTerm.TermId,
-        CourseAssessmentCount = 2
-    };
+        int id = courseDB.GetNextId().Result;
+        return id;
+    }
+    private int GetNextAssessmentId()
+    {
+        int id = assessmentDB.GetNextId().Result;
+        return id;
+    }
+    private int GetNextTermId()
+    {
+        int id = termsDB.GetNextId().Result;
+        return id;
+    }
 
-    private static readonly Course demoCourse2 = new()
+    private Course MakeDemoCourse()
     {
-        CourseId = GetNextAutoIncrementID("Course") ?? 1601,
-        CourseName = "The Zed Pandemic",
-        CourseStatus = "Completed",
-        CourseStart = new DateTime(2023, 01, 01),
-        CourseEnd = new DateTime(2023, 02, 28),
-        InstructorEmail = "rickgrimes@uwalkers.edu",
-        InstructorPhone = "555-987-6543",
-        InstructorName = "Rick Grimes",
-        CourseNotes = "This is a course that was completed and covered the fictional outbreak of a zombie disease",
-        NotificationsEnabled = false,
-        TermId = demoTerm2.TermId,
-        CourseAssessmentCount = 1
-    };
+        Course course = new()
+        {
+            CourseId = GetNextCourseId(),
+            CourseName = "Example Course for Evaluation",
+            CourseStatus = "In Progress",
+            CourseStart = new DateTime(2024, 01, 01),
+            CourseEnd = new DateTime(2024, 06, 30),
+            InstructorEmail = "anika.patel@strimeuniversity.edu",
+            InstructorPhone = "555-123-4567",
+            InstructorName = "Anika Patel",
+            CourseNotes = "This addresses assessment requirement C6 re: C3",
+            NotificationsEnabled = true,
+            TermId = 1,
+            CourseAssessmentCount = 0
+        };
 
-    private static readonly Course demoCourse3 = new()
-    {
-        CourseId = GetNextAutoIncrementID("Course") ?? 1602,
-        CourseName = "Screen Writing for Community",
-        CourseStatus = "Dropped",
-        CourseStart = new DateTime(2023, 03, 01),
-        CourseEnd = new DateTime(2023, 04, 30),
-        InstructorEmail = "dharmon@greendale.edu",
-        InstructorPhone = "555-424-1565",
-        InstructorName = "Dan Harmon",
-        CourseNotes = "This course was dropped due to a scheduling conflict with Dean Pelton.",
-        NotificationsEnabled = false,
-        TermId = demoTerm2.TermId,
-        CourseAssessmentCount = 1
-    };
+        return course;
+    }
 
-    private static readonly Assessment demoOA = new Assessment
+    private Course MakeDemoCourse2()
     {
-        AssessmentId = GetNextAutoIncrementID("Assessment") ?? 1700,
-        AssessmentName = "C6 OA",
-        AssessmentType = "Objective",
-        AssessmentStartDate = new DateTime(2024, 01, 01),
-        AssessmentEndDate = new DateTime(2024, 02, 29),
-        RelatedCourseId = courseId,
-        NotificationsEnabled = true
-    };
+        Course course = new()
+        {
+            CourseId = GetNextCourseId(),
+            CourseName = "The Zed Pandemic",
+            CourseStatus = "Completed",
+            CourseStart = new DateTime(2023, 01, 01),
+            CourseEnd = new DateTime(2023, 02, 28),
+            InstructorEmail = "rickgrimes@uwalkers.edu",
+            InstructorPhone = "555-987-6543",
+            InstructorName = "Rick Grimes",
+            CourseNotes = "This is a course that was completed and covered the fictional outbreak of a zombie disease",
+            NotificationsEnabled = false,
+            TermId = 2,
+            CourseAssessmentCount = 1
+        };
+        return course;
+    }
+
+    private Course MakeDemoCourse3()
+    {
+        Course course = new()
+        {
+            CourseId = GetNextCourseId(),
+            CourseName = "Screen Writing for Community",
+            CourseStatus = "Dropped",
+            CourseStart = new DateTime(2023, 03, 01),
+            CourseEnd = new DateTime(2023, 04, 30),
+            InstructorEmail = "dharmon@greendale.edu",
+            InstructorPhone = "555-424-1565",
+            InstructorName = "Dan Harmon",
+            CourseNotes = "This course was dropped due to a scheduling conflict with Dean Pelton.",
+            NotificationsEnabled = false,
+            TermId = 2,
+            CourseAssessmentCount = 1
+        };
+        return course;
+    }
+
+    private Assessment MakeDemoOA()
+    {
+        Assessment demoOA = new()
+        {
+            AssessmentId = GetNextAssessmentId(),
+            AssessmentName = "C6 OA",
+            AssessmentType = "Objective",
+            AssessmentStartDate = new DateTime(2024, 01, 01),
+            AssessmentEndDate = new DateTime(2024, 02, 29),
+            RelatedCourseId = 1,
+            NotificationsEnabled = true
+        };
+        return demoOA;
+    }
     
-    private static readonly Assessment demoPA = new Assessment
+    private Assessment MakeDemoPA()
     {
-        AssessmentId = GetNextAutoIncrementID("Assessment") ?? 1701,
+        Assessment demoPA = new()
+        {
+        AssessmentId = GetNextAssessmentId(),
         AssessmentName = "C6 PA",
         AssessmentType = "Performance",
         AssessmentStartDate = new DateTime(2024, 03, 01),
         AssessmentEndDate = new DateTime(2024, 04, 30),
-        RelatedCourseId = courseId,
+        RelatedCourseId = 1,
         NotificationsEnabled = true
     };
-    private static readonly Assessment demoOA2 = new Assessment
-    {
-        AssessmentId = GetNextAutoIncrementID("Assessment") ?? 1702,
-        AssessmentName = "Zed Pandemic OA",
-        AssessmentType = "Objective",
-        AssessmentStartDate = new DateTime(2023, 01, 01),
-        AssessmentEndDate = new DateTime(2023, 02, 28),
-        RelatedCourseId = demoCourse2.CourseId,
-        NotificationsEnabled = false
-    };
+        return demoPA;
+    }
 
-    private static readonly Assessment demoPA2 = new Assessment
+    private Assessment MakeDemoOA2()
     {
-        AssessmentId = GetNextAutoIncrementID("Assessment") ?? 1703,
-        AssessmentName = "Community Script PA",
-        AssessmentType = "Performance",
-        AssessmentStartDate = new DateTime(2023, 03, 01),
-        AssessmentEndDate = new DateTime(2024, 02, 29),
-        RelatedCourseId = demoCourse3.CourseId,
-        NotificationsEnabled = false
-    };
+        Assessment demoOA2 = new()
+        {
+            AssessmentId = GetNextAssessmentId(),
+            AssessmentName = "Zed Pandemic OA",
+            AssessmentType = "Objective",
+            AssessmentStartDate = new DateTime(2023, 01, 01),
+            AssessmentEndDate = new DateTime(2023, 02, 28),
+            RelatedCourseId = 2,
+            NotificationsEnabled = false
+        };
+        return demoOA2;
+    }
+
+    private Assessment MakeDemoPA2()
+    {
+        Assessment demoPA2 = new()
+        {
+            AssessmentId = GetNextAssessmentId(),
+            AssessmentName = "Community Script PA",
+            AssessmentType = "Performance",
+            AssessmentStartDate = new DateTime(2023, 03, 01),
+            AssessmentEndDate = new DateTime(2024, 02, 29),
+            RelatedCourseId = 3,
+            NotificationsEnabled = false
+        };
+        return demoPA2;
+    }
     
     private async Task LoadSampleDataAsync()
     {
@@ -190,64 +247,61 @@ public partial class Homepage : ContentPage
 
         try
         {
-            //First term, course for assessment C6 and C3 requirements
-            var termId = await connection.InsertAndGetIdAsync(demoTerm);
-            Debug.WriteLine("Inserted " + demoTerm.TermName);
-
+            //Term, Course and Assessments for C6 and C3 requirements
+            var DemoTerm = MakeDemoTerm();
+            DemoTerm.TermId = GetNextTermId();
+            var termId = await connection.InsertAndGetIdAsync(DemoTerm);
+            Debug.WriteLine("Inserted " + DemoTerm.TermName);
+            var demoCourse = MakeDemoCourse();
             demoCourse.TermId = termId;
             var courseId = await connection.InsertAndGetIdAsync(demoCourse);
             Debug.WriteLine("Inserted " + demoCourse.CourseName);
-
+            var demoOA = MakeDemoOA();
+            var demoPA = MakeDemoPA();
             demoOA.RelatedCourseId = courseId;
             demoPA.RelatedCourseId = courseId;
-            await connection.InsertAsync(demoOA);
+            await assessmentDB.InsertAssessmentAndUpdateCourseCount(demoOA);
             Debug.WriteLine("Inserted " + demoOA.AssessmentName);
-            await connection.InsertAsync(demoPA);
+            await assessmentDB.InsertAssessmentAndUpdateCourseCount(demoPA);
             Debug.WriteLine("Inserted " + demoPA.AssessmentName);
 
             //Second term and courses to provide a more robust demo set of data for evaluator
-            termId = await connection.InsertAndGetIdAsync(demoTerm2);
+            var demoTerm2 = MakeDemoTerm2();
+            var termId2 = await connection.InsertAndGetIdAsync(demoTerm2);
             Debug.WriteLine("Inserted " + demoTerm2.TermName);
-            demoCourse2.TermId = termId;
-            demoCourse3.TermId = termId;
-            courseId = await connection.InsertAndGetIdAsync(demoCourse2);
+
+            var demoCourse2 = MakeDemoCourse2();
+            var demoCourse3 = MakeDemoCourse3();
+            
+            demoCourse2.TermId = termId2;
+            demoCourse3.TermId = termId2;
+            var courseId2 = await connection.InsertAndGetIdAsync(demoCourse2);
             Debug.WriteLine("Inserted " + demoCourse2.CourseName);
-            demoOA2.RelatedCourseId = demoCourse2.CourseId;
-            courseId = await connection.InsertAndGetIdAsync(demoCourse3);
-            Debug.WriteLine("Inserted " + demoCourse3.CourseName);
+            await courseDB.UpdateCourseAndUpdateTermCount(demoCourse2);
+            
+            var demoOA2 = MakeDemoOA2();
+            var demoPA2 = MakeDemoPA2();
+
+            demoOA2.RelatedCourseId = courseId2;
             demoPA2.RelatedCourseId = demoCourse3.CourseId;
 
-            //TODO: add validation for insert during debug
+            await assessmentDB.InsertAssessmentAndUpdateCourseCount(demoOA2);
+            Debug.WriteLine("Inserted " + demoOA2.AssessmentName);
+            var courseId3 = await connection.InsertAndGetIdAsync(demoCourse3);
+            Debug.WriteLine("Inserted " + demoCourse3.CourseName);
+
+            demoPA2.RelatedCourseId = courseId3;
+            await courseDB.UpdateCourseAndUpdateTermCount(demoCourse3);
+            await assessmentDB.InsertAssessmentAndUpdateCourseCount(demoPA2);
+            Debug.WriteLine("Inserted " + demoPA2.AssessmentName);
 
             await DisplayAlert("Sample Data Loaded", "Sample data has been loaded successfully. Please relaunch the application to complete setup.", "OK");
-            isSampleDataLoaded();
         }
         catch (Exception ex)
         {
             await DisplayAlert("Sample Data Error", "$There was an error while loading sample data: " + ex.Message, "OK");
             return;
         }
-    }
-
-    public bool isSampleDataLoaded()
-    {
-        bool result = false;
-        if (connection == null)
-        {
-            connection = new();
-            connection.GetAsyncConnection();
-        }
-        var demotermexists = connection.FindAsync<Term>(demoTerm.TermId);
-        var democourseexists = connection.FindAsync<Course>(demoCourse.CourseId);
-        var demoOAexists = connection.FindAsync<Assessment>(demoOA.AssessmentId);
-        var demoPAexists = connection.FindAsync<Assessment>(demoPA.AssessmentId);
-
-        if (demotermexists != null && democourseexists != null && demoOAexists != null && demoPAexists != null)
-        {
-            result = true;
-        }
-
-        return result;
     }
     #endregion
 }

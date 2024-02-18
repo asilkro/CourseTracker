@@ -7,7 +7,6 @@ namespace CourseTracker.Maui.Supplemental
 {
     internal class Validation
     {
-        readonly Connection connection;
         static readonly DateTime _minDate = DateTime.Parse("01/01/2020");
         static readonly DateTime _maxDate = DateTime.Parse("12/31/4020");
 
@@ -230,7 +229,6 @@ namespace CourseTracker.Maui.Supplemental
 
         public async static Task<bool> DataExistsInTables(Connection _connection)
         {
-            bool result;
             if (_connection == null)
             {
                 _connection = new Connection();
@@ -239,20 +237,14 @@ namespace CourseTracker.Maui.Supplemental
             var termCount = await _connection.AnyAsync<Term>();
             var courseCount = await _connection.AnyAsync<Course>();
             var assessmentCount = await _connection.AnyAsync<Assessment>();
-            switch (termCount, courseCount, assessmentCount)
+            var result = (termCount, courseCount, assessmentCount)
+            switch
             {
                 // If not all three are empty, return true to avoid conflicts
-                case (true, true, true):
-                    result = true;
-                    break;
-                case (false, false, false):
-                    result = false;
-                    break;
-                default:
-                    result = true;
-                    break;
-            }
-
+                (true, true, true) => true,
+                (false, false, false) => false,
+                _ => true,
+            };
             return result;
         }
 

@@ -4,13 +4,12 @@ namespace CourseTracker.Maui.Views;
 
 public partial class TermPage : ContentPage
 {
-	TermVM viewModel;
+	readonly TermVM viewModel;
 	
     public TermPage()
 	{
 		InitializeComponent();
 		BindingContext = viewModel = new TermVM();
-        termCourseCountEntry.IsReadOnly = true; // Function updates this
     }
 
     protected override void OnAppearing()
