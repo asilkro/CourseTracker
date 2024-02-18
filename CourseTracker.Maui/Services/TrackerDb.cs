@@ -1,4 +1,5 @@
 ﻿using SQLite;
+using CourseTracker.Maui.ViewModels;
 using CourseTracker.Maui.Models;
 using static Microsoft.Maui.Storage.FileSystem;
 using System.Diagnostics;
@@ -86,59 +87,6 @@ namespace CourseTracker.Maui.Services
 
         #region Utility
 
-/*        public static int GetNextAutoIncrementID(string tableName)
-        {
-            if (_dbConnection == null)
-            {
-                _dbConnection = new Connection();
-                _dbConnection
-            }
-
-            try
-            {
-                var doesItExist = _db<int>($"SELECT EXISTS (SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = '{tableName}'");
-                if (doesItExist == 0)
-                {
-                   _dbConnection.CreateTable<tableName>();
-                }
-                var query = $"SELECT seq FROM sqlite_sequence WHERE name = '{tableName}'";
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
-            var result = _dbConnection.ExecuteScalar<int>(query);
-            return (result + 1);
-        }*/
-
-        public static int GetNextAutoIncrementID(string tableName) // was GetLastInsertedId
-        {
-            try
-            {
-                if (_dbConnection == null)
-                {
-                    _dbConnection = new Connection().GetConnection();
-                }
-                var query = "SELECT last_insert_rowid()";
-                var lastId =  _dbConnection.ExecuteScalar<int>(query);
-                switch (lastId)
-                {
-                    case <= 1:
-                        lastId = 1;
-                        return lastId;
-                    case > 1:
-                        lastId++;
-                        return lastId;
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"An error occurred: {ex.Message}");
-                return -1; // Indicate an error.
-            }
-        }
-
         public static async Task ResetDatabaseFileAsync()
         {
             try
@@ -156,7 +104,7 @@ namespace CourseTracker.Maui.Services
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Failed to reset database: {ex.Message}");
+                Debug.WriteLine("Failed to reset database: " + ex.Message);
                 // This should be unnecessary, but it's here for debugging purposes
             }
         }

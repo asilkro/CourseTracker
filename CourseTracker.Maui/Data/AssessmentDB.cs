@@ -35,45 +35,10 @@ namespace CourseTracker.Maui.Data
                 .FirstOrDefaultAsync();
         }
 
-        public async Task SaveAssessmentAsync(Assessment assessment)
-        {
-            await Init();
-            if (assessment.AssessmentId != 0)
-            {
-                await _database.UpdateAsync(assessment);
-                //TODO: Update assessment count on courses, return error if course not found or over limit of 2
-
-            }
-            else
-            {
-                await _database.InsertAsync(assessment);
-                //TODO: Update assessment count on courses, return error if course not found or over limit of 2
-
-            }
-        }
         public async Task<int> DeleteAssessmentAsync(Assessment assessment)
         {
             await Init();
             return await _database.DeleteAsync(assessment);
-        }
-
-        public async Task<AssessmentCreationOut> CreateAssessmentAsync(AssessmentVM assessmentVM)
-        {
-            AssessmentCreationOut result = await CreateAssessmentAsync(assessmentVM.AssessmentId,
-                                               assessmentVM.AssessmentName,
-                                               assessmentVM.AssessmentType,
-                                               assessmentVM.AssessmentStartDate,
-                                               assessmentVM.AssessmentEndDate,
-                                               assessmentVM.RelatedCourseId,
-                                               assessmentVM.NotificationsEnabled);
-            if (result != null)
-            {
-                return result;
-            }
-            else
-            {
-                return new AssessmentCreationOut { ErrorMessage = "Error creating assessment." };
-            }
         }
 
         public async Task<AssessmentCreationOut>? CreateAssessmentAsync(int assessmentId, string assessmentName,
@@ -81,11 +46,6 @@ namespace CourseTracker.Maui.Data
             int relatedCourseId, bool notificationsEnabled)
         {
             string errorMessage = string.Empty;
-            //if (!IsValidAssessment(assessmentId, assessmentName, assessmentType,
-            //    assessmentStartDate, assessmentEndDate, relatedCourseId, notificationsEnabled))
-            //{
-            //    return new AssessmentCreationOut { ErrorMessage = errorMessage };
-            //}
 
             Assessment assessment = new()
             {
@@ -129,8 +89,7 @@ namespace CourseTracker.Maui.Data
 
         public async Task<string> InsertAssessmentAndUpdateCourseCount(Assessment newAssessment)
         {
-            var connection = new Connection();
-            var course = await connection.FindAsync<Course>(newAssessment.RelatedCourseId);
+            var course = await _database.FindAsync<Course>(newAssessment.RelatedCourseId);
             if (course == null)
             {
                 return "Course not found.";
@@ -142,49 +101,13 @@ namespace CourseTracker.Maui.Data
             }
 
             course.CourseAssessmentCount += 1;
-            await connection.UpdateAsync(course);
-            await connection.InsertAsync(newAssessment);
+            await _database.UpdateAsync(course);
+            await _database.InsertAsync(newAssessment);
 
             return "Assessment added successfully.";
         }
 
-        public async Task LowerCourseAssessmentCount(int courseId) // Used when an assessment is deleted or moved to another course
-        {
-            var connection = new Connection().GetAsyncConnection();
-            var course = await connection.FindAsync<Course>(courseId);
-            if (course == null)
-            {
-                return;
-            }
-
-            if (course.CourseAssessmentCount > 0)
-            {
-                course.CourseAssessmentCount -= 1;
-                await connection.UpdateAsync(course);
-            }
-        }
-
-        public async Task<string> UpdateAssessmentAndUpdateCourseCount(Assessment newAssessment)
-        {
-            var connection = new Connection();
-            var course = await connection.FindAsync<Course>(newAssessment.RelatedCourseId);
-            if (course == null)
-            {
-                return "Course not found.";
-            }
-
-            if (course.CourseAssessmentCount >= 2)
-            {
-                return "Courses may have no more than two assessments.";
-            }
-
-            course.CourseAssessmentCount += 1;
-            await connection.UpdateAsync(course);
-            await connection.UpdateAsync(newAssessment);
-
-            return "Assessment updated successfully.";
-        }
-
+       
         public async Task ScheduleAssessmentNotifications(Assessment assessment)
         {
             // Assumptions: Using full days 

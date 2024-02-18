@@ -23,5 +23,7 @@ namespace CourseTracker.Maui.ViewModels
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+
     }
 }
