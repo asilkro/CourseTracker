@@ -47,9 +47,10 @@ namespace CourseTracker.Maui.Data
         public async Task SaveTermAsync(Term term)
         {
             await Init();
-            if (term.TermId != 0)
+            var result = await _database.FindAsync<Term>(term.TermId);
+            if (result == null)
             {
-                await _database.InsertOrReplaceAsync(term);
+                await _database.InsertAsync(term);
             }
             else
             {

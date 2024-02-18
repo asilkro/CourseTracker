@@ -2,6 +2,7 @@
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Supplemental;
+using Newtonsoft.Json;
 using Plugin.LocalNotification;
 
 namespace CourseTracker.Maui.Data
@@ -12,8 +13,9 @@ namespace CourseTracker.Maui.Data
         CourseDB courseDB;
         public AssessmentDB()
         {
+            courseDB = new CourseDB();
         }
-        async Task Init()
+        public async Task Init()
         {
             if (_database != null)
                 return;
@@ -88,22 +90,31 @@ namespace CourseTracker.Maui.Data
 
         public async Task<string> UpdateAssessmentAndUpdateCourse(Assessment assessment)
         {
-            var course = await _database.FindAsync<Course>(assessment.RelatedCourseId);
-            if (course == null)
+            try
             {
-                return "Course not found.";
+                var course = await _database.Table<Course>().Where(e => e.CourseId == assessment.RelatedCourseId).FirstOrDefaultAsync();
+                if (course == null)
+                {
+                    return "Course not found.";
+                }
+
+                if (course.CourseAssessmentCount >= 2)
+                {
+                    return "Courses may have no more than two assessments.";
+                }
+
+                course.CourseAssessmentCount += 1;
+                Debug.WriteLine(JsonConvert.SerializeObject(course, Formatting.Indented));
+                await courseDB.SaveCourseAsync(course);
+                await SaveAssessmentAsync(assessment);
+
+                return "Assessment added successfully.";
+            }
+            catch (Exception e)
+            {
+                return "Error updating assessment: " + e.Message;
             }
 
-            if (course.CourseAssessmentCount >= 2)
-            {
-                return "Courses may have no more than two assessments.";
-            }
-
-            course.CourseAssessmentCount += 1;
-            await courseDB.SaveCourseAsync(course);
-            await SaveAssessmentAsync(assessment);
-
-            return "Assessment added successfully.";
         }
 
         public async Task<string> DeleteAssessmentAndUpdateCourse(Assessment assessment)
@@ -213,7 +224,7 @@ namespace CourseTracker.Maui.Data
             var result = _database.FindAsync<Assessment>(assessment.AssessmentId);
             if (result == null)
             {
-                await _database.InsertOrReplaceAsync(assessment);
+                await _database.InsertAsync(assessment);
             }
             else
             {

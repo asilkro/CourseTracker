@@ -1,6 +1,7 @@
 ﻿using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Supplemental;
+using CourseTracker.Maui.ViewModels;
 using Plugin.LocalNotification;
 
 namespace CourseTracker.Maui.Data
@@ -11,6 +12,7 @@ namespace CourseTracker.Maui.Data
         TermsDB termsDB;
         public CourseDB()
         {
+            termsDB = new TermsDB();
         }
 
         public async Task Init()
@@ -42,7 +44,7 @@ namespace CourseTracker.Maui.Data
 
 
         public async Task<string> UpdateCourseAndUpdateTermCount(Course course)
-        {
+        { 
             var term = await _database.FindAsync<Term>(course.TermId);
             if (term == null)
             {
@@ -112,9 +114,10 @@ namespace CourseTracker.Maui.Data
         public async Task SaveCourseAsync(Course course)
         {
             await Init();
-            if (course.CourseId != 0)
+            var result = _database.FindAsync<Course>(course.CourseId);
+            if (result == null)
             {
-                await _database.InsertOrReplaceAsync(course);
+                await _database.InsertAsync(course);
             }
             else
             {

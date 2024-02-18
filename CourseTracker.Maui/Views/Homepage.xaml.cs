@@ -1,8 +1,16 @@
 using System.Diagnostics;
+using System.Net.Http.Json;
+using System.Text.Json.Serialization;
+using System.Xml;
+using Android.Views;
+using Android.Widget;
 using CourseTracker.Maui.Data;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Supplemental;
+using GoogleGson.Annotations;
+using Newtonsoft.Json;
+using Org.Json;
 
 namespace CourseTracker.Maui.Views;
 
@@ -11,21 +19,27 @@ public partial class Homepage : ContentPage
     #region Fields / Properties
     TrackerDb _trackerDb = new();
     Connection connection = new();
-    CourseDB courseDB;
-    TermsDB termsDB;
-    AssessmentDB assessmentDB;
+    public TermsDB termsDB;
+    public CourseDB courseDB;
+    public AssessmentDB assessmentDB;
     #endregion
 
     public Homepage()
     {
         InitializeComponent();
+        termsDB = new TermsDB();
+        courseDB = new CourseDB();
+        assessmentDB = new AssessmentDB();
         StartDB();
+
     }
 
     private async Task StartDB()
     {
         _trackerDb ??= new TrackerDb();
         await TrackerDb.Initialize();
+        
+        Toast.MakeText(Android.App.Application.Context, "Database Initialized", ToastLength.Short).Show();
     }
 
     private async void loadButton_Clicked(object sender, EventArgs e)
@@ -36,6 +50,7 @@ public partial class Homepage : ContentPage
             {
                 await StartDB();
             }
+            Debug.WriteLine("Starting to load Data");
             await LoadSampleDataAsync();
         }
 
@@ -47,32 +62,16 @@ public partial class Homepage : ContentPage
         if (confirmed)
         {
             await TrackerDb.ResetDatabaseFileAsync();
-
-        }
-    }
-
-    private int? GetNextAutoIncrementID(string tableName)
-    {
-        switch (tableName)
-        {
-            case "Term":
-                return termsDB.GetNextId().Result;
-            case "Course":
-                return courseDB.GetNextId().Result;
-            case "Assessment":
-                return assessmentDB.GetNextId().Result;
-            default:
-                return null;
         }
     }
 
     #region Sample Data For Evaluation
 
-    private Term MakeDemoTerm()
+    private async Task<Term> MakeDemoTerm()
     {
         Term demoTerm = new()
         {
-            TermId = GetNextAutoIncrementID("Term") ?? 1500,
+            TermId = await termsDB.GetNextId(),
             TermName = "Demo Term",
             TermStart = new DateTime(2024, 01, 01),
             TermEnd = new DateTime(2024, 06, 30),
@@ -81,11 +80,11 @@ public partial class Homepage : ContentPage
         return demoTerm;
     }
 
-    private Term MakeDemoTerm2()
+    private async Task<Term> MakeDemoTerm2()
     {
         Term demoTerm2 = new()
         {
-            TermId = termsDB.GetNextId().Result,
+            TermId = await termsDB.GetNextId(),
             TermName = "Term One 2023",
             TermStart = new DateTime(2023, 01, 01),
             TermEnd = new DateTime(2023, 06, 30),
@@ -94,27 +93,12 @@ public partial class Homepage : ContentPage
         return demoTerm2;
     }
 
-    private int GetNextCourseId()
-    {
-        int id = courseDB.GetNextId().Result;
-        return id;
-    }
-    private int GetNextAssessmentId()
-    {
-        int id = assessmentDB.GetNextId().Result;
-        return id;
-    }
-    private int GetNextTermId()
-    {
-        int id = termsDB.GetNextId().Result;
-        return id;
-    }
 
-    private Course MakeDemoCourse()
+    private async Task<Course> MakeDemoCourse()
     {
         Course course = new()
         {
-            CourseId = GetNextCourseId(),
+            CourseId = await courseDB.GetNextId(),
             CourseName = "Example Course for Evaluation",
             CourseStatus = "In Progress",
             CourseStart = new DateTime(2024, 01, 01),
@@ -131,11 +115,11 @@ public partial class Homepage : ContentPage
         return course;
     }
 
-    private Course MakeDemoCourse2()
+    private async Task<Course> MakeDemoCourse2()
     {
         Course course = new()
         {
-            CourseId = GetNextCourseId(),
+            CourseId = await courseDB.GetNextId(),
             CourseName = "The Zed Pandemic",
             CourseStatus = "Completed",
             CourseStart = new DateTime(2023, 01, 01),
@@ -151,11 +135,11 @@ public partial class Homepage : ContentPage
         return course;
     }
 
-    private Course MakeDemoCourse3()
+    private async Task<Course> MakeDemoCourse3()
     {
         Course course = new()
         {
-            CourseId = GetNextCourseId(),
+            CourseId = await courseDB.GetNextId(),
             CourseName = "Screen Writing for Community",
             CourseStatus = "Dropped",
             CourseStart = new DateTime(2023, 03, 01),
@@ -171,11 +155,11 @@ public partial class Homepage : ContentPage
         return course;
     }
 
-    private Assessment MakeDemoOA()
+    private async Task<Assessment> MakeDemoOA()
     {
         Assessment demoOA = new()
         {
-            AssessmentId = GetNextAssessmentId(),
+            AssessmentId = await assessmentDB.GetNextId(),
             AssessmentName = "C6 OA",
             AssessmentType = "Objective",
             AssessmentStartDate = new DateTime(2024, 01, 01),
@@ -186,11 +170,11 @@ public partial class Homepage : ContentPage
         return demoOA;
     }
 
-    private Assessment MakeDemoPA()
+    private async Task<Assessment> MakeDemoPA()
     {
         Assessment demoPA = new()
         {
-            AssessmentId = GetNextAssessmentId(),
+            AssessmentId = await assessmentDB.GetNextId(),
             AssessmentName = "C6 PA",
             AssessmentType = "Performance",
             AssessmentStartDate = new DateTime(2024, 03, 01),
@@ -201,11 +185,11 @@ public partial class Homepage : ContentPage
         return demoPA;
     }
 
-    private Assessment MakeDemoOA2()
+    private async Task<Assessment> MakeDemoOA2()
     {
         Assessment demoOA2 = new()
         {
-            AssessmentId = GetNextAssessmentId(),
+            AssessmentId = await assessmentDB.GetNextId(),
             AssessmentName = "Zed Pandemic OA",
             AssessmentType = "Objective",
             AssessmentStartDate = new DateTime(2023, 01, 01),
@@ -216,11 +200,11 @@ public partial class Homepage : ContentPage
         return demoOA2;
     }
 
-    private Assessment MakeDemoPA2()
+    private async Task<Assessment> MakeDemoPA2()
     {
         Assessment demoPA2 = new()
         {
-            AssessmentId = GetNextAssessmentId(),
+            AssessmentId = await assessmentDB.GetNextId(),
             AssessmentName = "Community Script PA",
             AssessmentType = "Performance",
             AssessmentStartDate = new DateTime(2023, 03, 01),
@@ -238,26 +222,34 @@ public partial class Homepage : ContentPage
             connection = new();
             connection.GetAsyncConnection(); // Ensure this method sets up the connection properly and is awaited
         }
-        var existing = await Validation.DataExistsInTables(connection);
+        var validation = new Validation();
+        var existing = await validation.DataExistsInTables();
+        Debug.WriteLine("Existing check: " + existing);
         if (existing)
         {
-            await DisplayAlert("Table Already Has Data", "Table data has already been loaded. You should reset the database to avoid errors with sample data creation.", "OK");
-            return;
+            //await DisplayAlert("Table Already Has Data", "Table data has already been loaded. " +
+            //    "You should reset the database to avoid errors with sample data creation.", "OK");
+            //return;
         }
 
         try
         {
             //Term, Course and Assessments for C6 and C3 requirements
-            var DemoTerm = MakeDemoTerm();
-            DemoTerm.TermId = GetNextTermId();
+            
+            var DemoTerm = await MakeDemoTerm();
+            DemoTerm.TermId = await termsDB.GetNextId();
+            
             var termId = await connection.InsertAndGetIdAsync(DemoTerm);
             Debug.WriteLine("Inserted " + DemoTerm.TermName);
-            var demoCourse = MakeDemoCourse();
+
+            var demoCourse = await MakeDemoCourse();
             demoCourse.TermId = termId;
-            var courseId = await connection.InsertAndGetIdAsync(demoCourse);
+            await courseDB.SaveCourseAsync(demoCourse);
+            var courseId = demoCourse.CourseId;
             Debug.WriteLine("Inserted " + demoCourse.CourseName);
-            var demoOA = MakeDemoOA();
-            var demoPA = MakeDemoPA();
+
+            var demoOA = await MakeDemoOA();
+            var demoPA = await MakeDemoPA();
             demoOA.RelatedCourseId = courseId;
             demoPA.RelatedCourseId = courseId;
             await assessmentDB.UpdateAssessmentAndUpdateCourse(demoOA);
@@ -266,12 +258,12 @@ public partial class Homepage : ContentPage
             Debug.WriteLine("Inserted " + demoPA.AssessmentName);
 
             //Second term and courses to provide a more robust demo set of data for evaluator
-            var demoTerm2 = MakeDemoTerm2();
+            var demoTerm2 = await MakeDemoTerm2();
             var termId2 = await connection.InsertAndGetIdAsync(demoTerm2);
             Debug.WriteLine("Inserted " + demoTerm2.TermName);
 
-            var demoCourse2 = MakeDemoCourse2();
-            var demoCourse3 = MakeDemoCourse3();
+            var demoCourse2 = await MakeDemoCourse2();
+            var demoCourse3 = await MakeDemoCourse3();
 
             demoCourse2.TermId = termId2;
             demoCourse3.TermId = termId2;
@@ -279,8 +271,8 @@ public partial class Homepage : ContentPage
             Debug.WriteLine("Inserted " + demoCourse2.CourseName);
             await courseDB.UpdateCourseAndUpdateTermCount(demoCourse2);
 
-            var demoOA2 = MakeDemoOA2();
-            var demoPA2 = MakeDemoPA2();
+            var demoOA2 = await MakeDemoOA2();
+            var demoPA2 = await MakeDemoPA2();
 
             demoOA2.RelatedCourseId = courseId2;
             demoPA2.RelatedCourseId = demoCourse3.CourseId;

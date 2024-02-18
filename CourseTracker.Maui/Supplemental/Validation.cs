@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using CourseTracker.Maui.Data;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
 using Plugin.LocalNotification;
@@ -9,6 +10,16 @@ namespace CourseTracker.Maui.Supplemental
     {
         static readonly DateTime _minDate = DateTime.Parse("01/01/2020");
         static readonly DateTime _maxDate = DateTime.Parse("12/31/4020");
+        public TermsDB termsDB;
+        public CourseDB courseDB;
+        public AssessmentDB assessmentDB;
+
+        public Validation()
+        {
+            termsDB = new TermsDB();
+            courseDB = new CourseDB();
+            assessmentDB = new AssessmentDB();
+        }
 
         public static bool FirstOfTheMonth(DateTime date)
         {
@@ -227,17 +238,13 @@ namespace CourseTracker.Maui.Supplemental
 
         }
 
-        public async static Task<bool> DataExistsInTables(Connection _connection)
+        public async Task<bool> DataExistsInTables()
         {
-            if (_connection == null)
-            {
-                _connection = new Connection();
-                _connection.GetAsyncConnection();
-            }
-            var termCount = await _connection.AnyAsync<Term>();
-            var courseCount = await _connection.AnyAsync<Course>();
-            var assessmentCount = await _connection.AnyAsync<Assessment>();
-            var result = (termCount, courseCount, assessmentCount)
+            List<Term> termCount = await termsDB.GetTermsAsync();
+            List<Course> courseCount = await courseDB.GetCoursesAsync();
+            List<Assessment> assessmentCount = await assessmentDB.GetAssessmentsAsync();
+            
+            var result = (termCount.Count > 0, courseCount.Count > 0, assessmentCount.Count > 0)
             switch
             {
                 // If not all three are empty, return true to avoid conflicts
