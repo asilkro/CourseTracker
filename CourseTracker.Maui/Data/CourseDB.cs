@@ -1,6 +1,4 @@
-﻿using System.Diagnostics;
-using CourseTracker.Maui.Models;
-using CourseTracker.Maui.ViewModels;
+﻿using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Supplemental;
 using Plugin.LocalNotification;
@@ -10,6 +8,7 @@ namespace CourseTracker.Maui.Data
     public class CourseDB
     {
         SQLiteAsyncConnection _database;
+        TermsDB termsDB;
         public CourseDB()
         {
         }
@@ -44,8 +43,7 @@ namespace CourseTracker.Maui.Data
 
         public async Task<string> UpdateCourseAndUpdateTermCount(Course course)
         {
-            var connection = new Connection();
-            var term = await connection.FindAsync<Term>(course.TermId);
+            var term = await _database.FindAsync<Term>(course.TermId);
             if (term == null)
             {
                 return "Associated term not found.";
@@ -57,8 +55,8 @@ namespace CourseTracker.Maui.Data
             }
 
             term.CourseCount += 1;
-            await connection.UpdateAsync(term);
-            await connection.UpdateAsync(course);
+            await termsDB.SaveTermAsync(term);
+            await SaveCourseAsync(course);
 
             return "Course Updated successfully.";
         }
@@ -74,7 +72,7 @@ namespace CourseTracker.Maui.Data
                 if (confirm == 1)
                 { await App.Current.MainPage.DisplayAlert("Course Deleted", $"{course.CourseName} has been deleted.", "OK"); }
                 else
-                { await App.Current.MainPage.DisplayAlert("Error", "Course was not deleted.", "OK");}
+                { await App.Current.MainPage.DisplayAlert("Error", "Course was not deleted.", "OK"); }
             }
         }
 
@@ -116,11 +114,11 @@ namespace CourseTracker.Maui.Data
             await Init();
             if (course.CourseId != 0)
             {
-                await _database.UpdateAsync(course);
+                await _database.InsertOrReplaceAsync(course);
             }
             else
             {
-                await _database.InsertAsync(course);
+                await _database.UpdateAsync(course);
             }
         }
 

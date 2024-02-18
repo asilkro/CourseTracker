@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using SQLite;
 
 namespace CourseTracker.Maui.Services;
 public interface IAsyncSqLite

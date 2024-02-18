@@ -1,18 +1,11 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using CourseTracker.Maui.Services;
-using CourseTracker.Maui.Factories;
-using CourseTracker.Maui.Views;
-using CourseTracker.Maui.Supplemental;
-using Microsoft.Maui.Platform;
-using System;
+﻿using System.Diagnostics;
 using Plugin.LocalNotification;
 using Plugin.LocalNotification.EventArgs;
-using System.Diagnostics;
 
 namespace CourseTracker.Maui
 {
     public partial class App : Application
-    {        
+    {
         public App()
         {
             InitializeComponent();

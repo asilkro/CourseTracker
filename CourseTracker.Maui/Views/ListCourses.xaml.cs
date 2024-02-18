@@ -6,7 +6,7 @@ namespace CourseTracker.Maui.Views;
 public partial class ListCourses : ContentPage
 {
     private readonly ListCoursesVM viewModel;
-    
+
     public ListCourses()
     {
         InitializeComponent();

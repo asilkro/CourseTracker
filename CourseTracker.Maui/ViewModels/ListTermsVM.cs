@@ -1,8 +1,5 @@
-﻿using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Windows.Input;
+﻿using System.Diagnostics;
 using CourseTracker.Maui.Models;
-using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Views;
 
 namespace CourseTracker.Maui.ViewModels
@@ -10,10 +7,10 @@ namespace CourseTracker.Maui.ViewModels
     public class ListTermsVM : ViewModelBase
     {
         public List<Term> Terms { get; set; }
-        
+
         public ListTermsVM()
         {
-           Terms = [];
+            Terms = [];
         }
         public bool IsRefreshing { get; set; }
         public async Task LoadTerms()
@@ -30,7 +27,7 @@ namespace CourseTracker.Maui.ViewModels
                     Terms.Clear();
                 }
                 var terms = await termsDB.GetTermsAsync();
-                Debug.WriteLine("Term count: "+ terms.Count);
+                Debug.WriteLine("Term count: " + terms.Count);
                 foreach (var term in terms)
                 {
                     Terms.Add(term);
@@ -155,7 +152,7 @@ namespace CourseTracker.Maui.ViewModels
             if (result)
             {
                 int confirm = await termsDB.DeleteTermAsync(term);
-                if (confirm == 1)
+                if (confirm != 0)
                 {
                     await App.Current.MainPage.DisplayAlert("Term Deleted Successfully", "", "Ok");
                 }

@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
-using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Models;
+using CourseTracker.Maui.Services;
 using Plugin.LocalNotification;
 
 namespace CourseTracker.Maui.Supplemental
@@ -24,7 +24,7 @@ namespace CourseTracker.Maui.Supplemental
         {
             if (startDate > endDate) return false;
             if (!DatesAreValid(startDate, endDate)) return false;
-            
+
             return FirstOfTheMonth(startDate.Date) && LastOfTheMonth(endDate.Date);
         }
 
@@ -33,7 +33,7 @@ namespace CourseTracker.Maui.Supplemental
             if (start < _minDate || end < _minDate) return false;
             if (start > _maxDate || end > _maxDate) return false;
             if (start >= end) return false;
-            
+
             return true;
         }
 
@@ -107,14 +107,14 @@ namespace CourseTracker.Maui.Supplemental
             return result;
         }
 
-       
+
         public static bool AssessmentTypeIsValid(string assessmentType)
         {
             var result = assessmentType switch
             {
                 "Objective" => true,
                 "Performance" => true,
-                _ => false 
+                _ => false
                 // This should work to cover cases where a course only has one assessment.
                 // In those cases, the course will only have one assessment related
                 // to it, and there's no need to specify the type for that.
@@ -138,9 +138,9 @@ namespace CourseTracker.Maui.Supplemental
             {
                 _connection = new Connection();
             }
-          var connection = _connection.GetAsyncConnection();
-          var existingTerm = await connection.Table<Term>().Where(t => t.TermName == termName).FirstOrDefaultAsync();
-          return existingTerm == null;
+            var connection = _connection.GetAsyncConnection();
+            var existingTerm = await connection.Table<Term>().Where(t => t.TermName == termName).FirstOrDefaultAsync();
+            return existingTerm == null;
         }
 
         public static async Task<bool> IsUniqueCourseNameInTerm(string courseName, int termId, Connection _connection)
@@ -224,7 +224,7 @@ namespace CourseTracker.Maui.Supplemental
             }
 
             return result;
-                 
+
         }
 
         public async static Task<bool> DataExistsInTables(Connection _connection)

@@ -2,11 +2,11 @@
 
 namespace CourseTracker.Maui.Supplemental
 {
-    
+
     public class Notification
     {
-         // Used to track the notification ID, would be a nice refactor to use a generator.
-        public static async Task ScheduleNotificationAsync(int notificationId, string title, string subtitle, 
+        // Used to track the notification ID, would be a nice refactor to use a generator.
+        public static async Task ScheduleNotificationAsync(int notificationId, string title, string subtitle,
             DateTime notifyTime, NotificationCategoryType type)
         {
             var notification = new NotificationRequest

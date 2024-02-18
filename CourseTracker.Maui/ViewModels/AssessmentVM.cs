@@ -2,9 +2,6 @@
 using System.Diagnostics;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using CourseTracker.Maui.Supplemental;
 using CourseTracker.Maui.Views;
 
 namespace CourseTracker.Maui.ViewModels
@@ -203,7 +200,7 @@ namespace CourseTracker.Maui.ViewModels
                 if (_selectedCourse != value)
                 {
                     _selectedCourse = value;
-                    
+
                     if (_selectedCourse != null && Assessment != null)
                     {
                         Assessment.RelatedCourseId = _selectedCourse.CourseId;
@@ -224,7 +221,7 @@ namespace CourseTracker.Maui.ViewModels
                     bool answer = await Application.Current.MainPage.DisplayAlert("Delete Assessment", "Are you sure you want to delete this assessment?", "Yes", "No");
                     if (answer)
                     {
-                        await assessmentDB.DeleteAssessmentAsync(assessment);
+                        await assessmentDB.DeleteAssessmentAndUpdateCourse(assessment);
                         await Shell.Current.GoToAsync("..");
                     }
                     break;
@@ -251,7 +248,7 @@ namespace CourseTracker.Maui.ViewModels
                 ShowToast(message);
                 return;
             }
-            await assessmentDB.InsertAssessmentAndUpdateCourseCount(assessment);
+            await assessmentDB.UpdateAssessmentAndUpdateCourse(assessment);
 
             bool anotherAssessmentWanted = await Application.Current.MainPage.DisplayAlert("Assessment Saved", "Would you like to add another assessment?", "Yes", "No");
             if (anotherAssessmentWanted)

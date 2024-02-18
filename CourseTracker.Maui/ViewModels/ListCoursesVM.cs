@@ -49,13 +49,13 @@ namespace CourseTracker.Maui.ViewModels
 
         private Course course = new();
 
-		public Course Course
-		{
+        public Course Course
+        {
             get { return course; }
             set
-			{
+            {
                 if (course != value)
-				{
+                {
                     course = value;
                     OnPropertyChanged(nameof(Course));
                 }

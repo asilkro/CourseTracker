@@ -1,6 +1,4 @@
 ﻿using System.Diagnostics;
-using CourseTracker.Maui.Data;
-using CourseTracker.Maui.Factories;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Supplemental;
 using CourseTracker.Maui.Views;

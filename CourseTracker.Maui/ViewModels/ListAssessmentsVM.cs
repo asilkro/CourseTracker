@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
 using CourseTracker.Maui.Models;
-using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Views;
 
 namespace CourseTracker.Maui.ViewModels

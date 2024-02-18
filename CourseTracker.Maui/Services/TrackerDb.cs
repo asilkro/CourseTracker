@@ -1,8 +1,6 @@
-﻿using SQLite;
-using CourseTracker.Maui.ViewModels;
+﻿using System.Diagnostics;
 using CourseTracker.Maui.Models;
 using static Microsoft.Maui.Storage.FileSystem;
-using System.Diagnostics;
 
 namespace CourseTracker.Maui.Services
 {
@@ -48,7 +46,7 @@ namespace CourseTracker.Maui.Services
             if (await _db.Table<Course>().CountAsync() != 0) return;
             if (await _db.Table<Assessment>().CountAsync() != 0) return;
 
-            await _db.EnableLoadExtensionAsync(true);   
+            await _db.EnableLoadExtensionAsync(true);
         }
 
         public static async Task SetupTables(SQLiteAsyncConnection db)
@@ -82,7 +80,7 @@ namespace CourseTracker.Maui.Services
                 await db.ExecuteAsync("CREATE TABLE sqlite_sequence(name, seq)");
             }
         }
-        
+
         #endregion
 
         #region Utility

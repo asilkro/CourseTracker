@@ -1,6 +1,4 @@
-﻿using SQLite;
-
-namespace CourseTracker.Maui.Models;
+﻿namespace CourseTracker.Maui.Models;
 
 [Table("Assessment")]
 public class Assessment

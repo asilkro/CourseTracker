@@ -10,34 +10,34 @@ public partial class Homepage : ContentPage
 {
     #region Fields / Properties
     TrackerDb _trackerDb = new();
-	Connection connection = new();
+    Connection connection = new();
     CourseDB courseDB;
     TermsDB termsDB;
     AssessmentDB assessmentDB;
     #endregion
 
     public Homepage()
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
         StartDB();
-	}
+    }
 
-	private async Task StartDB()
-	{
+    private async Task StartDB()
+    {
         _trackerDb ??= new TrackerDb();
         await TrackerDb.Initialize();
     }
 
     private async void loadButton_Clicked(object sender, EventArgs e)
     {
-		if (sender == loadSampleDataButton)
-		{
+        if (sender == loadSampleDataButton)
+        {
             if (_trackerDb == null)
             {
                 await StartDB();
             }
-			await LoadSampleDataAsync();
-		}
+            await LoadSampleDataAsync();
+        }
 
     }
 
@@ -48,7 +48,7 @@ public partial class Homepage : ContentPage
         {
             await TrackerDb.ResetDatabaseFileAsync();
 
-        }  
+        }
     }
 
     private int? GetNextAutoIncrementID(string tableName)
@@ -185,19 +185,19 @@ public partial class Homepage : ContentPage
         };
         return demoOA;
     }
-    
+
     private Assessment MakeDemoPA()
     {
         Assessment demoPA = new()
         {
-        AssessmentId = GetNextAssessmentId(),
-        AssessmentName = "C6 PA",
-        AssessmentType = "Performance",
-        AssessmentStartDate = new DateTime(2024, 03, 01),
-        AssessmentEndDate = new DateTime(2024, 04, 30),
-        RelatedCourseId = 1,
-        NotificationsEnabled = true
-    };
+            AssessmentId = GetNextAssessmentId(),
+            AssessmentName = "C6 PA",
+            AssessmentType = "Performance",
+            AssessmentStartDate = new DateTime(2024, 03, 01),
+            AssessmentEndDate = new DateTime(2024, 04, 30),
+            RelatedCourseId = 1,
+            NotificationsEnabled = true
+        };
         return demoPA;
     }
 
@@ -230,7 +230,7 @@ public partial class Homepage : ContentPage
         };
         return demoPA2;
     }
-    
+
     private async Task LoadSampleDataAsync()
     {
         if (connection == null)
@@ -260,9 +260,9 @@ public partial class Homepage : ContentPage
             var demoPA = MakeDemoPA();
             demoOA.RelatedCourseId = courseId;
             demoPA.RelatedCourseId = courseId;
-            await assessmentDB.InsertAssessmentAndUpdateCourseCount(demoOA);
+            await assessmentDB.UpdateAssessmentAndUpdateCourse(demoOA);
             Debug.WriteLine("Inserted " + demoOA.AssessmentName);
-            await assessmentDB.InsertAssessmentAndUpdateCourseCount(demoPA);
+            await assessmentDB.UpdateAssessmentAndUpdateCourse(demoPA);
             Debug.WriteLine("Inserted " + demoPA.AssessmentName);
 
             //Second term and courses to provide a more robust demo set of data for evaluator
@@ -272,27 +272,27 @@ public partial class Homepage : ContentPage
 
             var demoCourse2 = MakeDemoCourse2();
             var demoCourse3 = MakeDemoCourse3();
-            
+
             demoCourse2.TermId = termId2;
             demoCourse3.TermId = termId2;
             var courseId2 = await connection.InsertAndGetIdAsync(demoCourse2);
             Debug.WriteLine("Inserted " + demoCourse2.CourseName);
             await courseDB.UpdateCourseAndUpdateTermCount(demoCourse2);
-            
+
             var demoOA2 = MakeDemoOA2();
             var demoPA2 = MakeDemoPA2();
 
             demoOA2.RelatedCourseId = courseId2;
             demoPA2.RelatedCourseId = demoCourse3.CourseId;
 
-            await assessmentDB.InsertAssessmentAndUpdateCourseCount(demoOA2);
+            await assessmentDB.UpdateAssessmentAndUpdateCourse(demoOA2);
             Debug.WriteLine("Inserted " + demoOA2.AssessmentName);
             var courseId3 = await connection.InsertAndGetIdAsync(demoCourse3);
             Debug.WriteLine("Inserted " + demoCourse3.CourseName);
 
             demoPA2.RelatedCourseId = courseId3;
             await courseDB.UpdateCourseAndUpdateTermCount(demoCourse3);
-            await assessmentDB.InsertAssessmentAndUpdateCourseCount(demoPA2);
+            await assessmentDB.UpdateAssessmentAndUpdateCourse(demoPA2);
             Debug.WriteLine("Inserted " + demoPA2.AssessmentName);
 
             await DisplayAlert("Sample Data Loaded", "Sample data has been loaded successfully. Please relaunch the application to complete setup.", "OK");

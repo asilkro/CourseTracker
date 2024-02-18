@@ -1,10 +1,8 @@
-﻿using SQLite;
+﻿namespace CourseTracker.Maui.Models;
 
-namespace CourseTracker.Maui.Models;
-
-    [Table("Term")]
-    public class Term
-    {
+[Table("Term")]
+public class Term
+{
     #region Properties
     [PrimaryKey]
     [AutoIncrement]
@@ -17,10 +15,10 @@ namespace CourseTracker.Maui.Models;
     #endregion
 
     #region Constructors
-    
+
     public Term()
     {
-    
+
     }
 
     public Term(int termId, string termName, DateTime termStart,
@@ -33,5 +31,5 @@ namespace CourseTracker.Maui.Models;
         CourseCount = courseCount;
     }
 
-     #endregion
-    }
+    #endregion
+}

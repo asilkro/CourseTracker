@@ -1,7 +1,7 @@
 ﻿using ObjCRuntime;
 using UIKit;
 
-namespace CourseTracker.Maui
+namespace CourseTracker.Maui.Platforms.MacCatalyst
 {
     public class Program
     {

@@ -1,7 +1,5 @@
-﻿using System.Collections.ObjectModel;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using CourseTracker.Maui.Models;
-using CourseTracker.Maui.ViewModels;
 using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Supplemental;
 using Plugin.LocalNotification;
@@ -11,6 +9,7 @@ namespace CourseTracker.Maui.Data
     public class AssessmentDB
     {
         SQLiteAsyncConnection _database;
+        CourseDB courseDB;
         public AssessmentDB()
         {
         }
@@ -58,7 +57,7 @@ namespace CourseTracker.Maui.Data
                 NotificationsEnabled = notificationsEnabled
             };
 
-            await InsertAssessmentAndUpdateCourseCount(assessment);
+            await UpdateAssessmentAndUpdateCourse(assessment);
 
             if (assessment.NotificationsEnabled)
             {
@@ -69,7 +68,7 @@ namespace CourseTracker.Maui.Data
         }
 
         public string IsValidAssessment(Assessment assessment)
-        { 
+        {
             var errorMessage = string.Empty;
 
             if (!Validation.IdWasSet(assessment.AssessmentId))
@@ -87,9 +86,9 @@ namespace CourseTracker.Maui.Data
             return errorMessage;
         }
 
-        public async Task<string> InsertAssessmentAndUpdateCourseCount(Assessment newAssessment)
+        public async Task<string> UpdateAssessmentAndUpdateCourse(Assessment assessment)
         {
-            var course = await _database.FindAsync<Course>(newAssessment.RelatedCourseId);
+            var course = await _database.FindAsync<Course>(assessment.RelatedCourseId);
             if (course == null)
             {
                 return "Course not found.";
@@ -101,13 +100,60 @@ namespace CourseTracker.Maui.Data
             }
 
             course.CourseAssessmentCount += 1;
-            await _database.UpdateAsync(course);
-            await _database.InsertAsync(newAssessment);
+            await courseDB.SaveCourseAsync(course);
+            await SaveAssessmentAsync(assessment);
 
             return "Assessment added successfully.";
         }
 
-       
+        public async Task<string> DeleteAssessmentAndUpdateCourse(Assessment assessment)
+        {
+            var course = await _database.FindAsync<Course>(assessment.RelatedCourseId);
+            if (course == null)
+            {
+                return "Course not found.";
+            }
+
+            if (course.CourseAssessmentCount <= 0)
+            {
+                return "Course assessment count is already 0.";
+            }
+
+            course.CourseAssessmentCount -= 1;
+            await courseDB.SaveCourseAsync(course);
+            var result = await _database.DeleteAsync(assessment);
+
+            if (result != 1)
+            {
+                return "Error deleting assessment.";
+            }
+            return "Assessment deleted successfully.";
+        }
+
+        public async Task<string> LowerCourseAssessmentCount(Course course) // Used when an assessment is deleted or moved to another course
+        {
+            if (course == null)
+            {
+                return "Course not found.";
+            }
+
+            if (course.CourseAssessmentCount > 0)
+            {
+                try
+                {
+                    course.CourseAssessmentCount -= 1;
+                    await courseDB.SaveCourseAsync(course);
+                    return "Course " + course.CourseName + " assessment count lowered successfully.";
+                }
+                catch (Exception e)
+                {
+                    return "Error updating assessment count: " + e.Message;
+                }
+            }
+            else return "Course assessment count is already 0.";
+        }
+
+
         public async Task ScheduleAssessmentNotifications(Assessment assessment)
         {
             // Assumptions: Using full days 
@@ -117,7 +163,7 @@ namespace CourseTracker.Maui.Data
                 var title = $"Reminder for {assessment.AssessmentName}";
 
                 // Schedule notifications for start date reminders
-                var startReminders = new[] { 14, 7, 1 }; // These could be different from the end reminders or configurable in-app in a future version.
+                var startReminders = new[] { 7, 3, 1 }; // These could be different from the end reminders or configurable in-app in a future version.
                 foreach (var daysBefore in startReminders)
                 {
                     var notificationId = (assessment.AssessmentId + DateTime.Now.Second);
@@ -127,7 +173,7 @@ namespace CourseTracker.Maui.Data
                 }
 
                 // Schedule notifications for end date reminders
-                var endReminders = new[] { 14, 7, 1 }; // These could be different from the start reminders or configurable in-app in a future version.
+                var endReminders = new[] { 7, 3, 1 }; // These could be different from the start reminders or configurable in-app in a future version.
                 foreach (var daysBefore in endReminders)
                 {
                     var notificationId = (assessment.AssessmentId + DateTime.Now.Millisecond);
@@ -158,6 +204,20 @@ namespace CourseTracker.Maui.Data
                 int maxId = assessments.Max(t => t.AssessmentId);
                 maxId++;
                 return maxId;
+            }
+        }
+
+        public async Task SaveAssessmentAsync(Assessment assessment)
+        {
+            await Init();
+            var result = _database.FindAsync<Assessment>(assessment.AssessmentId);
+            if (result == null)
+            {
+                await _database.InsertOrReplaceAsync(assessment);
+            }
+            else
+            {
+                await _database.UpdateAsync(assessment);
             }
         }
     }

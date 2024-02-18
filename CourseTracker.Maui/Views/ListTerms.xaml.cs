@@ -1,8 +1,5 @@
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.ViewModels;
-using CourseTracker.Maui.Services;
-using System.Diagnostics;
-using System.Collections.ObjectModel;
 
 namespace CourseTracker.Maui.Views;
 
@@ -14,7 +11,7 @@ public partial class ListTerms : ContentPage
         InitializeComponent();
         BindingContext = _listTermsVM = new ListTermsVM();
     }
-    
+
     protected override void OnAppearing()
     {
         base.OnAppearing();

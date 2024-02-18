@@ -4,16 +4,16 @@ namespace CourseTracker.Maui.Views;
 
 public partial class AssessmentPage : ContentPage
 {
-	readonly AssessmentVM viewModel;
+    readonly AssessmentVM viewModel;
 
-	public AssessmentPage()
-	{
-		InitializeComponent();
+    public AssessmentPage()
+    {
+        InitializeComponent();
         BindingContext = viewModel = new AssessmentVM();
-	}
+    }
 
-	protected override void OnAppearing()
-	{
+    protected override void OnAppearing()
+    {
         base.OnAppearing();
         viewModel.OnAppearing();
     }

@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Threading.Tasks;
-using CourseTracker.Maui.Data;
 using CourseTracker.Maui.Models;
-using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Supplemental;
 using CourseTracker.Maui.Views;
 
@@ -252,7 +248,7 @@ namespace CourseTracker.Maui.ViewModels
             }
 
             ShowToast(await InsertCourseAndUpdateTermCount(course));
-           
+
             bool anotherCourseWanted = await Application.Current.MainPage.DisplayAlert("Course Saved", "Would you like to add another Course?", "Yes", "No");
             if (anotherCourseWanted)
             {

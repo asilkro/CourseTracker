@@ -6,8 +6,8 @@ public partial class UserGuide : ContentPage
 {
     private UserGuideVM viewModel;
     public UserGuide()
-	{
-		InitializeComponent();
-		BindingContext = viewModel = new UserGuideVM();
-	}
+    {
+        InitializeComponent();
+        BindingContext = viewModel = new UserGuideVM();
+    }
 }

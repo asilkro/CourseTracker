@@ -1,8 +1,7 @@
-﻿using Microsoft.Extensions.Logging;
-using CommunityToolkit.Maui;
-using SQLite;
-using Plugin.LocalNotification;
+﻿using CommunityToolkit.Maui;
 using CourseTracker.Maui.Data;
+using Microsoft.Extensions.Logging;
+using Plugin.LocalNotification;
 
 namespace CourseTracker.Maui
 {
@@ -24,7 +23,7 @@ namespace CourseTracker.Maui
             builder.Services.AddSingleton<AssessmentDB>();
 
 #if DEBUG
-            builder.Logging.AddDebug();  
+            builder.Logging.AddDebug();
 #endif
             return builder.Build();
         }

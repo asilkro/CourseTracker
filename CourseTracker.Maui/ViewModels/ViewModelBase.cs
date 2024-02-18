@@ -1,12 +1,8 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using Microsoft.Maui.Dispatching;
-using CourseTracker.Maui.Services;
-using CourseTracker.Maui.Data;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
-using static System.Net.Mime.MediaTypeNames;
-using System.Threading;
+using CourseTracker.Maui.Data;
 
 
 namespace CourseTracker.Maui.ViewModels
