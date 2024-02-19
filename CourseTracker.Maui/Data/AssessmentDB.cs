@@ -42,6 +42,13 @@ namespace CourseTracker.Maui.Data
                 .Where(i => i.AssessmentId == id)
                 .FirstOrDefaultAsync();
         }
+        public async Task<List<Assessment>> GetAssessmentsByCourseIdAsync(int CourseId)
+        {
+            await Init();
+            return await _database.Table<Assessment>()
+                .Where(i => i.RelatedCourseId == CourseId)
+                .ToListAsync();
+        }
 
         public async Task<int> DeleteAssessmentAsync(Assessment assessment)
         {
@@ -94,6 +101,7 @@ namespace CourseTracker.Maui.Data
             Debug.WriteLine(errorMessage);
             return errorMessage;
         }
+        
 
         public async Task<string> UpdateAssessmentAndUpdateCourse(Assessment assessment)
         {

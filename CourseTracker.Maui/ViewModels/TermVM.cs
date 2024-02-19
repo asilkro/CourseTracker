@@ -33,7 +33,7 @@ namespace CourseTracker.Maui.ViewModels
                 return;
             }
 
-            await sharedDB.SaveTerm(term);
+            //await sharedDB.SaveTerm(term);
 
             bool anotherTermWanted = await Application.Current.MainPage.DisplayAlert("Another Term?", "Would you like to add another term?", "Yes", "No");
             if (anotherTermWanted)

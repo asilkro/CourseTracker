@@ -7,13 +7,13 @@ namespace CourseTracker.Maui.Data;
 public class SharedDB : ViewModelBase
 {
     #region Fields
-    Connection connection;
+    //Connection connection;
     #endregion
 
     #region Constructor
     public SharedDB()
     {
-        connection = new Connection();
+        //connection = new Connection();
     }
     #endregion
 
@@ -73,27 +73,28 @@ public class SharedDB : ViewModelBase
         if (!confirmed) { return; }
         else
         {
-            var con = connection.GetConnection();
+            //var con = connection.GetConnection();
             try
             {
-                con.BeginTransaction();
-                List<Course> courses = con.Table<Course>().Where(c => c.TermId == term.TermId).ToList();
+                //con.BeginTransaction();
+                
+                List<Course> courses = await courseDB.GetCoursesByTermIdAsync(term.TermId);
                 foreach (var course in courses)
                 {
                     await DeleteCourseAndRelatedEntities(course, showConfirmation: false);
                 }
                 await termsDB.DeleteTermAsync(term);
-                con.Commit();
+                //con.Commit();
             }
             catch (Exception e)
             {
                 ShowToast("Error deleting term " + term.TermName + ": " + e.Message);
-                con.Rollback();
+                //con.Rollback();
                 throw;
             }
             finally
             {
-                con.Dispose();
+                //con.Dispose();
             }
             return;
         }
@@ -115,27 +116,27 @@ public class SharedDB : ViewModelBase
             ShowToast("A term cannot have more than 6 courses.");
             return;
         }
-        var tx = connection.GetConnection();
+        //var tx = connection.GetConnection();
         try
         {
-            using (tx)
+            //using (tx)
             {
-                tx.BeginTransaction();
+                //tx.BeginTransaction();
                 await courseDB.SaveCourseAsync(newCourse);
                 term.CourseCount += 1;
                 await termsDB.SaveTermAsync(term);
-                tx.Commit();
+                //tx.Commit();
             }
         }
         catch (Exception e)
         {
             ShowToast("Error adding course: " + e.Message);
-            tx.Rollback();
+            //tx.Rollback();
             return;
         }
         finally
         {
-            tx.Dispose();
+           // tx.Dispose();
             ShowToast("Term " + term.TermName + " updated successfully.");
             ShowToast("Course " + newCourse.CourseName + " added successfully.");
         }
@@ -153,25 +154,27 @@ public class SharedDB : ViewModelBase
         {
             try
             {
-                var con = connection.GetConnection();
+                //var con = connection.GetConnection();
                 try
                 {
-                    con.BeginTransaction();
-                    var assessments = con.Table<Assessment>().Where(a => a.RelatedCourseId == course.CourseId).ToList();
+                    //con.BeginTransaction();
+                    var assessments = await assessmentDB.GetAssessmentsByCourseIdAsync(course.CourseId);
                     foreach (var assessment in assessments)
                     {
                         await assessmentDB.DeleteAssessmentAsync(assessment);
 
                     }
                     await courseDB.DeleteCourseAsync(course);
-                    con.Commit();
+                    //con.Commit();
                 }
                 catch (Exception e)
                 {
-                    con.Rollback();
+                    //con.Rollback();
                     ShowToast("Error deleting course " + course.CourseName + ": " + e.Message);
                 }
-                finally { con.Dispose(); }
+                finally { 
+                    //con.Dispose();
+                }
             }
             finally
             {
@@ -200,27 +203,27 @@ public class SharedDB : ViewModelBase
             ShowToast("Courses may have no more than two assessments.");
             return;
         }
-        var tx = connection.GetConnection();
+        //var tx = connection.GetConnection();
         try
         {
-            using (tx)
+          //  using (tx)
             {
-                tx.BeginTransaction();
+            //    tx.BeginTransaction();
                 await assessmentDB.SaveAssessmentAsync(newAssessment);
                 course.CourseAssessmentCount += 1;
                 await courseDB.SaveCourseAsync(course);
-                tx.Commit();
+              //  tx.Commit();
             }
         }
         catch (Exception e)
         {
             ShowToast("Error adding assessment: " + e.Message);
-            tx.Rollback();
+            //tx.Rollback();
             return;
         }
         finally
         {
-            tx.Dispose();
+            //tx.Dispose();
             ShowToast("Course " + course.CourseName + " updated successfully.");
             ShowToast("Assessment added successfully.");
         }

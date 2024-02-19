@@ -35,6 +35,14 @@ namespace CourseTracker.Maui.Data
                 .FirstOrDefaultAsync();
         }
 
+        public async Task<List<Course>> GetCoursesByTermIdAsync(int TermId)
+        {
+            await Init();
+            return await _database.Table<Course>()
+                .Where(i => i.TermId == TermId)
+                .ToListAsync();
+        }
+
         public async Task<int> DeleteCourseAsync(Course course)
         {
             await Init();

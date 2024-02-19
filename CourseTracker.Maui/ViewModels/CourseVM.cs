@@ -173,7 +173,7 @@ namespace CourseTracker.Maui.ViewModels
         public CourseVM()
         {
             LoadTerms();
-            CourseNoteShareButton_Clicked = new Command(async () => await CourseNoteShareButtonClicked());
+             CourseNoteShareButton_Clicked = new Command(async () => await CourseNoteShareButtonClicked());
             OnCourseSubmitButtonClick = new Command(async () => await SubmitButtonClicked());
             OnCourseCancelButtonClick = new Command(async () => await CancelButtonClicked());
         }
@@ -247,7 +247,7 @@ namespace CourseTracker.Maui.ViewModels
                 return;
             }
 
-            await sharedDB.InsertCourseAndUpdateTerm(course);
+            //await sharedDB.InsertCourseAndUpdateTerm(course);
 
             bool anotherCourseWanted = await Application.Current.MainPage.DisplayAlert("Course Saved", "Would you like to add another Course?", "Yes", "No");
             if (anotherCourseWanted)
