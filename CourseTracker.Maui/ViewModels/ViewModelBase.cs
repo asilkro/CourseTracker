@@ -12,14 +12,15 @@ namespace CourseTracker.Maui.ViewModels
         public TermsDB termsDB;
         public CourseDB courseDB;
         public AssessmentDB assessmentDB;
+        public SharedDB sharedDB;
 
-        protected IDispatcher Dispatcher => DispatcherProvider.Current.GetForCurrentThread();
         public event PropertyChangedEventHandler PropertyChanged;
         public ViewModelBase()
         {
             termsDB = new TermsDB();
             courseDB = new CourseDB();
             assessmentDB = new AssessmentDB();
+            sharedDB = new SharedDB();
         }
         protected bool SetProperty<T>(ref T backingStore, T value, [CallerMemberName] string propertyName = "", Action onChanged = null)
         {
@@ -35,18 +36,6 @@ namespace CourseTracker.Maui.ViewModels
         protected void OnPropertyChanged([CallerMemberName] string propertyName = "")
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        protected void InvokeOnMainThread(Action action)
-        {
-            if (Dispatcher.IsDispatchRequired)
-            {
-                Dispatcher.Dispatch(action);
-            }
-            else
-            {
-                action.Invoke();
-            }
         }
 
         private DateTime minimumDate = DateTime.Parse("01/01/2020");

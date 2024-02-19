@@ -7,7 +7,6 @@ namespace CourseTracker.Maui.Services
     public class TrackerDb
     {
         private static Connection _connection = new();
-        private static SQLiteConnection _dbConnection;
         private static SQLiteAsyncConnection _db;
 
         #region SQLite setup

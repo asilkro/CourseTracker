@@ -9,7 +9,7 @@ namespace CourseTracker.Maui.Data
     public class CourseDB
     {
         SQLiteAsyncConnection _database;
-        TermsDB termsDB;
+        
         public CourseDB()
         {
         }
@@ -42,7 +42,7 @@ namespace CourseTracker.Maui.Data
         }
 
 
-        public async Task<string> UpdateCourseAndUpdateTermCount(Course course)
+        /*public async Task<string> UpdateCourseAndUpdateTermCount(Course course)
         { 
             var term = await _database.FindAsync<Term>(course.TermId);
             if (term == null)
@@ -56,11 +56,11 @@ namespace CourseTracker.Maui.Data
             }
 
             term.CourseCount += 1;
-            await termsDB.SaveTermAsync(term);
+            await .SaveTermAsync(term);
             await SaveCourseAsync(course);
 
             return "Course Updated successfully.";
-        }
+        }*/
 
         public async Task RemoveCourseAsync(Course course)
         {

@@ -4,24 +4,16 @@ using CourseTracker.Maui.Services;
 using CourseTracker.Maui.ViewModels;
 
 namespace CourseTracker.Maui.Data;
-public class SharedDB
+public class SharedDB : ViewModelBase
 {
     #region Fields
-    ViewModelBase vmb;
-    public TermsDB termsDB;
-    public CourseDB courseDB;
-    public AssessmentDB assessmentDB;
     Connection connection;
     #endregion
 
     #region Constructor
     public SharedDB()
     {
-        termsDB = new TermsDB();
-        courseDB = new CourseDB();
-        assessmentDB = new AssessmentDB();
         connection = new Connection();
-        vmb = new ViewModelBase();
     }
     #endregion
 
@@ -31,25 +23,47 @@ public class SharedDB
     //class but its here for convenience right now.
     public async Task<bool> ConfirmedAction(string messageRequiringConfirmation)
     {
-
         bool result = await Application.Current.MainPage.DisplayAlert("Confirm Action", messageRequiringConfirmation, "Yes", "No");
         return result;
     }
     #endregion
     #region Term Methods
-    public async Task InsertTerm(Term newTerm)
+    public async Task SaveTerm(Term newTerm)
     {
         try
         {
             await termsDB.SaveTermAsync(newTerm);
-            vmb.ShowToast("Database entry for Term " + newTerm.TermName + " successfully modified.");
+            ShowToast("Database entry for Term " + newTerm.TermName + " successfully modified.");
             return;
         }
         catch (Exception e)
         {
-            vmb.ShowToast("Error adding term: " + e.Message);
+            ShowToast("Error adding term: " + e.Message);
             return;
         }
+    }
+
+    public async Task<int> DeleteTermAsync(Term term)
+    {
+        int count = term.CourseCount;
+        var result = await Application.Current.MainPage.DisplayAlert(
+            "WARNING: DELETING TERM", "Are you SURE you want to delete this term?" +
+            " It will also remove " + count + " courses." +
+            "If you wish to keep this data, please move the existing courses to another term first.", "Yes", "No");
+        if (result)
+        {
+            List<Course> allCourses = await courseDB.GetCoursesAsync();
+            foreach (Course course in allCourses)
+            {
+                if (course.TermId == term.TermId)
+                {
+                    await courseDB.DeleteCourseAsync(course);
+                }
+            }
+
+            return await termsDB.DeleteTermAsync(term);
+        }
+        return 0;
     }
     public async Task DeleteTermAndRelatedEntities(Term term)
     {
@@ -57,6 +71,7 @@ public class SharedDB
             "and ALL " + term.CourseCount + " of its associated courses and assessments?" +
             "\r\nThis action cannot be undone.");
         if (!confirmed) { return; }
+        else
         {
             var con = connection.GetConnection();
             try
@@ -72,7 +87,8 @@ public class SharedDB
             }
             catch (Exception e)
             {
-                vmb.ShowToast("Error deleting term " + term.TermName + ": " + e.Message);
+                ShowToast("Error deleting term " + term.TermName + ": " + e.Message);
+                con.Rollback();
                 throw;
             }
             finally
@@ -90,13 +106,13 @@ public class SharedDB
         var term = await termsDB.GetTermByIdAsync(newCourse.TermId);
         if (term == null)
         {
-            vmb.ShowToast("Term not found.");
+            ShowToast("Term not found.");
             return;
         }
 
         if (term.CourseCount >= 6)
         {
-            vmb.ShowToast("A term cannot have more than 6 courses.");
+            ShowToast("A term cannot have more than 6 courses.");
             return;
         }
         var tx = connection.GetConnection();
@@ -113,14 +129,15 @@ public class SharedDB
         }
         catch (Exception e)
         {
-            vmb.ShowToast("Error adding course: " + e.Message);
+            ShowToast("Error adding course: " + e.Message);
+            tx.Rollback();
             return;
         }
         finally
         {
             tx.Dispose();
-            vmb.ShowToast("Term " + term.TermName + " updated successfully.");
-            vmb.ShowToast("Course " + newCourse.CourseName + " added successfully.");
+            ShowToast("Term " + term.TermName + " updated successfully.");
+            ShowToast("Course " + newCourse.CourseName + " added successfully.");
         }
         return;
     }
@@ -152,19 +169,62 @@ public class SharedDB
                 catch (Exception e)
                 {
                     con.Rollback();
-                    vmb.ShowToast("Error deleting course " + course.CourseName + ": " + e.Message);
+                    ShowToast("Error deleting course " + course.CourseName + ": " + e.Message);
                 }
                 finally { con.Dispose(); }
             }
             finally
             {
-                vmb.ShowToast("Course " + course.CourseName + " deleted successfully.");
+                ShowToast("Course " + course.CourseName + " deleted successfully.");
             }
         }
         else
         {
             return;
         }
+    }
+    #endregion
+
+    #region Assessment Methods
+    public async Task InsertAssessmentAndUpdateCourse(Assessment newAssessment) 
+    {
+        var course = await courseDB.GetCourseByIdAsync(newAssessment.RelatedCourseId);
+        if (course == null)
+        {
+            ShowToast("Course not found.");
+            return;
+        }
+
+        if (course.CourseAssessmentCount >= 2)
+        {
+            ShowToast("Courses may have no more than two assessments.");
+            return;
+        }
+        var tx = connection.GetConnection();
+        try
+        {
+            using (tx)
+            {
+                tx.BeginTransaction();
+                await assessmentDB.SaveAssessmentAsync(newAssessment);
+                course.CourseAssessmentCount += 1;
+                await courseDB.SaveCourseAsync(course);
+                tx.Commit();
+            }
+        }
+        catch (Exception e)
+        {
+            ShowToast("Error adding assessment: " + e.Message);
+            tx.Rollback();
+            return;
+        }
+        finally
+        {
+            tx.Dispose();
+            ShowToast("Course " + course.CourseName + " updated successfully.");
+            ShowToast("Assessment added successfully.");
+        }
+        return;
     }
     #endregion
 }

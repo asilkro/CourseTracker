@@ -10,8 +10,8 @@
         Spacing="10">
 
         <!-- These are only for debug and assessment purposes, and would be removed in a public-facing build. -->
-        <Button x:Name="resetDbButton" Text="**RESET DATABASE - USE CAUTION**" Clicked="resetDbButton_Clicked" FontAttributes="Bold" BackgroundColor="Red" TextColor="AntiqueWhite"/>
-        <Button x:Name="loadSampleDataButton" Text="C971 - Load Evaluation Data" Clicked="loadButton_Clicked" FontAttributes="Bold" BackgroundColor="Red" TextColor="AntiqueWhite"/>
+        <Button x:Name="resetDbButton" Text="**RESET DATABASE - USE CAUTION**" Command="{Binding OnResetDBButtonClicked}" FontAttributes="Bold" BackgroundColor="Red" TextColor="AntiqueWhite"/>
+        <Button x:Name="loadSampleDataButton" Text="C971 - Load Evaluation Data" Command="{Binding OnLoadButtonClicked}" FontAttributes="Bold" BackgroundColor="Red" TextColor="AntiqueWhite"/>
     
     </VerticalStackLayout>
 </ContentPage>

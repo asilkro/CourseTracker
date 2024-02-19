@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using CourseTracker.Maui.Data;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Supplemental;
 using CourseTracker.Maui.Views;
@@ -32,7 +33,8 @@ namespace CourseTracker.Maui.ViewModels
                 return;
             }
 
-            await termsDB.SaveTermAsync(term);
+            await sharedDB.SaveTerm(term);
+
             bool anotherTermWanted = await Application.Current.MainPage.DisplayAlert("Another Term?", "Would you like to add another term?", "Yes", "No");
             if (anotherTermWanted)
             {

@@ -8,13 +8,10 @@ namespace CourseTracker.Maui.ViewModels
     public class ListAssessmentsVM : ViewModelBase
     {
         public ObservableCollection<Assessment> Assessments { get; private set; } = new ObservableCollection<Assessment>();
-        public Command OnAssessmentTap { get; }
 
         public ListAssessmentsVM()
         {
-            LoadAssessments();
         }
-
 
         public bool IsRefreshing { get; set; }
         public async Task LoadAssessments()

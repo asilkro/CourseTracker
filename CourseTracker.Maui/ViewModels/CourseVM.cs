@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
+using CourseTracker.Maui.Data;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Supplemental;
 using CourseTracker.Maui.Views;
@@ -10,7 +11,6 @@ namespace CourseTracker.Maui.ViewModels
     public class CourseVM : ViewModelBase
     {
         #region Fields
-
         private Course course;
         private int editCourseId;
         private Assessment assessment = new();
@@ -247,7 +247,7 @@ namespace CourseTracker.Maui.ViewModels
                 return;
             }
 
-            ShowToast(await InsertCourseAndUpdateTermCount(course));
+            await sharedDB.InsertCourseAndUpdateTerm(course);
 
             bool anotherCourseWanted = await Application.Current.MainPage.DisplayAlert("Course Saved", "Would you like to add another Course?", "Yes", "No");
             if (anotherCourseWanted)

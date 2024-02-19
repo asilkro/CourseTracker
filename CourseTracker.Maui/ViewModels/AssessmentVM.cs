@@ -248,7 +248,7 @@ namespace CourseTracker.Maui.ViewModels
                 ShowToast(message);
                 return;
             }
-            await assessmentDB.UpdateAssessmentAndUpdateCourse(assessment);
+            await sharedDB.InsertAssessmentAndUpdateCourse(assessment);
 
             bool anotherAssessmentWanted = await Application.Current.MainPage.DisplayAlert("Assessment Saved", "Would you like to add another assessment?", "Yes", "No");
             if (anotherAssessmentWanted)
