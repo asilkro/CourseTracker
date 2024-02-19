@@ -94,17 +94,14 @@ public class SharedDB
             return;
         }
 
-        // Validation for the maximum number of courses per term
         if (term.CourseCount >= 6)
         {
             vmb.ShowToast("A term cannot have more than 6 courses.");
             return;
         }
-
-        // Insert the new course
+        var tx = connection.GetConnection();
         try
         {
-            var tx = connection.GetConnection();
             using (tx)
             {
                 tx.BeginTransaction();
@@ -113,16 +110,19 @@ public class SharedDB
                 await termsDB.SaveTermAsync(term);
                 tx.Commit();
             }
-            tx.Dispose();
-            vmb.ShowToast("Term " + term.TermName + " updated successfully.");
-            vmb.ShowToast("Course " + newCourse.CourseName + " added successfully.");
-            return;
         }
         catch (Exception e)
         {
             vmb.ShowToast("Error adding course: " + e.Message);
             return;
         }
+        finally
+        {
+            tx.Dispose();
+            vmb.ShowToast("Term " + term.TermName + " updated successfully.");
+            vmb.ShowToast("Course " + newCourse.CourseName + " added successfully.");
+        }
+        return;
     }
     public async Task DeleteCourseAndRelatedEntities(Course course, bool showConfirmation = true)
     {
@@ -154,10 +154,7 @@ public class SharedDB
                     con.Rollback();
                     vmb.ShowToast("Error deleting course " + course.CourseName + ": " + e.Message);
                 }
-                finally
-                {
-                    con.Dispose();
-                }
+                finally { con.Dispose(); }
             }
             finally
             {
