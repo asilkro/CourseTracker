@@ -179,18 +179,24 @@ namespace CourseTracker.Maui.ViewModels
 
         #endregion
 
-        #region Commands and Methods
 
         private async Task LoadTerms()
         {
             try
             {
                 var terms = await termsDB.GetTermsAsync();
+                Course course = await courseDB.GetCourseByIdAsync(EditCourseId);
                 Terms.Clear();
+                Term t = new();
                 foreach (var term in terms)
                 {
+                    if (course.TermId == term.TermId)
+                    {
+                        t = term;
+                    }
                     Terms.Add(term);
                 }
+                SelectedTerm = t;
             }
             catch (Exception ex)
             {
@@ -220,6 +226,7 @@ namespace CourseTracker.Maui.ViewModels
             NotificationsEnabled = temp.NotificationsEnabled;
             CourseId = temp.CourseId;
             TermId = temp.TermId;
+            CourseAssessmentCount = temp.CourseAssessmentCount;
         }
 
         public async Task SubmitButtonClicked()
@@ -358,8 +365,8 @@ namespace CourseTracker.Maui.ViewModels
             {
                 CourseId = await courseDB.GetNextId();
             }
+
         }
 
-        #endregion
     }
 }

@@ -55,59 +55,51 @@ namespace CourseTracker.Maui.ViewModels
 
                 var DemoTerm = await MakeDemoTerm();
 
-                await termsDB.SaveTermAsync(DemoTerm);
-                Debug.WriteLine("Inserted: " + DemoTerm.TermName);
+                await sharedDB.SaveTerm(DemoTerm);
+                Debug.WriteLine("Inserted term: " + DemoTerm.TermName);
 
-                var demoCourse = await MakeDemoCourse();
+                var demoCourse = await MakeDemoCourse1();
                 demoCourse.TermId = DemoTerm.TermId;
                                 
-                await courseDB.SaveCourseAsync(demoCourse);
-                Debug.WriteLine(await courseDB.GetNextId());
+                await sharedDB.InsertCourseAndUpdateTerm(demoCourse);
+                Debug.WriteLine("Inserted course: " + demoCourse.CourseName);
 
-                Debug.WriteLine("Inserted: " + demoCourse.CourseName);
-
-                var demoOA = await MakeDemoOA();
+                var demoOA = await MakeDemoOA(); //Assessment for course 1
                 demoOA.RelatedCourseId = demoCourse.CourseId;
-                await assessmentDB.UpdateAssessmentAndUpdateCourse(demoOA);
-                Debug.WriteLine("Inserted: " + demoOA.AssessmentName); //C6 OA
-                
-                Debug.WriteLine("*******************************");
-                
-                var demoPA = await MakeDemoPA();
+                await sharedDB.SaveAssessmentAndUpdateCourse(demoOA); //1
+                Debug.WriteLine("Inserted assessment: " + demoOA.AssessmentName); //C6 OA
+                                
+                var demoPA = await MakeDemoPA(); //Assessment for course 1
                 demoPA.RelatedCourseId = demoCourse.CourseId;
-                await assessmentDB.UpdateAssessmentAndUpdateCourse(demoPA);
-                Debug.WriteLine("Inserted: " + demoPA.AssessmentName); //C6 PA
+                await sharedDB.SaveAssessmentAndUpdateCourse(demoPA); //2
+                Debug.WriteLine("Inserted assessment: " + demoPA.AssessmentName); //C6 PA
 
                 //Second term and courses to provide a more robust demo set of data for evaluator
                 var demoTerm2 = await MakeDemoTerm2();
-                await termsDB.SaveTermAsync(demoTerm2);
-                Debug.WriteLine("Inserted " + demoTerm2.TermName);
+                await sharedDB.SaveTerm(demoTerm2);
+                Debug.WriteLine("Inserted term: " + demoTerm2.TermName);
 
-                var demoCourse2 = await MakeDemoCourse2();
-                var demoCourse3 = await MakeDemoCourse3();
-
+                var demoCourse2 = await MakeDemoCourse2(); //Course created
                 demoCourse2.TermId = demoTerm2.TermId;
-                demoCourse3.TermId = demoTerm2.TermId;
-                await courseDB.SaveCourseAsync(demoCourse2);
-                Debug.WriteLine("Inserted " + demoCourse2.CourseName);
+
                 await sharedDB.InsertCourseAndUpdateTerm(demoCourse2);
+                Debug.WriteLine("Inserted course: " + demoCourse2.CourseName);  
 
                 var demoOA2 = await MakeDemoOA2();
-                var demoPA2 = await MakeDemoPA2();
-
                 demoOA2.RelatedCourseId = demoCourse2.CourseId;
-                demoPA2.RelatedCourseId = demoCourse3.CourseId;
+                await sharedDB.SaveAssessmentAndUpdateCourse(demoOA2); //3
+                Debug.WriteLine("Inserted assessment:" + demoOA2.AssessmentName);
 
-                await assessmentDB.UpdateAssessmentAndUpdateCourse(demoOA2);
-                Debug.WriteLine("Inserted " + demoOA2.AssessmentName);
-                await courseDB.SaveCourseAsync(demoCourse3);
-                Debug.WriteLine("Inserted " + demoCourse3.CourseName);
-
-                demoPA2.RelatedCourseId = demoCourse3.CourseId;
+                var demoCourse3 = await MakeDemoCourse3(); //Course created
+                demoCourse3.TermId = demoTerm2.TermId;
                 await sharedDB.InsertCourseAndUpdateTerm(demoCourse3);
-                await assessmentDB.UpdateAssessmentAndUpdateCourse(demoPA2);
-                Debug.WriteLine("Inserted " + demoPA2.AssessmentName);
+                Debug.WriteLine("Inserted course: " + demoCourse3.CourseName);
 
+                var demoPA2 = await MakeDemoPA2();
+                demoPA2.RelatedCourseId = demoCourse3.CourseId;  
+                await sharedDB.SaveAssessmentAndUpdateCourse(demoPA2); //4
+                Debug.WriteLine("Inserted assessment: " + demoPA2.AssessmentName);
+                
                 await App.Current.MainPage.DisplayAlert("Sample Data Loaded", "Sample data has been loaded successfully. Please relaunch the application to complete setup.", "OK");
             }
             catch (Exception ex)
@@ -145,7 +137,7 @@ namespace CourseTracker.Maui.ViewModels
         }
 
 
-        private async Task<Course> MakeDemoCourse()
+        private async Task<Course> MakeDemoCourse1()
         {
             Course course = new()
             {
@@ -181,7 +173,7 @@ namespace CourseTracker.Maui.ViewModels
                 CourseNotes = "This course covered the change in relationships amongst Gen Z and millenials in the era of dating apps.",
                 NotificationsEnabled = false,
                 TermId = 2,
-                CourseAssessmentCount = 1
+                CourseAssessmentCount = 0
             };
             return course;
         }
@@ -201,7 +193,7 @@ namespace CourseTracker.Maui.ViewModels
                 CourseNotes = "This course was dropped due to a scheduling conflict with Dean Pelton.",
                 NotificationsEnabled = false,
                 TermId = 2,
-                CourseAssessmentCount = 1
+                CourseAssessmentCount = 0
             };
             return course;
         }

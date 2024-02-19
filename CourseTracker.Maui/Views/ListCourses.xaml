@@ -8,7 +8,8 @@
 
         <!-- Display List of Courses using ListView -->
         <ListView x:Name="courseListView" ItemsSource="{Binding Courses}"
-                  ItemTapped="courseListView_ItemTapped" VerticalOptions="FillAndExpand" CachingStrategy="RecycleElement" SelectionMode="Single">
+                  ItemTapped="courseListView_ItemTapped" VerticalOptions="FillAndExpand"
+                  CachingStrategy="RecycleElement" SelectionMode="Single">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>

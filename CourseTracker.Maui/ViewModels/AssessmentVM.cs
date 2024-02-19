@@ -25,11 +25,18 @@ namespace CourseTracker.Maui.ViewModels
             try
             {
                 var courses = await courseDB.GetCoursesAsync();
+                Assessment assessment = await assessmentDB.GetAssessmentByIdAsync(EditAssessmentId);
                 Courses.Clear();
+                Course course1 = new();
                 foreach (var course in courses)
                 {
+                    if (course.CourseId == assessment.RelatedCourseId)
+                    {
+                        course1 = course;
+                    }
                     Courses.Add(course);
                 }
+                SelectedCourse = course1;
             }
             catch (Exception ex)
             {
@@ -248,7 +255,7 @@ namespace CourseTracker.Maui.ViewModels
                 ShowToast(message);
                 return;
             }
-            await sharedDB.InsertAssessmentAndUpdateCourse(assessment);
+            await sharedDB.SaveAssessmentAndUpdateCourse(assessment);
 
             bool anotherAssessmentWanted = await Application.Current.MainPage.DisplayAlert("Assessment Saved", "Would you like to add another assessment?", "Yes", "No");
             if (anotherAssessmentWanted)

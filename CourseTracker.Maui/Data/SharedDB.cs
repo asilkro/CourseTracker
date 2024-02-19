@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Maui.Alerts;
+﻿using System.Diagnostics;
+using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.ViewModels;
@@ -196,7 +197,7 @@ public class SharedDB
     #endregion
 
     #region Assessment Methods
-    public async Task InsertAssessmentAndUpdateCourse(Assessment newAssessment)
+    public async Task SaveAssessmentAndUpdateCourse(Assessment newAssessment)
     {
         var course = await courseDB.GetCourseByIdAsync(newAssessment.RelatedCourseId);
         if (course == null)
@@ -210,27 +211,23 @@ public class SharedDB
             ShowToast("Courses may have no more than two assessments.");
             return;
         }
-        //var tx = connection.GetConnection();
         try
         {
-            //  using (tx)
             {
-                //    tx.BeginTransaction();
                 await assessmentDB.SaveAssessmentAsync(newAssessment);
+                
                 course.CourseAssessmentCount += 1;
+                
                 await courseDB.SaveCourseAsync(course);
-                //  tx.Commit();
             }
         }
         catch (Exception e)
         {
             ShowToast("Error adding assessment: " + e.Message);
-            //tx.Rollback();
             return;
         }
         finally
         {
-            //tx.Dispose();
             ShowToast("Course " + course.CourseName + " updated successfully.");
             ShowToast("Assessment added successfully.");
         }

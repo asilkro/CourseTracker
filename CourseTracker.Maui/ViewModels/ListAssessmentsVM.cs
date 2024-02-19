@@ -174,6 +174,7 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
+
         private async void RemoveAssessmentAsync(Assessment assessment)
         {
             var result = await App.Current.MainPage.DisplayAlert("Delete Assessment", $"Are you sure you want to delete {assessment.AssessmentName}?", "Yes", "No");

@@ -9,9 +9,30 @@
         Padding="20, 10"
         Spacing="10">
 
+        <VerticalStackLayout HorizontalOptions="Center" >
+            <Label Text="Welcome to CourseTracker!" FontSize="Large" FontAttributes="Bold" HorizontalOptions="Center" />
+            <Label FontSize="Medium">
+                <Label.Text>
+                    -------------------------------------------------------------
+                    If this is your 1st time using the application,
+                    please click C971 - Load Evaluation Data.
+                    -------------------------------------------------------------
+                </Label.Text>
+            </Label>
+
+            <Label HorizontalOptions="Center" FontSize="Medium" LineBreakMode="WordWrap">
+                <Label.Text>
+                    The Evaluation User Guide can be
+                    accessed at any time from the flyout menu at the top.
+                    -------------------------------------------------------------
+                </Label.Text>
+            </Label>
+        </VerticalStackLayout>
+
         <!-- These are only for debug and assessment purposes, and would be removed in a public-facing build. -->
-        <Button x:Name="resetDbButton" Text="**RESET DATABASE - USE CAUTION**" Command="{Binding OnResetDBButtonClicked}" FontAttributes="Bold" BackgroundColor="Red" TextColor="AntiqueWhite"/>
         <Button x:Name="loadSampleDataButton" Text="C971 - Load Evaluation Data" Command="{Binding OnLoadButtonClicked}" FontAttributes="Bold" BackgroundColor="Red" TextColor="AntiqueWhite"/>
+        <Button x:Name="resetDbButton" Text="**RESET DATABASE - USE CAUTION**" Command="{Binding OnResetDBButtonClicked}" FontAttributes="Bold" BackgroundColor="Red" TextColor="AntiqueWhite"/>
+        
     
     </VerticalStackLayout>
 </ContentPage>

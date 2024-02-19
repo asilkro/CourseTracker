@@ -88,7 +88,7 @@ namespace CourseTracker.Maui.Data
             var errorMessage = string.Empty;
 
             if (!Validation.IdWasSet(assessment.AssessmentId))
-                errorMessage = "Assessment ID does not appear to have been set.";
+                errorMessage = "Assessment ID does not appear to have been set."; //Should never trigger
             else if (!Validation.IdWasSet(assessment.RelatedCourseId))
                 errorMessage = "Related course ID must be greater than 0.";
             else if (!Validation.NotNull(assessment.AssessmentName))
