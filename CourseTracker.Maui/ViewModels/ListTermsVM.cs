@@ -24,15 +24,23 @@ namespace CourseTracker.Maui.ViewModels
                 }
                 if (Terms.Count > 0)
                 {
-                    Terms.Clear();
+                    Terms = [];
                 }
-                var terms = await termsDB.GetTermsAsync();
-                Debug.WriteLine("Term count: " + terms.Count);
-                foreach (var term in terms)
+                List<Term> terms = await termsDB.GetTermsAsync();
+                try
                 {
-                    Terms.Add(term);
+                    int i = 0;
+                    foreach (Term term in terms)
+                    {
+                        Terms.Add(term);
+                        i++;
+                        Debug.WriteLine("Term " + i + ": " + term.TermName);
+                    }
                 }
-                //Terms = new ObservableCollection<Term>(terms);
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("Issue loading terms: " + ex.Message);
+                }
 
             }
             catch (Exception ex)
@@ -44,6 +52,7 @@ namespace CourseTracker.Maui.ViewModels
                 IsRefreshing = false;
             }
         }
+    
 
         private Term term = new();
 
@@ -139,23 +148,11 @@ namespace CourseTracker.Maui.ViewModels
                     await Shell.Current.GoToAsync($"{nameof(TermPage)}?{nameof(TermVM.EditTermId)}={term.TermId}");
                     break;
                 case "Delete Term":
-                    await RemoveTermAsync(term);
+                    await sharedDB.DeleteTermAndRelatedEntities(term);
+                    await LoadTerms();
                     break;
                 default:
                     break;
-            }
-        }
-
-        private async Task RemoveTermAsync(Term term)
-        {
-            var result = await App.Current.MainPage.DisplayAlert("Delete Term", $"Are you sure you want to delete {term.TermName}?", "Yes", "No");
-            if (result)
-            {
-                int confirm = await termsDB.DeleteTermAsync(term);
-                if (confirm != 0)
-                {
-                    await App.Current.MainPage.DisplayAlert("Term Deleted Successfully", "", "Ok");
-                }
             }
         }
 

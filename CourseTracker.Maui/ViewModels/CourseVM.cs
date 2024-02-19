@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
-using CourseTracker.Maui.Data;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Supplemental;
 using CourseTracker.Maui.Views;
@@ -173,7 +172,7 @@ namespace CourseTracker.Maui.ViewModels
         public CourseVM()
         {
             LoadTerms();
-             CourseNoteShareButton_Clicked = new Command(async () => await CourseNoteShareButtonClicked());
+            CourseNoteShareButton_Clicked = new Command(async () => await CourseNoteShareButtonClicked());
             OnCourseSubmitButtonClick = new Command(async () => await SubmitButtonClicked());
             OnCourseCancelButtonClick = new Command(async () => await CancelButtonClicked());
         }
@@ -247,7 +246,7 @@ namespace CourseTracker.Maui.ViewModels
                 return;
             }
 
-            //await sharedDB.InsertCourseAndUpdateTerm(course);
+            await sharedDB.InsertCourseAndUpdateTerm(course);
 
             bool anotherCourseWanted = await Application.Current.MainPage.DisplayAlert("Course Saved", "Would you like to add another Course?", "Yes", "No");
             if (anotherCourseWanted)

@@ -1,11 +1,8 @@
-﻿using System.ComponentModel;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using CourseTracker.Maui.Data;
+﻿using System.Diagnostics;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Supplemental;
-using Kotlin.IO.Path;
+using Newtonsoft.Json;
 
 namespace CourseTracker.Maui.ViewModels
 {
@@ -57,56 +54,61 @@ namespace CourseTracker.Maui.ViewModels
                 //Term, Course and Assessments for C6 and C3 requirements
 
                 var DemoTerm = await MakeDemoTerm();
-                    Debug.WriteLine("**************************");
-    //      await termsDB.SaveTermAsync(DemoTerm);
-    //      Debug.WriteLine("Inserted " + DemoTerm.TermName);
-    //
-    //      var demoCourse = await MakeDemoCourse();
-    //      demoCourse.TermId = DemoTerm.TermId;
-    //      await courseDB.SaveCourseAsync(demoCourse);
-    //      var courseId = demoCourse.CourseId;
-    //      Debug.WriteLine("Inserted " + demoCourse.CourseName);
-    //
-    //      var demoOA = await MakeDemoOA();
-    //      var demoPA = await MakeDemoPA();
-    //      demoOA.RelatedCourseId = courseId;
-    //      demoPA.RelatedCourseId = courseId;
-    //      await assessmentDB.UpdateAssessmentAndUpdateCourse(demoOA);
-    //      Debug.WriteLine("Inserted " + demoOA.AssessmentName);
-    //      await assessmentDB.UpdateAssessmentAndUpdateCourse(demoPA);
-    //      Debug.WriteLine("Inserted " + demoPA.AssessmentName);
-    //
-    //      //Second term and courses to provide a more robust demo set of data for evaluator
-    //      var demoTerm2 = await MakeDemoTerm2();
-    //      await termsDB.SaveTermAsync(demoTerm2);
-    //      Debug.WriteLine("Inserted " + demoTerm2.TermName);
-    //
-    //      var demoCourse2 = await MakeDemoCourse2();
-    //      var demoCourse3 = await MakeDemoCourse3();
-    //
-    //      demoCourse2.TermId = demoTerm2.TermId;
-    //      demoCourse3.TermId = demoTerm2.TermId;
-    //      await courseDB.SaveCourseAsync(demoCourse2);
-    //      Debug.WriteLine("Inserted " + demoCourse2.CourseName);
-    //      await sharedDB.InsertCourseAndUpdateTerm(demoCourse2);
-    //
-    //      var demoOA2 = await MakeDemoOA2();
-    //      var demoPA2 = await MakeDemoPA2();
-    //
-    //      demoOA2.RelatedCourseId = demoCourse2.CourseId;
-    //      demoPA2.RelatedCourseId = demoCourse3.CourseId;
-    //
-    //      await assessmentDB.UpdateAssessmentAndUpdateCourse(demoOA2);
-    //      Debug.WriteLine("Inserted " + demoOA2.AssessmentName);
-    //      await courseDB.SaveCourseAsync(demoCourse3);
-    //      Debug.WriteLine("Inserted " + demoCourse3.CourseName);
-    //
-    //      demoPA2.RelatedCourseId = demoCourse3.CourseId;
-    //      await sharedDB.InsertCourseAndUpdateTerm(demoCourse3);
-    //      await assessmentDB.UpdateAssessmentAndUpdateCourse(demoPA2);
-    //      Debug.WriteLine("Inserted " + demoPA2.AssessmentName);
-    //
-    //      await App.Current.MainPage.DisplayAlert("Sample Data Loaded", "Sample data has been loaded successfully. Please relaunch the application to complete setup.", "OK");
+
+                await termsDB.SaveTermAsync(DemoTerm);
+                Debug.WriteLine("Inserted: " + DemoTerm.TermName);
+
+                var demoCourse = await MakeDemoCourse();
+                demoCourse.TermId = DemoTerm.TermId;
+                                
+                await courseDB.SaveCourseAsync(demoCourse);
+                Debug.WriteLine(await courseDB.GetNextId());
+
+                Debug.WriteLine("Inserted: " + demoCourse.CourseName);
+
+                var demoOA = await MakeDemoOA();
+                demoOA.RelatedCourseId = demoCourse.CourseId;
+                await assessmentDB.UpdateAssessmentAndUpdateCourse(demoOA);
+                Debug.WriteLine("Inserted: " + demoOA.AssessmentName); //C6 OA
+                
+                Debug.WriteLine("*******************************");
+                
+                var demoPA = await MakeDemoPA();
+                demoPA.RelatedCourseId = demoCourse.CourseId;
+                await assessmentDB.UpdateAssessmentAndUpdateCourse(demoPA);
+                Debug.WriteLine("Inserted: " + demoPA.AssessmentName); //C6 PA
+
+                //Second term and courses to provide a more robust demo set of data for evaluator
+                var demoTerm2 = await MakeDemoTerm2();
+                await termsDB.SaveTermAsync(demoTerm2);
+                Debug.WriteLine("Inserted " + demoTerm2.TermName);
+
+                var demoCourse2 = await MakeDemoCourse2();
+                var demoCourse3 = await MakeDemoCourse3();
+
+                demoCourse2.TermId = demoTerm2.TermId;
+                demoCourse3.TermId = demoTerm2.TermId;
+                await courseDB.SaveCourseAsync(demoCourse2);
+                Debug.WriteLine("Inserted " + demoCourse2.CourseName);
+                await sharedDB.InsertCourseAndUpdateTerm(demoCourse2);
+
+                var demoOA2 = await MakeDemoOA2();
+                var demoPA2 = await MakeDemoPA2();
+
+                demoOA2.RelatedCourseId = demoCourse2.CourseId;
+                demoPA2.RelatedCourseId = demoCourse3.CourseId;
+
+                await assessmentDB.UpdateAssessmentAndUpdateCourse(demoOA2);
+                Debug.WriteLine("Inserted " + demoOA2.AssessmentName);
+                await courseDB.SaveCourseAsync(demoCourse3);
+                Debug.WriteLine("Inserted " + demoCourse3.CourseName);
+
+                demoPA2.RelatedCourseId = demoCourse3.CourseId;
+                await sharedDB.InsertCourseAndUpdateTerm(demoCourse3);
+                await assessmentDB.UpdateAssessmentAndUpdateCourse(demoPA2);
+                Debug.WriteLine("Inserted " + demoPA2.AssessmentName);
+
+                await App.Current.MainPage.DisplayAlert("Sample Data Loaded", "Sample data has been loaded successfully. Please relaunch the application to complete setup.", "OK");
             }
             catch (Exception ex)
             {

@@ -28,6 +28,7 @@ namespace CourseTracker.Maui.ViewModels
                     Assessments.Clear();
                 }
                 var updatedAssessmentsList = await assessmentDB.GetAssessmentsAsync();
+                Debug.WriteLine("Assessment Count: " + Assessments.Count);
                 foreach (var assessment in updatedAssessmentsList)
                 {
                     Assessments.Add(assessment);

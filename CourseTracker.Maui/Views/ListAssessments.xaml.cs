@@ -21,4 +21,10 @@ public partial class ListAssessments : ContentPage
         }
         ((ListView)sender).SelectedItem = null;
     }
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        viewModel.OnAppearing();
+    }
 }

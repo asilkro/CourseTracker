@@ -1,7 +1,7 @@
-﻿using CourseTracker.Maui.Models;
+﻿using System.Diagnostics;
+using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Supplemental;
-using CourseTracker.Maui.ViewModels;
 using Plugin.LocalNotification;
 
 namespace CourseTracker.Maui.Data
@@ -9,7 +9,7 @@ namespace CourseTracker.Maui.Data
     public class CourseDB
     {
         SQLiteAsyncConnection _database;
-        
+
         public CourseDB()
         {
         }
@@ -121,20 +121,25 @@ namespace CourseTracker.Maui.Data
         public async Task SaveCourseAsync(Course course)
         {
             await Init();
-            var result = _database.FindAsync<Course>(course.CourseId);
+            var result = await _database.FindAsync<Course>(course.CourseId);
+
             if (result == null)
             {
                 await _database.InsertAsync(course);
-
+                if (course.NotificationsEnabled)
+                {
+                    await ScheduleCourseNotifications(course);
+                }
             }
             else
             {
                 await _database.UpdateAsync(course);
+                if (course.NotificationsEnabled)
+                {
+                    await ScheduleCourseNotifications(course);
+                }
             }
-            if (course.NotificationsEnabled)
-            {
-                await ScheduleCourseNotifications(course);
-            }
+            Debug.WriteLine(result);
         }
 
         public async Task<int> GetNextId()

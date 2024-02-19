@@ -6,7 +6,7 @@ namespace CourseTracker.Maui.Data
     public class TermsDB
     {
         SQLiteAsyncConnection _database;
-        
+
         public TermsDB()
         {
         }
@@ -57,7 +57,7 @@ namespace CourseTracker.Maui.Data
                 await _database.UpdateAsync(term);
             }
         }
-        
+
         public async Task<int> DeleteTermAsync(Term term)
         {
             await Init();

@@ -1,18 +1,24 @@
-﻿using System.Diagnostics;
+﻿using CommunityToolkit.Maui.Alerts;
+using CommunityToolkit.Maui.Core;
 using CourseTracker.Maui.Models;
-using CourseTracker.Maui.Services;
 using CourseTracker.Maui.ViewModels;
 
 namespace CourseTracker.Maui.Data;
-public class SharedDB : ViewModelBase
+public class SharedDB
 {
     #region Fields
+    public TermsDB termsDB;
+    public CourseDB courseDB;
+    public AssessmentDB assessmentDB;
     //Connection connection;
     #endregion
 
     #region Constructor
     public SharedDB()
     {
+        termsDB = new TermsDB();
+        courseDB = new CourseDB();
+        assessmentDB = new AssessmentDB();
         //connection = new Connection();
     }
     #endregion
@@ -77,7 +83,7 @@ public class SharedDB : ViewModelBase
             try
             {
                 //con.BeginTransaction();
-                
+
                 List<Course> courses = await courseDB.GetCoursesByTermIdAsync(term.TermId);
                 foreach (var course in courses)
                 {
@@ -136,7 +142,7 @@ public class SharedDB : ViewModelBase
         }
         finally
         {
-           // tx.Dispose();
+            // tx.Dispose();
             ShowToast("Term " + term.TermName + " updated successfully.");
             ShowToast("Course " + newCourse.CourseName + " added successfully.");
         }
@@ -172,7 +178,8 @@ public class SharedDB : ViewModelBase
                     //con.Rollback();
                     ShowToast("Error deleting course " + course.CourseName + ": " + e.Message);
                 }
-                finally { 
+                finally
+                {
                     //con.Dispose();
                 }
             }
@@ -189,7 +196,7 @@ public class SharedDB : ViewModelBase
     #endregion
 
     #region Assessment Methods
-    public async Task InsertAssessmentAndUpdateCourse(Assessment newAssessment) 
+    public async Task InsertAssessmentAndUpdateCourse(Assessment newAssessment)
     {
         var course = await courseDB.GetCourseByIdAsync(newAssessment.RelatedCourseId);
         if (course == null)
@@ -206,13 +213,13 @@ public class SharedDB : ViewModelBase
         //var tx = connection.GetConnection();
         try
         {
-          //  using (tx)
+            //  using (tx)
             {
-            //    tx.BeginTransaction();
+                //    tx.BeginTransaction();
                 await assessmentDB.SaveAssessmentAsync(newAssessment);
                 course.CourseAssessmentCount += 1;
                 await courseDB.SaveCourseAsync(course);
-              //  tx.Commit();
+                //  tx.Commit();
             }
         }
         catch (Exception e)
@@ -228,6 +235,19 @@ public class SharedDB : ViewModelBase
             ShowToast("Assessment added successfully.");
         }
         return;
+    }
+
+    private async void ShowToast(string message)
+    {
+        CancellationTokenSource cancellationTokenSource = new();
+
+        string text = message;
+        ToastDuration duration = ToastDuration.Short;
+        double fontSize = 14;
+
+        var toast = Toast.Make(text, duration, fontSize);
+
+        await toast.Show(cancellationTokenSource.Token);
     }
     #endregion
 }

@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using CourseTracker.Maui.Data;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Supplemental;
 using CourseTracker.Maui.Views;
@@ -33,7 +32,7 @@ namespace CourseTracker.Maui.ViewModels
                 return;
             }
 
-            //await sharedDB.SaveTerm(term);
+            await sharedDB.SaveTerm(term);
 
             bool anotherTermWanted = await Application.Current.MainPage.DisplayAlert("Another Term?", "Would you like to add another term?", "Yes", "No");
             if (anotherTermWanted)
@@ -126,7 +125,7 @@ namespace CourseTracker.Maui.ViewModels
         }
 
 
-        private static readonly DateTime dateStart = DateTime.Now.Date;
+        private static readonly new DateTime dateStart = DateTime.Now.Date;
         private DateTime termStart = new DateTime(dateStart.Year, dateStart.Month, 1);
         public DateTime TermStart
         {
@@ -141,7 +140,7 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
-        private static readonly DateTime dateEnd = DateTime.Now.Date;
+        private static readonly new DateTime dateEnd = DateTime.Now.Date;
         private DateTime termEnd = new DateTime(dateEnd.Year, dateEnd.Month, DateTime.DaysInMonth(dateEnd.Year, dateEnd.Month)).AddMonths(6).AddTicks(-1);
         public DateTime TermEnd
         {

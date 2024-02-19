@@ -1,8 +1,3 @@
-using System.Diagnostics;
-using CourseTracker.Maui.Data;
-using CourseTracker.Maui.Models;
-using CourseTracker.Maui.Services;
-using CourseTracker.Maui.Supplemental;
 using CourseTracker.Maui.ViewModels;
 
 namespace CourseTracker.Maui.Views;

@@ -236,7 +236,7 @@ namespace CourseTracker.Maui.Supplemental
             List<Term> termCount = await termsDB.GetTermsAsync();
             List<Course> courseCount = await courseDB.GetCoursesAsync();
             List<Assessment> assessmentCount = await assessmentDB.GetAssessmentsAsync();
-            
+
             var result = (termCount.Count > 0, courseCount.Count > 0, assessmentCount.Count > 0)
             switch
             {

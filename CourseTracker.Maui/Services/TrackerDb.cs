@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using CourseTracker.Maui.Models;
 using static Microsoft.Maui.Storage.FileSystem;
 
 namespace CourseTracker.Maui.Services

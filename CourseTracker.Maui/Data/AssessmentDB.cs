@@ -101,7 +101,7 @@ namespace CourseTracker.Maui.Data
             Debug.WriteLine(errorMessage);
             return errorMessage;
         }
-        
+
 
         public async Task<string> UpdateAssessmentAndUpdateCourse(Assessment assessment)
         {
@@ -230,7 +230,7 @@ namespace CourseTracker.Maui.Data
         public async Task SaveAssessmentAsync(Assessment assessment)
         {
             await Init();
-            var result = _database.FindAsync<Assessment>(assessment.AssessmentId);
+            var result = await _database.FindAsync<Assessment>(assessment.AssessmentId);
             if (result == null)
             {
                 await _database.InsertAsync(assessment);

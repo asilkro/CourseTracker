@@ -21,6 +21,8 @@ namespace CourseTracker.Maui
             builder.Services.AddSingleton<TermsDB>();
             builder.Services.AddSingleton<CourseDB>();
             builder.Services.AddSingleton<AssessmentDB>();
+            builder.Services.AddSingleton<SharedDB>();
+
 
 #if DEBUG
             builder.Logging.AddDebug();
