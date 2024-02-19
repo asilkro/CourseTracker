@@ -9,12 +9,19 @@ namespace CourseTracker.Maui.Data
 {
     public class AssessmentDB
     {
+        #region Fields
         SQLiteAsyncConnection _database;
         CourseDB courseDB;
+        #endregion
+
+        #region Constructors
         public AssessmentDB()
         {
             courseDB = new CourseDB();
         }
+        #endregion
+
+        #region Methods
         public async Task Init()
         {
             if (_database != null)
@@ -28,7 +35,7 @@ namespace CourseTracker.Maui.Data
             return await _database.Table<Assessment>().ToListAsync();
         }
 
-        public async Task<Assessment> GetAssessmentsAsync(int id)
+        public async Task<Assessment> GetAssessmentByIdAsync(int id)
         {
             await Init();
             return await _database.Table<Assessment>()
@@ -74,7 +81,7 @@ namespace CourseTracker.Maui.Data
             var errorMessage = string.Empty;
 
             if (!Validation.IdWasSet(assessment.AssessmentId))
-                errorMessage = "Assessment ID must be greater than 0.";
+                errorMessage = "Assessment ID does not appear to have been set.";
             else if (!Validation.IdWasSet(assessment.RelatedCourseId))
                 errorMessage = "Related course ID must be greater than 0.";
             else if (!Validation.NotNull(assessment.AssessmentName))
@@ -174,7 +181,7 @@ namespace CourseTracker.Maui.Data
                 var title = $"Reminder for {assessment.AssessmentName}";
 
                 // Schedule notifications for start date reminders
-                var startReminders = new[] { 7, 3, 1 }; // These could be different from the end reminders or configurable in-app in a future version.
+                var startReminders = new[] { 3, 1 }; // These could be different from the end reminders or configurable in-app in a future version.
                 foreach (var daysBefore in startReminders)
                 {
                     var notificationId = (assessment.AssessmentId + DateTime.Now.Second);
@@ -184,7 +191,7 @@ namespace CourseTracker.Maui.Data
                 }
 
                 // Schedule notifications for end date reminders
-                var endReminders = new[] { 7, 3, 1 }; // These could be different from the start reminders or configurable in-app in a future version.
+                var endReminders = new[] { 3, 1 }; // These could be different from the start reminders or configurable in-app in a future version.
                 foreach (var daysBefore in endReminders)
                 {
                     var notificationId = (assessment.AssessmentId + DateTime.Now.Millisecond);
@@ -194,12 +201,6 @@ namespace CourseTracker.Maui.Data
                 }
             }
             return;
-        }
-
-        public class AssessmentCreationOut
-        {
-            public Assessment? Assessment { get; set; }
-            public string ErrorMessage { get; set; } = string.Empty;
         }
 
         public async Task<int> GetNextId()
@@ -231,5 +232,15 @@ namespace CourseTracker.Maui.Data
                 await _database.UpdateAsync(assessment);
             }
         }
+        #endregion
+
+        #region Nested Types
+
+        public class AssessmentCreationOut
+        {
+            public Assessment? Assessment { get; set; }
+            public string ErrorMessage { get; set; } = string.Empty;
+        }
+        #endregion
     }
 }

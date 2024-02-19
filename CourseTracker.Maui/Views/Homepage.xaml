@@ -2,12 +2,9 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModel="clr-namespace:CourseTracker.Maui.ViewModels"
+             x:DataType="viewModel:HomepageVM"
              x:Class="CourseTracker.Maui.Views.Homepage">
-
-    <ContentPage.BindingContext>
-        <viewModel:HomepageVM />
-    </ContentPage.BindingContext>
-
+    
     <VerticalStackLayout
         Padding="20, 10"
         Spacing="10">
@@ -15,6 +12,6 @@
         <!-- These are only for debug and assessment purposes, and would be removed in a public-facing build. -->
         <Button x:Name="resetDbButton" Text="**RESET DATABASE - USE CAUTION**" Clicked="resetDbButton_Clicked" FontAttributes="Bold" BackgroundColor="Red" TextColor="AntiqueWhite"/>
         <Button x:Name="loadSampleDataButton" Text="C971 - Load Evaluation Data" Clicked="loadButton_Clicked" FontAttributes="Bold" BackgroundColor="Red" TextColor="AntiqueWhite"/>
-
+    
     </VerticalStackLayout>
 </ContentPage>

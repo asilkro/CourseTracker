@@ -12,7 +12,6 @@ namespace CourseTracker.Maui.Data
         TermsDB termsDB;
         public CourseDB()
         {
-            termsDB = new TermsDB();
         }
 
         public async Task Init()
@@ -86,7 +85,7 @@ namespace CourseTracker.Maui.Data
                 var title = $"Reminder for {course.CourseName}";
 
                 // Schedule notifications for start date reminders
-                var startReminders = new[] { 7, 3, 1 };
+                var startReminders = new[] { 3, 1 };
                 foreach (var daysBefore in startReminders)
                 {
                     var notifyTime = course.CourseStart.AddDays(-daysBefore);
@@ -95,7 +94,7 @@ namespace CourseTracker.Maui.Data
                 }
 
                 // Schedule notifications for end date reminders
-                var endReminders = new[] { 7, 3, 1 };
+                var endReminders = new[] { 3, 1 };
                 foreach (var daysBefore in endReminders)
                 {
                     var notifyTime = course.CourseEnd.AddDays(-daysBefore);
@@ -118,10 +117,15 @@ namespace CourseTracker.Maui.Data
             if (result == null)
             {
                 await _database.InsertAsync(course);
+
             }
             else
             {
                 await _database.UpdateAsync(course);
+            }
+            if (course.NotificationsEnabled)
+            {
+                await ScheduleCourseNotifications(course);
             }
         }
 

@@ -281,7 +281,7 @@ namespace CourseTracker.Maui.ViewModels
             {
                 await Share.Default.RequestAsync(new ShareTextRequest
                 {
-                    Text = notes + Environment.NewLine + "Shared on " + DateTime.Now.ToShortDateString(),
+                    Text = notes + Environment.NewLine + "SharedDB on " + DateTime.Now.ToShortDateString(),
                     Title = "Course Notes for " + source,
                 });
                 ShowToast("Notes shared successfully.");

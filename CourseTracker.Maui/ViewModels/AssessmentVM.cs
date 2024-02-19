@@ -75,7 +75,7 @@ namespace CourseTracker.Maui.ViewModels
             }
 
             Debug.WriteLine("AssessmentId: " + Id);
-            Assessment temp = await assessmentDB.GetAssessmentsAsync(Id);
+            Assessment temp = await assessmentDB.GetAssessmentByIdAsync(Id);
             AssessmentId = temp.AssessmentId;
             AssessmentName = temp.AssessmentName;
             AssessmentType = temp.AssessmentType;

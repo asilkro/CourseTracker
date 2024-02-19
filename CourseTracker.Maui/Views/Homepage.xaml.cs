@@ -1,16 +1,10 @@
 using System.Diagnostics;
-using System.Net.Http.Json;
-using System.Text.Json.Serialization;
-using System.Xml;
-using Android.Views;
 using Android.Widget;
 using CourseTracker.Maui.Data;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Supplemental;
-using GoogleGson.Annotations;
-using Newtonsoft.Json;
-using Org.Json;
+using CourseTracker.Maui.ViewModels;
 
 namespace CourseTracker.Maui.Views;
 
@@ -22,11 +16,14 @@ public partial class Homepage : ContentPage
     public TermsDB termsDB;
     public CourseDB courseDB;
     public AssessmentDB assessmentDB;
+    private readonly HomepageVM viewModel;
     #endregion
 
     public Homepage()
     {
+
         InitializeComponent();
+        BindingContext = viewModel = new HomepageVM();
         termsDB = new TermsDB();
         courseDB = new CourseDB();
         assessmentDB = new AssessmentDB();
@@ -120,14 +117,14 @@ public partial class Homepage : ContentPage
         Course course = new()
         {
             CourseId = await courseDB.GetNextId(),
-            CourseName = "The Zed Pandemic",
+            CourseName = "Relationships in a Digital Era",
             CourseStatus = "Completed",
             CourseStart = new DateTime(2023, 01, 01),
             CourseEnd = new DateTime(2023, 02, 28),
-            InstructorEmail = "rickgrimes@uwalkers.edu",
-            InstructorPhone = "555-987-6543",
-            InstructorName = "Rick Grimes",
-            CourseNotes = "This is a course that was completed and covered the fictional outbreak of a zombie disease",
+            InstructorEmail = "zenobia@subbrat.edu",
+            InstructorPhone = "554-207-6943",
+            InstructorName = "Marielle CC Zenobia",
+            CourseNotes = "This course covered the change in relationships amongst Gen Z and millenials in the era of dating apps.",
             NotificationsEnabled = false,
             TermId = 2,
             CourseAssessmentCount = 1
@@ -190,7 +187,7 @@ public partial class Homepage : ContentPage
         Assessment demoOA2 = new()
         {
             AssessmentId = await assessmentDB.GetNextId(),
-            AssessmentName = "Zed Pandemic OA",
+            AssessmentName = "Digital Relationships OA",
             AssessmentType = "Objective",
             AssessmentStartDate = new DateTime(2023, 01, 01),
             AssessmentEndDate = new DateTime(2023, 02, 28),
