@@ -93,7 +93,7 @@ class Connection : IAsyncSqLite
 
     public class RefreshService
     {
-        public Action onRefreshActionRequested;
+        public Action? onRefreshActionRequested;
         public void CallRequestRefresh()
         {
             onRefreshActionRequested?.Invoke();

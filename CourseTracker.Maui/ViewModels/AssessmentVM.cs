@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
+using CourseTracker.Maui.Data;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Views;
@@ -19,7 +20,7 @@ namespace CourseTracker.Maui.ViewModels
             OnAssessmentCancelButtonClick = new Command(async () => await CancelButtonClicked());
         }
 
-        public ObservableCollection<Course> Courses { get; } = new ObservableCollection<Course>();
+        public ObservableCollection<Course> Courses { get; } = [];
         private async Task LoadCourses()
         {
             try
@@ -249,7 +250,7 @@ namespace CourseTracker.Maui.ViewModels
                 RelatedCourseId = SelectedCourse.CourseId,
                 NotificationsEnabled = NotificationsEnabled
             };
-            string message = assessmentDB.IsValidAssessment(assessment);
+            string message = AssessmentDB.IsValidAssessment(assessment);
             if (!string.IsNullOrEmpty(message))
             {
                 ShowToast(message);

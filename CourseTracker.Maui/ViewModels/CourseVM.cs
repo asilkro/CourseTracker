@@ -64,7 +64,7 @@ namespace CourseTracker.Maui.ViewModels
             set => SetProperty(ref term, value);
         }
 
-        public ObservableCollection<Term> Terms { get; } = new ObservableCollection<Term>();
+        public ObservableCollection<Term> Terms { get; } = [];
 
         public Term SelectedTerm
         {
@@ -231,7 +231,7 @@ namespace CourseTracker.Maui.ViewModels
 
         public async Task SubmitButtonClicked()
         {
-            Course course = new Course()
+            Course course = new()
             {
                 CourseId = CourseId,
                 CourseName = CourseName,
@@ -281,7 +281,7 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
-        public async Task ShareText(string notes, string source)
+        public static async Task ShareText(string notes, string source)
         {
             try
             {
@@ -294,14 +294,12 @@ namespace CourseTracker.Maui.ViewModels
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Error sharing notes: " + ex.Message);
                 ShowToast("Error sharing notes. " + ex.Message);
             }
         }
 
-        public string IsValidCourse(Course course)
+        public static string IsValidCourse(Course course)
         {
-            Debug.WriteLine(course.TermId + " is your TermId");
             var errorMessage = string.Empty;
             if (!Validation.NotNull(course.CourseName))
                 errorMessage = "Course name cannot be empty or undefined.";

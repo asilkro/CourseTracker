@@ -13,7 +13,7 @@ public partial class ListCourses : ContentPage
         BindingContext = viewModel = new ListCoursesVM();
     }
 
-    public void courseListView_ItemTapped(object sender, ItemTappedEventArgs e)
+    public void CourseListView_ItemTapped(object sender, ItemTappedEventArgs e)
     {
         if (e.Item is Course selectedCourse)
         {

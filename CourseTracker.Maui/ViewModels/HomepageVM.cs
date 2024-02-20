@@ -12,14 +12,14 @@ namespace CourseTracker.Maui.ViewModels
         public Command OnResetDBButtonClicked { get; set; }
         public HomepageVM()
         {
-            OnLoadButtonClicked = new Command(async () => await loadButton_Clicked());
-            OnResetDBButtonClicked = new Command(async () => await resetDbButton_Clicked());
+            OnLoadButtonClicked = new Command(async () => await LoadButton_Clicked());
+            OnResetDBButtonClicked = new Command(async () => await ResetDbButton_Clicked());
         }
-        private async Task StartDB()
+        private static async Task StartDB()
         {
-            ShowToast("Initializing application");
+            ShowToast("Application ready.");
         }
-        private async Task resetDbButton_Clicked()
+        private static async Task ResetDbButton_Clicked()
         {
             bool confirmed = await App.Current.MainPage.DisplayAlert("Reset Database", "This will delete all data in the database. Are you sure you want to continue?", "Yes", "No");
             if (confirmed)
@@ -27,7 +27,7 @@ namespace CourseTracker.Maui.ViewModels
                 await TrackerDb.ResetDatabaseFileAsync();
             }
         }
-        private async Task loadButton_Clicked()
+        private async Task LoadButton_Clicked()
         {
             Debug.WriteLine("Starting to load Data");
             await LoadSampleDataAsync();
@@ -114,7 +114,7 @@ namespace CourseTracker.Maui.ViewModels
         {
             Term demoTerm = new()
             {
-                TermId = 1,//await termsDB.GetNextId(),
+                TermId = await termsDB.GetNextId(),
                 TermName = "Demo Term",
                 TermStart = new DateTime(2024, 01, 01),
                 TermEnd = new DateTime(2024, 06, 30),
@@ -128,10 +128,10 @@ namespace CourseTracker.Maui.ViewModels
             Term demoTerm2 = new()
             {
                 TermId = await termsDB.GetNextId(),
-                TermName = "Term One 2023",
+                TermName = "Term One - 2023",
                 TermStart = new DateTime(2023, 01, 01),
                 TermEnd = new DateTime(2023, 06, 30),
-                CourseCount = 2
+                CourseCount = 0
             };
             return demoTerm2;
         }

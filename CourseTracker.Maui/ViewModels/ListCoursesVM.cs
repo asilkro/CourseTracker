@@ -11,7 +11,7 @@ namespace CourseTracker.Maui.ViewModels
     {
         private Connection _database;
 
-        public ObservableCollection<Course> Courses { get; private set; } = new ObservableCollection<Course>();
+        public ObservableCollection<Course> Courses { get; private set; } = [];
 
         public ListCoursesVM()
         {
@@ -22,7 +22,7 @@ namespace CourseTracker.Maui.ViewModels
         {
             try
             {
-                _database = _database ?? new Connection();
+                _database ??= new Connection();
                 _database.GetAsyncConnection();
                 var updatedCoursesList = await courseDB.GetCoursesAsync();
                 Courses.Clear();
@@ -38,7 +38,7 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
-        public void courseListView_ItemTapped(object sender, ItemTappedEventArgs e)
+        public void CourseListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             if (e.Item is Course selectedCourse)
             {

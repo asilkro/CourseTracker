@@ -49,27 +49,6 @@ namespace CourseTracker.Maui.Data
             return await _database.DeleteAsync(course);
         }
 
-
-        /*public async Task<string> UpdateCourseAndUpdateTermCount(Course course)
-        { 
-            var term = await _database.FindAsync<Term>(course.TermId);
-            if (term == null)
-            {
-                return "Associated term not found.";
-            }
-
-            if (term.CourseCount >= 6)
-            {
-                return "Terms may NOT consist of more than six courses.";
-            }
-
-            term.CourseCount += 1;
-            await .SaveTermAsync(term);
-            await SaveCourseAsync(course);
-
-            return "Course Updated successfully.";
-        }*/
-
         public async Task RemoveCourseAsync(Course course)
         {
             if (course == null)
@@ -85,7 +64,7 @@ namespace CourseTracker.Maui.Data
             }
         }
 
-        public async Task ScheduleCourseNotifications(Course course)
+        public static async Task ScheduleCourseNotifications(Course course)
         {
             if (course.NotificationsEnabled)
             {

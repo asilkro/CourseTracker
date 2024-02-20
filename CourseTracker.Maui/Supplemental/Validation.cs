@@ -6,7 +6,7 @@ using Plugin.LocalNotification;
 
 namespace CourseTracker.Maui.Supplemental
 {
-    internal class Validation
+    internal partial class Validation
     {
         static readonly DateTime _minDate = DateTime.Parse("01/01/2020");
         static readonly DateTime _maxDate = DateTime.Parse("12/31/4020");
@@ -73,7 +73,7 @@ namespace CourseTracker.Maui.Supplemental
 
         public static bool ValidPhoneNumber(string phoneNumber)
         {
-            Regex phoneFormat = new Regex(@"^[\d-]+$");
+            Regex phoneFormat = MyRegex();
             return phoneFormat.IsMatch(phoneNumber);
         }
 
@@ -138,32 +138,23 @@ namespace CourseTracker.Maui.Supplemental
 
         public static async Task<bool> IsUniqueTermName(string termName, Connection _connection)
         {
-            if (_connection == null)
-            {
-                _connection = new Connection();
-            }
+            _connection ??= new Connection();
             var connection = _connection.GetAsyncConnection();
             var existingTerm = await connection.Table<Term>().Where(t => t.TermName == termName).FirstOrDefaultAsync();
             return existingTerm == null;
         }
 
-        public static async Task<bool> IsUniqueCourseNameInTerm(string courseName, int termId, Connection _connection)
+        public static async Task<bool> IsUniqueCourseNameInTerm(string courseName, Connection _connection)
         {
-            if (_connection == null)
-            {
-                _connection = new Connection();
-            }
+            _connection ??= new Connection();
             var connection = _connection.GetAsyncConnection();
-            var existingCourse = await connection.Table<Course>().Where(c => c.CourseName == courseName && c.TermId == termId).FirstOrDefaultAsync();
+            var existingCourse = await connection.Table<Course>().Where(c => c.CourseName == courseName).FirstOrDefaultAsync();
             return existingCourse == null;
         }
 
         public static async Task<bool> IsUniqueAssessmentName(string assessmentName, int courseId, Connection _connection)
         {
-            if (_connection == null)
-            {
-                _connection = new Connection();
-            }
+            _connection ??= new Connection();
             var connection = _connection.GetAsyncConnection();
             var existingAssessment = await connection.Table<Assessment>().Where(a => a.AssessmentName == assessmentName && a.RelatedCourseId == courseId).FirstOrDefaultAsync();
             return existingAssessment == null;
@@ -248,6 +239,8 @@ namespace CourseTracker.Maui.Supplemental
             return result;
         }
 
+        [GeneratedRegex(@"^[\d-]+$")]
+        private static partial Regex MyRegex();
     }
 
 }

@@ -12,7 +12,7 @@ Padding="20,10" Spacing="5">
 
         <!-- Display List of Terms using ListView -->
         <ListView x:Name="termListView" CachingStrategy="RecycleElement" ItemsSource="{Binding Terms}" 
-              ItemTapped="termListView_ItemTapped" IsRefreshing="{Binding IsRefreshing}" SelectionMode="Single">
+              ItemTapped="TermListView_ItemTapped" IsRefreshing="{Binding IsRefreshing}" SelectionMode="Single">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>

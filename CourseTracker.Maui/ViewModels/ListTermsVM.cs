@@ -18,10 +18,7 @@ namespace CourseTracker.Maui.ViewModels
             IsRefreshing = true;
             try
             {
-                if (Terms == null)
-                {
-                    Terms = new List<Term>();
-                }
+                Terms ??= [];
                 if (Terms.Count > 0)
                 {
                     Terms = [];

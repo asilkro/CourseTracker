@@ -3,6 +3,7 @@ using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.ViewModels;
+using static Android.Graphics.ImageDecoder;
 
 namespace CourseTracker.Maui.Data;
 public class SharedDB
@@ -11,7 +12,7 @@ public class SharedDB
     public TermsDB termsDB;
     public CourseDB courseDB;
     public AssessmentDB assessmentDB;
-    //Connection connection;
+    
     #endregion
 
     #region Constructor
@@ -20,7 +21,7 @@ public class SharedDB
         termsDB = new TermsDB();
         courseDB = new CourseDB();
         assessmentDB = new AssessmentDB();
-        //connection = new Connection();
+    
     }
     #endregion
 
@@ -28,7 +29,7 @@ public class SharedDB
 
     //This could probably be moved to another
     //class but its here for convenience right now.
-    public async Task<bool> ConfirmedAction(string messageRequiringConfirmation)
+    public static async Task<bool> ConfirmedAction(string messageRequiringConfirmation)
     {
         bool result = await Application.Current.MainPage.DisplayAlert("Confirm Action", messageRequiringConfirmation, "Yes", "No");
         return result;
@@ -80,28 +81,23 @@ public class SharedDB
         if (!confirmed) { return; }
         else
         {
-            //var con = connection.GetConnection();
             try
             {
-                //con.BeginTransaction();
-
                 List<Course> courses = await courseDB.GetCoursesByTermIdAsync(term.TermId);
                 foreach (var course in courses)
                 {
                     await DeleteCourseAndRelatedEntities(course, showConfirmation: false);
                 }
                 await termsDB.DeleteTermAsync(term);
-                //con.Commit();
-            }
+             }
             catch (Exception e)
             {
                 ShowToast("Error deleting term " + term.TermName + ": " + e.Message);
-                //con.Rollback();
                 throw;
             }
             finally
             {
-                //con.Dispose();
+                ShowToast("Term " + term.TermName + " deleted successfully.");
             }
             return;
         }
@@ -123,27 +119,22 @@ public class SharedDB
             ShowToast("A term cannot have more than 6 courses.");
             return;
         }
-        //var tx = connection.GetConnection();
         try
         {
-            //using (tx)
             {
-                //tx.BeginTransaction();
                 await courseDB.SaveCourseAsync(newCourse);
                 term.CourseCount += 1;
                 await termsDB.SaveTermAsync(term);
-                //tx.Commit();
             }
         }
         catch (Exception e)
         {
             ShowToast("Error adding course: " + e.Message);
-            //tx.Rollback();
             return;
         }
         finally
         {
-            // tx.Dispose();
+
             ShowToast("Term " + term.TermName + " updated successfully.");
             ShowToast("Course " + newCourse.CourseName + " added successfully.");
         }
@@ -161,10 +152,8 @@ public class SharedDB
         {
             try
             {
-                //var con = connection.GetConnection();
                 try
                 {
-                    //con.BeginTransaction();
                     var assessments = await assessmentDB.GetAssessmentsByCourseIdAsync(course.CourseId);
                     foreach (var assessment in assessments)
                     {
@@ -172,16 +161,10 @@ public class SharedDB
 
                     }
                     await courseDB.DeleteCourseAsync(course);
-                    //con.Commit();
                 }
                 catch (Exception e)
                 {
-                    //con.Rollback();
                     ShowToast("Error deleting course " + course.CourseName + ": " + e.Message);
-                }
-                finally
-                {
-                    //con.Dispose();
                 }
             }
             finally
@@ -215,10 +198,8 @@ public class SharedDB
         {
             {
                 await assessmentDB.SaveAssessmentAsync(newAssessment);
-                
-                course.CourseAssessmentCount += 1;
-                
-                await courseDB.SaveCourseAsync(course);
+
+                await UpdateCourseAssessmentCount(course);
             }
         }
         catch (Exception e)
@@ -234,7 +215,7 @@ public class SharedDB
         return;
     }
 
-    private async void ShowToast(string message)
+    private static async void ShowToast(string message)
     {
         CancellationTokenSource cancellationTokenSource = new();
 
@@ -245,6 +226,65 @@ public class SharedDB
         var toast = Toast.Make(text, duration, fontSize);
 
         await toast.Show(cancellationTokenSource.Token);
+    }
+
+    public async Task UpdateTermCourseCount(Term term)
+    {
+        try
+        {
+            var courses = await courseDB.GetCoursesByTermIdAsync(term.TermId);
+            if (courses == null)
+            {
+                ShowToast("No courses found for term: " + term.TermName);
+                return;
+            }
+            if (courses.Count > 6)
+            {
+                ShowToast("Term: " + term.TermName + " has more than 6 courses.");
+                return;
+            }
+            if (courses.Count != term.CourseCount)
+            {
+                term.CourseCount = courses.Count;
+                ShowToast("Term: " + term.TermName + " course count updated successfully.");
+            }
+        }
+        catch (Exception ex)
+        {
+            ShowToast("There was an error updating the course count for Term: " + term.TermName + " - " + ex);
+            throw;
+        }
+        
+        return;    
+    }
+
+    public async Task UpdateCourseAssessmentCount(Course course)
+    {
+        try
+        {
+            var assessments = await assessmentDB.GetAssessmentsByCourseIdAsync(course.CourseId);
+            if (assessments == null)
+            {
+                ShowToast("No assessments found for course " + course.CourseName);
+                return;
+            }
+            if (assessments.Count > 2)
+            {
+                ShowToast("Course " + course.CourseName + " has more than 2 assessments.");
+                return;
+            }
+            if (assessments.Count != course.CourseAssessmentCount)
+            {
+                course.CourseAssessmentCount = assessments.Count;
+                ShowToast("Course " + course.CourseName + " assessment count updated successfully.");
+                return;
+            }
+        }
+        catch (Exception ex)
+        {
+            ShowToast("There was an error updating the assessment count for Course: " + course.CourseName + " - " + ex);
+            throw;
+        }
     }
     #endregion
 }

@@ -22,7 +22,7 @@ namespace CourseTracker.Maui.ViewModels
             assessmentDB = new AssessmentDB();
             sharedDB = new SharedDB();
         }
-        protected bool SetProperty<T>(ref T backingStore, T value, [CallerMemberName] string propertyName = "", Action onChanged = null)
+        protected bool SetProperty<T>(ref T backingStore, T value, [CallerMemberName] string propertyName = "", Action? onChanged = null)
         {
             if (EqualityComparer<T>.Default.Equals(backingStore, value))
                 return false;
@@ -67,7 +67,7 @@ namespace CourseTracker.Maui.ViewModels
         }
 
 
-        public async void ShowToast(string message)
+        public static async void ShowToast(string message)
         {
             CancellationTokenSource cancellationTokenSource = new();
 
@@ -80,7 +80,7 @@ namespace CourseTracker.Maui.ViewModels
             await toast.Show(cancellationTokenSource.Token);
         }
 
-        public async Task CancelButtonClicked() //Used by all cancel buttons
+        public static async Task CancelButtonClicked() //Used by all cancel buttons
         {
             await Shell.Current.GoToAsync("//homepage");
         }

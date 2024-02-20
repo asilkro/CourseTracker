@@ -7,7 +7,7 @@ namespace CourseTracker.Maui.ViewModels
 {
     public class ListAssessmentsVM : ViewModelBase
     {
-        public ObservableCollection<Assessment> Assessments { get; private set; } = new ObservableCollection<Assessment>();
+        public ObservableCollection<Assessment> Assessments { get; private set; } = [];
 
         public ListAssessmentsVM()
         {
@@ -19,16 +19,12 @@ namespace CourseTracker.Maui.ViewModels
             IsRefreshing = true;
             try
             {
-                if (Assessments == null)
-                {
-                    Assessments = new ObservableCollection<Assessment>();
-                }
+                Assessments ??= [];
                 if (Assessments.Count > 0)
                 {
                     Assessments.Clear();
                 }
                 var updatedAssessmentsList = await assessmentDB.GetAssessmentsAsync();
-                Debug.WriteLine("Assessment Count: " + Assessments.Count);
                 foreach (var assessment in updatedAssessmentsList)
                 {
                     Assessments.Add(assessment);
@@ -198,7 +194,7 @@ namespace CourseTracker.Maui.ViewModels
         ((ListView)sender).SelectedItem = null;
         }
 
-        public void assessmentListView_ItemTapped(object sender, ItemTappedEventArgs e)
+        public void AssessmentListView_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             if (e.Item is Assessment selectedAssessment)
             {

@@ -11,7 +11,7 @@ namespace CourseTracker.Maui.Data
     {
         #region Fields
         SQLiteAsyncConnection _database;
-        CourseDB courseDB;
+        readonly CourseDB courseDB;
         #endregion
 
         #region Constructors
@@ -56,34 +56,7 @@ namespace CourseTracker.Maui.Data
             return await _database.DeleteAsync(assessment);
         }
 
-        public async Task<AssessmentCreationOut>? CreateAssessmentAsync(int assessmentId, string assessmentName,
-            string assessmentType, DateTime assessmentStartDate, DateTime assessmentEndDate,
-            int relatedCourseId, bool notificationsEnabled)
-        {
-            string errorMessage = string.Empty;
-
-            Assessment assessment = new()
-            {
-                AssessmentId = assessmentId,
-                AssessmentName = assessmentName,
-                AssessmentType = assessmentType,
-                AssessmentStartDate = assessmentStartDate,
-                AssessmentEndDate = assessmentEndDate,
-                RelatedCourseId = relatedCourseId,
-                NotificationsEnabled = notificationsEnabled
-            };
-
-            await UpdateAssessmentAndUpdateCourse(assessment);
-
-            if (assessment.NotificationsEnabled)
-            {
-                await ScheduleAssessmentNotifications(assessment);
-            }
-
-            return new AssessmentCreationOut { Assessment = assessment };
-        }
-
-        public string IsValidAssessment(Assessment assessment)
+        public static string IsValidAssessment(Assessment assessment)
         {
             var errorMessage = string.Empty;
 
@@ -98,10 +71,8 @@ namespace CourseTracker.Maui.Data
             else if (!Validation.DatesAreValid(assessment.AssessmentStartDate, assessment.AssessmentEndDate))
                 errorMessage = "Assessment start and end dates must be valid.";
 
-            Debug.WriteLine(errorMessage);
             return errorMessage;
         }
-
 
         public async Task<string> UpdateAssessmentAndUpdateCourse(Assessment assessment)
         {
@@ -120,8 +91,9 @@ namespace CourseTracker.Maui.Data
 
                 course.CourseAssessmentCount += 1;
                 Debug.WriteLine(JsonConvert.SerializeObject(course, Formatting.Indented));
-                await courseDB.SaveCourseAsync(course);
                 await SaveAssessmentAsync(assessment);
+                await courseDB.SaveCourseAsync(course);
+                
 
                 return "Assessment added successfully.";
             }
@@ -156,31 +128,7 @@ namespace CourseTracker.Maui.Data
             return "Assessment deleted successfully.";
         }
 
-        public async Task<string> LowerCourseAssessmentCount(Course course) // Used when an assessment is deleted or moved to another course
-        {
-            if (course == null)
-            {
-                return "Course not found.";
-            }
-
-            if (course.CourseAssessmentCount > 0)
-            {
-                try
-                {
-                    course.CourseAssessmentCount -= 1;
-                    await courseDB.SaveCourseAsync(course);
-                    return "Course " + course.CourseName + " assessment count lowered successfully.";
-                }
-                catch (Exception e)
-                {
-                    return "Error updating assessment count: " + e.Message;
-                }
-            }
-            else return "Course assessment count is already 0.";
-        }
-
-
-        public async Task ScheduleAssessmentNotifications(Assessment assessment)
+        public static async Task ScheduleAssessmentNotifications(Assessment assessment)
         {
             // Assumptions: Using full days 
             if (assessment.NotificationsEnabled)
@@ -234,20 +182,19 @@ namespace CourseTracker.Maui.Data
             if (result == null)
             {
                 await _database.InsertAsync(assessment);
+                if (assessment.NotificationsEnabled)
+                {
+                    await ScheduleAssessmentNotifications(assessment);
+                }
             }
             else
             {
                 await _database.UpdateAsync(assessment);
+                if (assessment.NotificationsEnabled)
+                {
+                    await ScheduleAssessmentNotifications(assessment);
+                }
             }
-        }
-        #endregion
-
-        #region Nested Types
-
-        public class AssessmentCreationOut
-        {
-            public Assessment? Assessment { get; set; }
-            public string ErrorMessage { get; set; } = string.Empty;
         }
         #endregion
     }
