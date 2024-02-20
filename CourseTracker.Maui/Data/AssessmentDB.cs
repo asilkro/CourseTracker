@@ -1,8 +1,6 @@
-﻿using System.Diagnostics;
-using CourseTracker.Maui.Models;
+﻿using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Supplemental;
-using Newtonsoft.Json;
 using Plugin.LocalNotification;
 
 namespace CourseTracker.Maui.Data

@@ -79,7 +79,7 @@ namespace CourseTracker.Maui.Supplemental
 
         public static bool ValidCourseAssessmentCount(int count)
         {
-            if (count == 1 || count == 2)
+            if (2 >= count && count >= 0)
             {
                 return true;
             }
@@ -119,9 +119,6 @@ namespace CourseTracker.Maui.Supplemental
                 "Objective" => true,
                 "Performance" => true,
                 _ => false
-                // This should work to cover cases where a course only has one assessment.
-                // In those cases, the course will only have one assessment related
-                // to it, and there's no need to specify the type for that.
             };
 
             return result;
@@ -129,7 +126,7 @@ namespace CourseTracker.Maui.Supplemental
 
         public static bool CourseCountIsValid(int courseCount)
         {
-            if (courseCount <= 0 || courseCount > 6)
+            if (courseCount < 0 || courseCount > 6)
             {
                 return false;
             }
@@ -144,7 +141,7 @@ namespace CourseTracker.Maui.Supplemental
             return existingTerm == null;
         }
 
-        public static async Task<bool> IsUniqueCourseNameInTerm(string courseName, Connection _connection)
+        public static async Task<bool> IsUniqueCourseName(string courseName, Connection _connection)
         {
             _connection ??= new Connection();
             var connection = _connection.GetAsyncConnection();
@@ -160,35 +157,6 @@ namespace CourseTracker.Maui.Supplemental
             return existingAssessment == null;
         }
 
-        public static bool IsValidNotificationType(NotificationCategoryType type)
-        {
-            switch (type)
-            {
-                //Break on expected cases
-                case NotificationCategoryType.None:
-                    break;
-                case NotificationCategoryType.Alarm:
-                    break;
-                case NotificationCategoryType.Reminder:
-                    break;
-                case NotificationCategoryType.Event:
-                    break;
-                case NotificationCategoryType.Error:
-                    break;
-                case NotificationCategoryType.Progress:
-                    break;
-                case NotificationCategoryType.Promo:
-                    break;
-                case NotificationCategoryType.Recommendation:
-                    break;
-                case NotificationCategoryType.Service:
-                    break;
-                default:
-                    return false;
-            }
-
-            return true;
-        }
 
         public async static Task<bool> IsValidNotification(NotificationRequest notification) //Non exhaustive checks
         {
@@ -202,10 +170,6 @@ namespace CourseTracker.Maui.Supplemental
                 result = false;
             }
             else if (notification.Schedule == null)
-            {
-                result = false;
-            }
-            else if (!IsValidNotificationType(notification.CategoryType))
             {
                 result = false;
             }

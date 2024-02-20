@@ -201,7 +201,7 @@ namespace CourseTracker.Maui.ViewModels
             else if (!Validation.TermsAreValid(termStart, termEnd))
                 errorMessage = "Term start and end dates must be the first and last days of the month, respectively.";
             else if (!Validation.CourseCountIsValid(courseCount))
-                errorMessage = "Terms must have between 1 and 6 courses.";
+                errorMessage = "Terms should have between 1 and 6 courses.";
             else if (!Validation.DatesAreValid(termStart, termEnd))
                 errorMessage = "Term start and end dates are not valid.";
             else if (Validation.IsUniqueTermName(termName, new()).Result == false)

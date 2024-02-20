@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Diagnostics;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Supplemental;
 using CourseTracker.Maui.Views;
@@ -179,7 +178,6 @@ namespace CourseTracker.Maui.ViewModels
 
         #endregion
 
-
         private async Task LoadTerms()
         {
             try
@@ -187,20 +185,20 @@ namespace CourseTracker.Maui.ViewModels
                 var terms = await termsDB.GetTermsAsync();
                 Course course = await courseDB.GetCourseByIdAsync(EditCourseId);
                 Terms.Clear();
-                Term t = new();
+                Term term1 = new();
                 foreach (var term in terms)
                 {
                     if (course.TermId == term.TermId)
                     {
-                        t = term;
+                        term1 = term;
                     }
                     Terms.Add(term);
                 }
-                SelectedTerm = t;
+                SelectedTerm = term1;
             }
             catch (Exception ex)
             {
-                ShowToast(ex.Message);
+                ShowToast("Issue loading terms: " + ex.Message);
             }
         }
 
@@ -213,7 +211,9 @@ namespace CourseTracker.Maui.ViewModels
                 CourseEnd = dateEnd;
                 return;
             }
-            Debug.WriteLine("CourseId: " + Id);
+            Course? courseCounter = await courseDB.GetCourseByIdAsync(Id);
+            int count = 0;
+            
             Course temp = await courseDB.GetCourseByIdAsync(Id);
             CourseName = temp.CourseName;
             InstructorName = temp.InstructorName;
@@ -226,7 +226,15 @@ namespace CourseTracker.Maui.ViewModels
             NotificationsEnabled = temp.NotificationsEnabled;
             CourseId = temp.CourseId;
             TermId = temp.TermId;
-            CourseAssessmentCount = temp.CourseAssessmentCount;
+            if (courseCounter != null)
+            {
+                count =  courseCounter.CourseAssessmentCount;
+                CourseAssessmentCount = count;
+            }
+            else
+            {
+                CourseAssessmentCount = count;
+            }
         }
 
         public async Task SubmitButtonClicked()
@@ -303,6 +311,8 @@ namespace CourseTracker.Maui.ViewModels
             var errorMessage = string.Empty;
             if (!Validation.NotNull(course.CourseName))
                 errorMessage = "Course name cannot be empty or undefined.";
+            else if (!Validation.IsUniqueCourseName(course.CourseName, new()).Result == false)
+                errorMessage = "Course name must be unique.";
             else if (!Validation.NotNull(course.CourseStatus))
                 errorMessage = "Course status cannot be empty or undefined.";
             else if (!Validation.CourseStatusIsValid(course.CourseStatus))
@@ -324,37 +334,11 @@ namespace CourseTracker.Maui.ViewModels
             else if (!Validation.ValidPhoneNumber(course.InstructorPhone))
                 errorMessage = "Instructor phone is not valid. Use xxx-xxx-xxxx format.";
             else if (!Validation.ValidCourseAssessmentCount(course.CourseAssessmentCount))
-                errorMessage = "Course can only have 1 or 2 assessments.";
+                errorMessage = "Course can only have 1 or 2 assessments."; //
 
             if (!string.IsNullOrEmpty(errorMessage))
                 ShowToast(errorMessage);
             return errorMessage;
-        }
-
-        public async Task<string> InsertCourseAndUpdateTermCount(Course course)
-        {
-            Term term = await termsDB.GetTermByIdAsync(course.TermId);
-            if (term == null)
-            {
-                return "Associated term not found.";
-            }
-
-            if (term.CourseCount >= 6)
-            {
-                return "Terms may NOT consist of more than six courses.";
-            }
-            try
-            {
-                await termsDB.SaveTermAsync(term);
-                term.CourseCount += 1;
-                await courseDB.SaveCourseAsync(course);
-            }
-            catch
-            {
-                return "There was an error.";
-            }
-
-            return "Course added successfully.";
         }
 
         public async void OnAppearing()

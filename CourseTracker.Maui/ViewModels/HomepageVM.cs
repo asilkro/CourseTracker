@@ -2,7 +2,6 @@
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Supplemental;
-using Newtonsoft.Json;
 
 namespace CourseTracker.Maui.ViewModels
 {
