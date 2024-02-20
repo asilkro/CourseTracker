@@ -29,10 +29,9 @@ namespace CourseTracker.Maui.ViewModels
         }
         private async Task LoadButton_Clicked()
         {
-            Debug.WriteLine("Starting to load Data");
             await LoadSampleDataAsync();
         }
-        public async void OnAppearing()
+        public static async void OnAppearing()
         {
             await StartDB();
         }
@@ -44,9 +43,9 @@ namespace CourseTracker.Maui.ViewModels
             Debug.WriteLine("Existing check: " + existing);
             if (existing)
             {
-                //await DisplayAlert("Table Already Has Data", "Table data has already been loaded. " +
-                //    "You should reset the database to avoid errors with sample data creation.", "OK");
-                //return;
+                await App.Current.MainPage.DisplayAlert("Table Already Has Data", "Table data has already been loaded. " +
+                    "You should reset the database to avoid errors with sample data creation.", "OK");
+                return;
             }
 
             try
@@ -258,8 +257,6 @@ namespace CourseTracker.Maui.ViewModels
             return demoPA2;
         }
 
-
         #endregion
     }
-
 }

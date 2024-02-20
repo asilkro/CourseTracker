@@ -90,13 +90,4 @@ class Connection : IAsyncSqLite
             return false;
         }
     }
-
-    public class RefreshService
-    {
-        public Action? onRefreshActionRequested;
-        public void CallRequestRefresh()
-        {
-            onRefreshActionRequested?.Invoke();
-        }
-    }
 }

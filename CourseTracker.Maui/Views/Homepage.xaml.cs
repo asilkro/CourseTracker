@@ -4,8 +4,7 @@ namespace CourseTracker.Maui.Views;
 
 public partial class Homepage : ContentPage
 {
-    HomepageVM viewModel;
-
+    readonly HomepageVM viewModel;
     public Homepage()
     {
         InitializeComponent();
@@ -14,7 +13,7 @@ public partial class Homepage : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        viewModel.OnAppearing();
+        HomepageVM.OnAppearing();
     }
 
 }
