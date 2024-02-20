@@ -96,7 +96,6 @@ namespace CourseTracker.Maui.ViewModels
             }
             else
             {
-                Debug.WriteLine("TermId: " + Id);
                 Term temp = await termsDB.GetTermByIdAsync(Id);
                 if (temp == null)
                 {

@@ -32,7 +32,7 @@ namespace CourseTracker.Maui.ViewModels
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Issue loading assessments: " + ex.Message);
+                ShowToast("Issue loading assessments: " + ex.Message);
                 return;
             }
             finally
@@ -163,25 +163,14 @@ namespace CourseTracker.Maui.ViewModels
                     await Shell.Current.GoToAsync($"{nameof(AssessmentPage)}?{nameof(AssessmentVM.EditAssessmentId)}={assessment.AssessmentId}");
                     break;
                 case "Delete Assessment":
+                    var course = await courseDB.GetCourseByIdAsync(assessment.RelatedCourseId);
                     await assessmentDB.DeleteAssessmentAsync(assessment);
+                    await sharedDB.UpdateCourseAssessmentCount(course);
+                    await LoadAssessments();
+                    await Shell.Current.GoToAsync("..");
                     break;
                 default:
                     break;
-            }
-        }
-
-
-        private async void RemoveAssessmentAsync(Assessment assessment)
-        {
-            var result = await App.Current.MainPage.DisplayAlert("Delete Assessment", $"Are you sure you want to delete {assessment.AssessmentName}?", "Yes", "No");
-            if (result)
-            {
-                int confirm = await assessmentDB.DeleteAssessmentAsync(assessment);
-                //TODO: Update course assessment count
-                if (confirm == 1)
-                {
-                    ShowToast("Assessment Deleted Successfully");
-                }
             }
         }
 

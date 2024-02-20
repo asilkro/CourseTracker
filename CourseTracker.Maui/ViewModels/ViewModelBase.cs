@@ -4,7 +4,6 @@ using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using CourseTracker.Maui.Data;
 
-
 namespace CourseTracker.Maui.ViewModels
 {
     public class ViewModelBase : INotifyPropertyChanged
@@ -65,7 +64,6 @@ namespace CourseTracker.Maui.ViewModels
                 }
             }
         }
-
 
         public static async void ShowToast(string message)
         {

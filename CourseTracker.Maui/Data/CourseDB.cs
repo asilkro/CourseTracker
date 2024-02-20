@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Security.Cryptography;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Supplemental;
@@ -64,11 +65,12 @@ namespace CourseTracker.Maui.Data
             }
         }
 
+
         public static async Task ScheduleCourseNotifications(Course course)
         {
             if (course.NotificationsEnabled)
             {
-                var notificationId = course.CourseId; // Ideally, generate a unique ID for each notification.
+                var notificationId = course.CourseId + RandomNumberGenerator.GetInt32(999); // Ideally, generate a unique ID for each notification.
                 var title = $"Reminder for {course.CourseName}";
 
                 // Schedule notifications for start date reminders

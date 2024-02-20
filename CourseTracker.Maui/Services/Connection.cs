@@ -86,7 +86,7 @@ class Connection : IAsyncSqLite
         }
         catch (Exception ex)
         {
-            Debug.WriteLine($"Error in AnyAsync: {ex.Message}");
+            Debug.WriteLine($"Error in AnyAsync: {ex.Message}"); // Never came up in testing
             return false;
         }
     }

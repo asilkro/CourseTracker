@@ -4,7 +4,7 @@ namespace CourseTracker.Maui.Views;
 
 public partial class UserGuide : ContentPage
 {
-    private UserGuideVM viewModel;
+    private readonly UserGuideVM viewModel;
     public UserGuide()
     {
         InitializeComponent();

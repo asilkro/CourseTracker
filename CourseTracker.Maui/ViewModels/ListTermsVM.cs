@@ -31,18 +31,17 @@ namespace CourseTracker.Maui.ViewModels
                     {
                         Terms.Add(term);
                         i++;
-                        Debug.WriteLine("Term " + i + ": " + term.TermName);
                     }
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine("Issue loading terms: " + ex.Message);
+                    ShowToast("Issue loading terms: " + ex.Message);
                 }
 
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Issue loading terms: " + ex.Message);
+                ShowToast("Issue loading terms: " + ex.Message);
             }
             finally
             {
@@ -147,6 +146,7 @@ namespace CourseTracker.Maui.ViewModels
                 case "Delete Term":
                     await sharedDB.DeleteTermAndRelatedEntities(term);
                     await LoadTerms();
+                    await Shell.Current.GoToAsync("..");
                     break;
                 default:
                     break;

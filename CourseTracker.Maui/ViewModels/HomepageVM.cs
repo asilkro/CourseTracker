@@ -17,14 +17,15 @@ namespace CourseTracker.Maui.ViewModels
         }
         private static async Task StartDB()
         {
-            ShowToast("Application ready.");
+            ShowToast("Ready for use.");
         }
         private static async Task ResetDbButton_Clicked()
         {
-            bool confirmed = await App.Current.MainPage.DisplayAlert("Reset Database", "This will delete all data in the database. Are you sure you want to continue?", "Yes", "No");
+            bool confirmed = await App.Current.MainPage.DisplayAlert("Reset Database", "This will delete ALL data in the database. Are you sure you want to continue?", "Yes", "No");
             if (confirmed)
             {
                 await TrackerDb.ResetDatabaseFileAsync();
+                ShowToast("Database has been reset. Please quit and relaunch the app.");
             }
         }
         private async Task LoadButton_Clicked()
@@ -40,11 +41,9 @@ namespace CourseTracker.Maui.ViewModels
         {
             var validation = new Validation();
             var existing = await validation.DataExistsInTables();
-            Debug.WriteLine("Existing check: " + existing);
             if (existing)
             {
-                await App.Current.MainPage.DisplayAlert("Table Already Has Data", "Table data has already been loaded. " +
-                    "You should reset the database to avoid errors with sample data creation.", "OK");
+                ShowToast("Please reset Database and restart app.");
                 return;
             }
 

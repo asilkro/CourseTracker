@@ -37,10 +37,8 @@ namespace CourseTracker.Maui.Services
             {
                 if (File.Exists(DatabasePath)) // If the database file exists, delete it
                 {
-                    Debug.WriteLine("Erasing file at: " + DatabasePath);
                     File.Delete(DatabasePath);
                 }
-
             }
             catch (Exception ex)
             {

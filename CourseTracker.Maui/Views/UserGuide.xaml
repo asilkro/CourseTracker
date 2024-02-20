@@ -4,11 +4,11 @@
              xmlns:viewModels="clr-namespace:CourseTracker.Maui.ViewModels"
              x:DataType="viewModels:UserGuideVM"
              x:Class="CourseTracker.Maui.Views.UserGuide"
-             Title="User Guide">
+             Title="CourseTracker User Guide">
 
     <ScrollView Padding="5,5">
         <Editor Text="{Binding UserGuideText}"  HorizontalOptions="Center"
-                IsReadOnly="True" AutoSize="TextChanges" 
+                IsReadOnly="True" FontSize="Medium" AutoSize="TextChanges" 
                 FontAutoScalingEnabled="True"/>
     </ScrollView>
 

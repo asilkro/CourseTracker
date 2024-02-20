@@ -74,36 +74,6 @@ namespace CourseTracker.Maui.Data
             return errorMessage;
         }
 
-        public async Task<string> UpdateAssessmentAndUpdateCourse(Assessment assessment)
-        {
-            try
-            {
-                var course = await _database.Table<Course>().Where(e => e.CourseId == assessment.RelatedCourseId).FirstOrDefaultAsync();
-                if (course == null)
-                {
-                    return "Course not found.";
-                }
-
-                if (course.CourseAssessmentCount >= 2)
-                {
-                    return "Courses may have no more than two assessments.";
-                }
-
-                course.CourseAssessmentCount += 1;
-                Debug.WriteLine(JsonConvert.SerializeObject(course, Formatting.Indented));
-                await SaveAssessmentAsync(assessment);
-                await courseDB.SaveCourseAsync(course);
-                
-
-                return "Assessment added successfully.";
-            }
-            catch (Exception e)
-            {
-                return "Error updating assessment: " + e.Message;
-            }
-
-        }
-
         public async Task<string> DeleteAssessmentAndUpdateCourse(Assessment assessment)
         {
             var course = await _database.FindAsync<Course>(assessment.RelatedCourseId);

@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
+using CourseTracker.Maui.Data;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Views;
@@ -33,7 +34,7 @@ namespace CourseTracker.Maui.ViewModels
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Issue loading courses: " + ex.Message);
+                ShowToast("Issue loading courses: " + ex.Message);
                 return;
             }
         }
@@ -218,7 +219,13 @@ namespace CourseTracker.Maui.ViewModels
                     await Shell.Current.GoToAsync($"{nameof(CoursePage)}?{nameof(CourseVM.EditCourseId)}={course.CourseId}");
                     break;
                 case "Delete Course":
-                    await courseDB.RemoveCourseAsync(course);
+                    bool answer = await Application.Current.MainPage.DisplayAlert("Delete Course", "Are you sure you want to delete this course and its assessments?", "Yes", "No");
+                    if (answer)
+                    {
+                        await sharedDB.DeleteCourseAndRelatedEntities(course);
+                        await LoadCourses();
+                        await Shell.Current.GoToAsync("..");
+                    }
                     break;
                 default:
                     break;

@@ -33,5 +33,6 @@ namespace CourseTracker.Maui.Supplemental
         {
             return notification.Schedule.NotifyTime > DateTime.Now;
         }
+
     }
 }
