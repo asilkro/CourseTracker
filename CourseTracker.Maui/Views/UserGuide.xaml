@@ -6,8 +6,8 @@
              x:Class="CourseTracker.Maui.Views.UserGuide"
              Title="CourseTracker User Guide">
 
-    <ScrollView Padding="5,5">
-        <Editor Text="{Binding UserGuideText}"  HorizontalOptions="Center"
+    <ScrollView Padding="10" Margin="5">
+        <Editor Text="{Binding UserGuideText}"  HorizontalOptions="CenterAndExpand"
                 IsReadOnly="True" FontSize="Medium" AutoSize="TextChanges" 
                 FontAutoScalingEnabled="True"/>
     </ScrollView>

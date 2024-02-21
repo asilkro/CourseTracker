@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using CourseTracker.Maui.Data;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
@@ -16,7 +17,11 @@ namespace CourseTracker.Maui.ViewModels
 
         public ListCoursesVM()
         {
-            LoadCourses();
+        }
+
+        public async void OnAppearing()
+        {
+            await LoadCourses();
         }
 
         public async Task LoadCourses()

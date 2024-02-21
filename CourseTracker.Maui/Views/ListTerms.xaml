@@ -7,17 +7,15 @@
              Title="Term(s) List">
 
     <VerticalStackLayout
-Padding="20,10" Spacing="5">
-        
-
+Padding="20,10" Spacing="5" VerticalOptions="FillAndExpand">
         <!-- Display List of Terms using ListView -->
-        <ListView x:Name="termListView" CachingStrategy="RecycleElement" ItemsSource="{Binding Terms}" 
-              ItemTapped="TermListView_ItemTapped" IsRefreshing="{Binding IsRefreshing}" SelectionMode="Single">
+        <ListView x:Name="termListView" ItemsSource="{Binding Terms}" 
+             CachingStrategy="RetainElement" ItemTapped="TermListView_ItemTapped" IsRefreshing="{Binding IsRefreshing}" SelectionMode="Single">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
                         <Grid Padding="10" RowDefinitions="Auto">
-                            <Label Text="{Binding TermName, StringFormat='Term Name: {0}'}" FontAttributes="Bold"/>
+                            <Label Text="{Binding TermName, StringFormat='Term Name : {0}'}" FontAttributes="Bold"/>
                         </Grid>
                     </ViewCell>
                 </DataTemplate>

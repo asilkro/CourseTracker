@@ -5,47 +5,77 @@
              x:DataType="viewModels:TermVM"
              x:Class="CourseTracker.Maui.Views.TermPage"
              Title="Term Modification">
-    <VerticalStackLayout Spacing="5" 
-                         Padding="5,5,5,5" 
-                         HorizontalOptions="FillAndExpand">
 
-        <HorizontalStackLayout HorizontalOptions="FillAndExpand" Spacing="10" Padding="5">
-            <Label x:Name="termIdLabel" Margin="12" Text="Term Id" FontAttributes="Bold"/>
-            <Entry x:Name="termIdEntry" Text="{Binding TermId}" IsReadOnly="True"/>
-        </HorizontalStackLayout>
+    <ScrollView>
+        <StackLayout Spacing="5" Padding="10">
+            <VerticalStackLayout HorizontalOptions="FillAndExpand">
 
-        <HorizontalStackLayout HorizontalOptions="FillAndExpand" Spacing="10" Padding="5">
-            <Label x:Name="termNameLabel" Margin="12" Text="Term Name" FontAttributes="Bold"/>
-            <Entry x:Name="termNameEntry" Placeholder="Term Name Placeholder" Text="{Binding TermName}"/>
-        </HorizontalStackLayout>
+                <HorizontalStackLayout HorizontalOptions="FillAndExpand" Spacing="5" Padding="5">
+                    <Label x:Name="termNameLabel" Margin="12" Text="Term Name" FontAttributes="Bold"/>
+                    <Entry x:Name="termNameEntry" Placeholder="Term Name Placeholder" Text="{Binding TermName}"/>
+                </HorizontalStackLayout>
 
-        <HorizontalStackLayout HorizontalOptions="FillAndExpand" Spacing="10" Padding="5">
-            <Label x:Name="termStartLabel" Margin="12" Text="Term Start" FontAttributes="Bold"/>
-            <DatePicker x:Name="termStartPicker" Date="{Binding TermStart}" MinimumDate="{Binding MinimumDate}" MaximumDate="{Binding MaximumDate}"/>
-        </HorizontalStackLayout>
+                <HorizontalStackLayout HorizontalOptions="FillAndExpand" Spacing="5" Padding="5">
+                    <Label x:Name="termIdLabel" Margin="12" Text="Term Id" FontAttributes="Bold"/>
+                    <Entry x:Name="termIdEntry" Text="{Binding TermId}" IsReadOnly="True"/>
+                </HorizontalStackLayout>
 
-        <HorizontalStackLayout HorizontalOptions="FillAndExpand" Spacing="10" Padding="5">
-            <Label x:Name="termEndLabel" Margin="12" Text="Term End" FontAttributes="Bold"/>
-            <DatePicker x:Name="termEndPicker" Date="{Binding TermEnd}" MinimumDate="{Binding MinimumDate}" MaximumDate="{Binding MaximumDate}"/>
-        </HorizontalStackLayout>
+                <HorizontalStackLayout HorizontalOptions="FillAndExpand" Spacing="5" Padding="5">
+                    <Label x:Name="termStartLabel" Margin="12" Text="Term Start" FontAttributes="Bold"/>
+                    <DatePicker x:Name="termStartPicker" Date="{Binding TermStart}" MinimumDate="{Binding MinimumDate}" MaximumDate="{Binding MaximumDate}"/>
+                </HorizontalStackLayout>
 
-        <HorizontalStackLayout HorizontalOptions="FillAndExpand" Spacing="10" Padding="5">
-            <Label x:Name="termCourseCountLabel" Margin="12" Text="Number of Courses in Term" FontAttributes="Bold"/>
-            <Entry x:Name="termCourseCountEntry" Placeholder="-1" Text="{Binding CourseCount}" IsReadOnly="True" FontAttributes="Bold"/>
-        </HorizontalStackLayout>
+                <HorizontalStackLayout HorizontalOptions="FillAndExpand" Spacing="5" Padding="5">
+                    <Label x:Name="termEndLabel" Margin="12" Text="Term End" FontAttributes="Bold"/>
+                    <DatePicker x:Name="termEndPicker" Date="{Binding TermEnd}" MinimumDate="{Binding MinimumDate}" MaximumDate="{Binding MaximumDate}"/>
+                </HorizontalStackLayout>
+
+                <HorizontalStackLayout HorizontalOptions="FillAndExpand" Spacing="5" Padding="5">
+                    <Label x:Name="termCourseCountLabel" Margin="12" Text="Number of Courses in Term" FontAttributes="Bold"/>
+                    <Entry x:Name="termCourseCountEntry" Placeholder="-1" Text="{Binding CourseCount}" IsReadOnly="True" FontAttributes="Bold"/>
+                </HorizontalStackLayout>
+
+                <!-- Display List of Courses using ListView -->
+                <Label x:Name="termCoursesLabel" Margin="12"
+                       Text="{Binding TermName, StringFormat='Associated Courses for {0}'}"
+                       FontSize="Medium" FontAttributes="Bold"/>
+                <Button x:Name="loadCoursesButton" 
+                    Text="Load Associated Courses" 
+                    FontSize="Medium" 
+                    FontAttributes="Bold" 
+                    Command="{Binding OnLoadCourseButtonClick}"
+                    HorizontalOptions="Center"
+                    />
+
+                <ListView x:Name="termCoursesList" ItemsSource="{Binding RelatedCourses}"
+       VerticalOptions="FillAndExpand"
+       MinimumHeightRequest="140" BackgroundColor="WhiteSmoke" SelectedItem="None">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <Grid MinimumHeightRequest="100" RowDefinitions="50, 50">
+                                    <!-- Some properties of each Course on term-->
+                                    <Label Grid.Row="0" Text="{Binding CourseName, StringFormat='Course Name: {0}'}" FontAttributes="Bold" />
+                                    <Label Grid.Row="1" Text="{Binding CourseStatus, StringFormat='Course Status: {0}'}" />
+                                </Grid>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </VerticalStackLayout>
 
 
-        <!--Buttons-->
-        <StackLayout Orientation="Horizontal" Spacing="10" Margin="10,30">
+            <!--Buttons-->
+            <StackLayout Orientation="Horizontal" Spacing="10" Margin="10,10">
 
-            <Button x:Name="cancelButton" 
+                <Button x:Name="cancelButton" 
                     Text="Cancel" 
                     FontSize="Medium" 
                     FontAttributes="Bold" 
                     Command="{Binding OnTermCancelButtonClick}"
                     HorizontalOptions="FillAndExpand"
                     />
-            <Button x:Name="submitButton" 
+                <Button x:Name="submitButton" 
                     Text="Submit" 
                     FontSize="Medium" 
                     FontAttributes="Bold"
@@ -53,7 +83,7 @@
                     Command="{Binding OnTermSubmitButtonClick}"
                     HorizontalOptions="FillAndExpand"
                     />
+            </StackLayout>
         </StackLayout>
-
-    </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

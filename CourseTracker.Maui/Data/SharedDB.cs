@@ -276,6 +276,7 @@ public class SharedDB
             if (assessments.Count != course.CourseAssessmentCount)
             {
                 course.CourseAssessmentCount = assessments.Count;
+                await courseDB.SaveCourseAsync(course);
                 ShowToast("Course " + course.CourseName + " assessment count updated successfully.");
                 return;
             }

@@ -25,6 +25,6 @@ public partial class ListAssessments : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        viewModel.OnAppearing();
+        viewModel.OnAppearing();   
     }
 }

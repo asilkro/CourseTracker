@@ -24,7 +24,7 @@ namespace CourseTracker.Maui.ViewModels
             if (confirmed)
             {
                 await TrackerDb.ResetDatabaseFileAsync();
-                ShowToast("Database has been reset. Please quit and relaunch the app.");
+                ShowToast("Database has been reset, all data in tables has been removed.");
             }
         }
         private async Task LoadButton_Clicked()
@@ -97,7 +97,7 @@ namespace CourseTracker.Maui.ViewModels
                 await sharedDB.SaveAssessmentAndUpdateCourse(demoPA2); //4
                 Debug.WriteLine("Inserted assessment: " + demoPA2.AssessmentName);
                 
-                await App.Current.MainPage.DisplayAlert("Sample Data Loaded", "Sample data has been loaded successfully. Please relaunch the application to complete setup.", "OK");
+                await App.Current.MainPage.DisplayAlert("Sample Data Loaded", "Sample data has been loaded successfully.", "OK");
             }
             catch (Exception ex)
             {
@@ -115,7 +115,7 @@ namespace CourseTracker.Maui.ViewModels
                 TermName = "Demo Term",
                 TermStart = new DateTime(2024, 01, 01),
                 TermEnd = new DateTime(2024, 06, 30),
-                CourseCount = 1
+                CourseCount = 0
             };
             return demoTerm;
         }

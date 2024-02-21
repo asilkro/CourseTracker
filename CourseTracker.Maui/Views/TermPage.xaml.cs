@@ -5,7 +5,6 @@ namespace CourseTracker.Maui.Views;
 public partial class TermPage : ContentPage
 {
     readonly TermVM viewModel;
-
     public TermPage()
     {
         InitializeComponent();

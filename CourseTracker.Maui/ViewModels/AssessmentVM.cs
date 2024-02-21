@@ -27,6 +27,10 @@ namespace CourseTracker.Maui.ViewModels
             {
                 var courses = await courseDB.GetCoursesAsync();
                 Assessment assessment = await assessmentDB.GetAssessmentByIdAsync(EditAssessmentId);
+                if (assessment == null)
+                {
+                    assessment = new Assessment();
+                }
                 Courses.Clear();
                 Course course1 = new();
                 foreach (var course in courses)

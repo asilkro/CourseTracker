@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Supplemental;
 using CourseTracker.Maui.Views;
@@ -184,6 +185,10 @@ namespace CourseTracker.Maui.ViewModels
             {
                 var terms = await termsDB.GetTermsAsync();
                 Course course = await courseDB.GetCourseByIdAsync(EditCourseId);
+                if (course == null)
+                {
+                    course = new();
+                }
                 Terms.Clear();
                 Term term1 = new();
                 foreach (var term in terms)
@@ -211,9 +216,7 @@ namespace CourseTracker.Maui.ViewModels
                 CourseEnd = dateEnd;
                 return;
             }
-            Course? courseCounter = await courseDB.GetCourseByIdAsync(Id);
-            int count = 0;
-            
+                    
             Course temp = await courseDB.GetCourseByIdAsync(Id);
             CourseName = temp.CourseName;
             InstructorName = temp.InstructorName;
@@ -226,15 +229,8 @@ namespace CourseTracker.Maui.ViewModels
             NotificationsEnabled = temp.NotificationsEnabled;
             CourseId = temp.CourseId;
             TermId = temp.TermId;
-            if (courseCounter != null)
-            {
-                count =  courseCounter.CourseAssessmentCount;
-                CourseAssessmentCount = count;
-            }
-            else
-            {
-                CourseAssessmentCount = count;
-            }
+            CourseAssessmentCount = temp.CourseAssessmentCount;
+            Debug.WriteLine(temp.CourseAssessmentCount);
         }
 
         public async Task SubmitButtonClicked()
@@ -279,13 +275,13 @@ namespace CourseTracker.Maui.ViewModels
             var notes = Course.CourseNotes;
             var course = Course.CourseName;
 
-            if (!Validation.NotNull(notes))
+            if (Validation.NotNull(notes))
             {
-                ShowToast("No course notes found to share.");
+                await ShareText(notes, course);
             }
             else
             {
-                await ShareText(notes, course);
+                ShowToast("Unable to share, no notes found for " + course);
             }
         }
 
@@ -311,8 +307,6 @@ namespace CourseTracker.Maui.ViewModels
             var errorMessage = string.Empty;
             if (!Validation.NotNull(course.CourseName))
                 errorMessage = "Course name cannot be empty or undefined.";
-            else if (!Validation.IsUniqueCourseName(course.CourseName, new()).Result == false)
-                errorMessage = "Course name must be unique.";
             else if (!Validation.NotNull(course.CourseStatus))
                 errorMessage = "Course status cannot be empty or undefined.";
             else if (!Validation.CourseStatusIsValid(course.CourseStatus))
@@ -347,7 +341,6 @@ namespace CourseTracker.Maui.ViewModels
             {
                 CourseId = await courseDB.GetNextId();
             }
-
         }
 
     }

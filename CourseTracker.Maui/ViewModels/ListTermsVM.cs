@@ -15,9 +15,9 @@ namespace CourseTracker.Maui.ViewModels
         public bool IsRefreshing { get; set; }
         public async Task LoadTerms()
         {
-            IsRefreshing = true;
             try
             {
+                IsRefreshing = true;
                 Terms ??= [];
                 if (Terms.Count > 0)
                 {
@@ -32,6 +32,8 @@ namespace CourseTracker.Maui.ViewModels
                         Terms.Add(term);
                         i++;
                     }
+                    OnPropertyChanged(nameof(Terms));
+                    Debug.WriteLine("Term count: " + Terms.Count);
                 }
                 catch (Exception ex)
                 {
@@ -162,7 +164,7 @@ namespace CourseTracker.Maui.ViewModels
         ((ListView)sender).SelectedItem = null;
         }
 
-        public async void OnAppearing()
+        public async Task OnAppearing()
         {
             await LoadTerms();
         }

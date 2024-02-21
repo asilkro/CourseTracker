@@ -35,11 +35,11 @@ namespace CourseTracker.Maui.Services
         {
             try
             {
-                if (File.Exists(DatabasePath)) // If the database file exists, delete it
-                {
-                    File.Delete(DatabasePath);
-                }
+                _connection.GetConnection().Execute("Delete from Term");
+                _connection.GetConnection().Execute("Delete from Course");
+                _connection.GetConnection().Execute("Delete from Assessment");
             }
+
             catch (Exception ex)
             {
                 Debug.WriteLine("Failed to reset database: " + ex.Message);

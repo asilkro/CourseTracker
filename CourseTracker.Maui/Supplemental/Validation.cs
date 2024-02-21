@@ -133,31 +133,6 @@ namespace CourseTracker.Maui.Supplemental
             return true;
         }
 
-        public static async Task<bool> IsUniqueTermName(string termName, Connection _connection)
-        {
-            _connection ??= new Connection();
-            var connection = _connection.GetAsyncConnection();
-            var existingTerm = await connection.Table<Term>().Where(t => t.TermName == termName).FirstOrDefaultAsync();
-            return existingTerm == null;
-        }
-
-        public static async Task<bool> IsUniqueCourseName(string courseName, Connection _connection)
-        {
-            _connection ??= new Connection();
-            var connection = _connection.GetAsyncConnection();
-            var existingCourse = await connection.Table<Course>().Where(c => c.CourseName == courseName).FirstOrDefaultAsync();
-            return existingCourse == null;
-        }
-
-        public static async Task<bool> IsUniqueAssessmentName(string assessmentName, int courseId, Connection _connection)
-        {
-            _connection ??= new Connection();
-            var connection = _connection.GetAsyncConnection();
-            var existingAssessment = await connection.Table<Assessment>().Where(a => a.AssessmentName == assessmentName && a.RelatedCourseId == courseId).FirstOrDefaultAsync();
-            return existingAssessment == null;
-        }
-
-
         public async static Task<bool> IsValidNotification(NotificationRequest notification) //Non exhaustive checks
         {
             var result = true;
@@ -181,9 +156,7 @@ namespace CourseTracker.Maui.Supplemental
             {
                 result = false;
             }
-
             return result;
-
         }
 
         public async Task<bool> DataExistsInTables()

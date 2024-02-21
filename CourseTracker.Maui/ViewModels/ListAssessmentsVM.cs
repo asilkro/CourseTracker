@@ -192,7 +192,7 @@ namespace CourseTracker.Maui.ViewModels
     ((ListView)sender).SelectedItem = null;
         }
 
-        public async void OnAppearing()
+        public async Task OnAppearing()
         {
             await LoadAssessments();
         }
