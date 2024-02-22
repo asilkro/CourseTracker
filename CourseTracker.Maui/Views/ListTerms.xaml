@@ -16,6 +16,7 @@ Padding="20,10" Spacing="5" VerticalOptions="FillAndExpand">
                     <ViewCell>
                         <Grid Padding="10" RowDefinitions="Auto">
                             <Label Text="{Binding TermName, StringFormat='Term Name : {0}'}" FontAttributes="Bold"/>
+                            <Label Text="{Binding CourseCount, StringFormat='Course Count: {0}'}"/>
                         </Grid>
                     </ViewCell>
                 </DataTemplate>

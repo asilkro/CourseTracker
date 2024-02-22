@@ -14,19 +14,11 @@
                 <DataTemplate>
                     <ViewCell>
                         <StackLayout Padding="5,5">
-                            <!-- Properties of each Course -->
-                            <Label Text="{Binding CourseName, StringFormat='Course Name: {0}'}" FontAttributes="Bold" />
-                            <Label Text="{Binding CourseId, StringFormat='Course Id: {0}'}" />
-                            <Label Text="{Binding TermId, StringFormat='Term Id: {0}'}" />
-                            <Label Text="{Binding InstructorName, StringFormat='Instructor Name: {0}'}" />
-                            <Label Text="{Binding InstructorEmail, StringFormat='Instructor Email: {0}'}" />
-                            <Label Text="{Binding InstructorPhone, StringFormat='Instructor Phone: {0}'}" />
-                            <Label Text="{Binding CourseStatus, StringFormat='Course Status: {0}'}" />
-                            <Label Text="{Binding CourseStart, StringFormat='Course Start: {0:d}'}" />
-                            <Label Text="{Binding CourseEnd, StringFormat='Course End: {0:d}'}" />
-                            <Label Text="{Binding CourseAssessmentCount, StringFormat='Course Quantity in Term: {0}'}" />
-                            <Label Text="{Binding NotificationsEnabled, StringFormat='Course Notifications Enabled: {0}'}" />
-                        </StackLayout>
+                            <!-- Displayed Properties of each Course -->
+                        <Label Text="{Binding CourseName, StringFormat='Course Name: {0}'}" FontAttributes="Bold" />
+                        <Label Text="{Binding TermId, StringFormat='Term Id: {0}'}" />
+                        <Label Text="{Binding CourseAssessmentCount, StringFormat='Assessment Count: {0}'}" />
+                    </StackLayout>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>

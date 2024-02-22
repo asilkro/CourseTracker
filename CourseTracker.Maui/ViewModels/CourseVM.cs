@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
+using CourseTracker.Maui.Data;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Supplemental;
 using CourseTracker.Maui.Views;
@@ -250,7 +251,7 @@ namespace CourseTracker.Maui.ViewModels
                 NotificationsEnabled = NotificationsEnabled,
                 CourseAssessmentCount = CourseAssessmentCount
             };
-            string message = IsValidCourse(course);
+            string message = await IsValidCourseAsync(course);
             if (!string.IsNullOrEmpty(message))
             {
                 ShowToast(message);
@@ -302,9 +303,10 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
-        public static string IsValidCourse(Course course)
+        public async Task<string> IsValidCourseAsync(Course course)
         {
             var errorMessage = string.Empty;
+
             if (!Validation.NotNull(course.CourseName))
                 errorMessage = "Course name cannot be empty or undefined.";
             else if (!Validation.NotNull(course.CourseStatus))

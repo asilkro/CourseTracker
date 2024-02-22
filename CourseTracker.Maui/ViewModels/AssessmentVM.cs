@@ -169,9 +169,15 @@ namespace CourseTracker.Maui.ViewModels
                 NotificationsEnabled = NotificationsEnabled
             };
             string message = AssessmentDB.IsValidAssessment(assessment);
+            string duplicateAssessmentKind = await DuplicateAssessmentKind(assessment);
             if (!string.IsNullOrEmpty(message))
             {
                 ShowToast(message);
+                return;
+            }
+            if (!string.IsNullOrEmpty(duplicateAssessmentKind))
+            {
+                ShowToast(duplicateAssessmentKind);
                 return;
             }
             await sharedDB.SaveAssessmentAndUpdateCourse(assessment);
@@ -194,6 +200,33 @@ namespace CourseTracker.Maui.ViewModels
                 AssessmentId = await assessmentDB.GetNextId();
             }
         }
+
+        private async Task<string> DuplicateAssessmentKind(Assessment assessment)
+        {
+            var message = string.Empty;
+            try
+            {
+                var assessments = await assessmentDB.GetAssessmentsByCourseIdAsync(assessment.RelatedCourseId);
+                if (assessments == null)
+                {
+                    return message;
+                }
+                foreach (var a in assessments)
+                {
+                    Debug.WriteLine("Assessment " + a.AssessmentName + " is " + a.AssessmentType);
+                    if (a.AssessmentType == assessment.AssessmentType)
+                    {
+                        message = "This course already has a " + assessment.AssessmentType + " assessment.";
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                message = "Issue checking for duplicate assessment type: " + ex.Message;
+            }
+            return message;
+        }
+        
         #endregion
     }
 }

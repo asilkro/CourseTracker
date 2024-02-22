@@ -13,6 +13,8 @@ namespace CourseTracker.Maui.ViewModels
         private Term term = new();
         private int termId;
         private int editTermId;
+        private string courseName;
+        private string courseStatus;
         private string termName;
         private static readonly new DateTime dateStart = DateTime.Now.Date;
         private static readonly new DateTime dateEnd = DateTime.Now.Date;
@@ -62,6 +64,18 @@ namespace CourseTracker.Maui.ViewModels
         {
             get => termEnd;
             set => SetProperty(ref termEnd, value);
+        }
+
+        public string CourseName
+        {
+            get => courseName;
+            set => SetProperty(ref courseName, value);
+        }
+
+        public string CourseStatus
+        {
+            get => courseStatus;
+            set => SetProperty(ref courseStatus, value);
         }
 
         public int CourseCount
