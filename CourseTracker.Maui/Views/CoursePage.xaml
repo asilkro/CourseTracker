@@ -54,8 +54,8 @@
                         <x:Array Type="{x:Type x:String}">
                             <x:String>Planned</x:String>
                             <x:String>In Progress</x:String>
-                            <x:String>Completed</x:String>
                             <x:String>Awaiting Evaluation</x:String>
+                            <x:String>Completed</x:String>
                             <x:String>Dropped</x:String>
                         </x:Array>
                     </Picker.ItemsSource>
@@ -91,7 +91,7 @@
             <Button x:Name="courseNoteShareButton" Text="Share Notes" BackgroundColor="{StaticResource PrimaryDark}" TextColor="WhiteSmoke" Command="{Binding CourseNoteShareButton_Clicked}"/>
             
             <StackLayout Orientation="Horizontal" Spacing="10" Margin="10,30">
-            <Button x:Name="cancelButton" HorizontalOptions="FillAndExpand" Text="Cancel" FontAttributes="Bold" Command="{Binding OnCourseCancelButtonClick}"/>
+                <Button x:Name="cancelButton" HorizontalOptions="FillAndExpand" Text="Cancel" FontAttributes="Bold" Command="{Binding OnCourseCancelButtonClick}"/>
                 <Button x:Name="submitButton" HorizontalOptions="FillAndExpand" Text="Submit" BackgroundColor="{StaticResource DarkGreen}" FontAttributes="Bold" Command="{Binding OnCourseSubmitButtonClick}"/>
             </StackLayout>
         

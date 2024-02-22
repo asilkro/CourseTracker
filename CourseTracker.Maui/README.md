@@ -40,7 +40,6 @@ Thank you for evaluating and using this application. There are a few things you 
 	
 - When removing a course, all assessments associated with that course will be removed as well.
 
-
 ## NuGet Packages
 
 	- CommunityToolkit.Maui 7.0.1
@@ -76,4 +75,3 @@ git remote add origin https://gitlab.com/wgu-gitlab-environment/task-templates/c
 git branch -M main
 git push -uf origin main
 ```
-
