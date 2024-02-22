@@ -18,7 +18,7 @@ namespace CourseTracker.Maui.ViewModels
         private string termName;
         private static readonly new DateTime dateStart = DateTime.Now.Date;
         private static readonly new DateTime dateEnd = DateTime.Now.Date;
-        private DateTime termStart = new DateTime(dateStart.Year, dateStart.Month, 1);
+        private DateTime termStart = new(dateStart.Year, dateStart.Month, 1);
         private DateTime termEnd = DateTime.Now.Date.AddDays(30);
         private int courseCount;
         private bool notificationsEnabled;
@@ -186,19 +186,19 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
-        public string IsValidTerm(Term term)
+        public static string IsValidTerm(Term term)
         {
             var errorMessage = string.Empty;
 
-            if (!Validation.IdWasSet(termId))
+            if (!Validation.IdWasSet(term.TermId))
                 errorMessage = "Term ID must be greater than 0.";
-            else if (!Validation.NotNull(termName))
+            else if (!Validation.NotNull(term.TermName))
                 errorMessage = "Term name cannot be empty.";
-            else if (!Validation.TermsAreValid(termStart, termEnd))
+            else if (!Validation.TermDatesAreValid(term.TermStart, term.TermEnd))
                 errorMessage = "Term start and end dates must be the first and last days of the month, respectively.";
-            else if (!Validation.CourseCountIsValid(courseCount))
+            else if (!Validation.CourseCountIsValid(term.CourseCount))
                 errorMessage = "Terms should have between 1 and 6 courses.";
-            else if (!Validation.DatesAreValid(termStart, termEnd))
+            else if (!Validation.DatesAreValid(term.TermStart, term.TermEnd))
                 errorMessage = "Term start and end dates are not valid.";
 
             if (!string.IsNullOrEmpty(errorMessage))

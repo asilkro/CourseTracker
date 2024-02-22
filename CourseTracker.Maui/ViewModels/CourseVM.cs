@@ -186,10 +186,7 @@ namespace CourseTracker.Maui.ViewModels
             {
                 var terms = await termsDB.GetTermsAsync();
                 Course course = await courseDB.GetCourseByIdAsync(EditCourseId);
-                if (course == null)
-                {
-                    course = new();
-                }
+                course ??= new();
                 Terms.Clear();
                 Term term1 = new();
                 foreach (var term in terms)
@@ -251,7 +248,7 @@ namespace CourseTracker.Maui.ViewModels
                 NotificationsEnabled = NotificationsEnabled,
                 CourseAssessmentCount = CourseAssessmentCount
             };
-            string message = await IsValidCourseAsync(course);
+            string message = IsValidCourse(course);
             if (!string.IsNullOrEmpty(message))
             {
                 ShowToast(message);
@@ -303,7 +300,7 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
-        public async Task<string> IsValidCourseAsync(Course course)
+        public static string IsValidCourse(Course course)
         {
             var errorMessage = string.Empty;
 

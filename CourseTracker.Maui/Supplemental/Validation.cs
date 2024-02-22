@@ -31,7 +31,7 @@ namespace CourseTracker.Maui.Supplemental
             return date.Day == DateTime.DaysInMonth(date.Year, date.Month);
         }
 
-        public static bool TermsAreValid(DateTime startDate, DateTime endDate)
+        public static bool TermDatesAreValid(DateTime startDate, DateTime endDate)
         {
             if (startDate > endDate) return false;
             if (!DatesAreValid(startDate, endDate)) return false;

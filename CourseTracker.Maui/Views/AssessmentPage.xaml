@@ -66,17 +66,17 @@
                 SelectedItem="{Binding SelectedCourse}" />
         </HorizontalStackLayout>
 
-        <HorizontalStackLayout HorizontalOptions="FillAndExpand" Spacing="10" Padding="5">
-            <!-- Notifications Enabled -->
-            <Label Margin="12" Text="Enable Notifications" VerticalOptions="Center" />
-            <Switch IsToggled="{Binding NotificationsEnabled}"
+            <HorizontalStackLayout HorizontalOptions="FillAndExpand" Spacing="10" Padding="5">
+                <!-- Notifications Enabled -->
+                <Label Margin="12" Text="Enable Notifications" VerticalOptions="Center" />
+                <Switch IsToggled="{Binding NotificationsEnabled}"
                 x:Name="notificationsEnabledSwitch"
                 HorizontalOptions="Start"
                 />
-        </HorizontalStackLayout>
-        
-        <!-- Buttons -->
-        <StackLayout Orientation="Horizontal" Spacing="10" Margin="10,30">
+            </HorizontalStackLayout>
+
+            <!-- Buttons -->
+        <StackLayout Orientation="Horizontal" Spacing="10" Margin="10,10">
             <Button x:Name="cancelButton" HorizontalOptions="FillAndExpand" Text="Cancel" Command="{Binding OnAssessmentCancelButtonClick}"  FontAttributes="Bold" />
             <Button x:Name="submitButton" HorizontalOptions="FillAndExpand" Text="Submit" BackgroundColor="{StaticResource DarkGreen}" Command="{Binding OnAssessmentSubmitButtonClick}" FontAttributes="Bold" />
         </StackLayout>

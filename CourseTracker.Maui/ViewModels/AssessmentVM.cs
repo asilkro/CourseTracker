@@ -25,7 +25,7 @@ namespace CourseTracker.Maui.ViewModels
         #region Properties
         public Command OnAssessmentSubmitButtonClick { get; set; }
         public Command OnAssessmentCancelButtonClick { get; set; }
-        public ObservableCollection<Course> Courses { get; } = new ObservableCollection<Course>();
+        public ObservableCollection<Course> Courses { get; } = [];
 
         public Assessment Assessment
         {
@@ -113,10 +113,7 @@ namespace CourseTracker.Maui.ViewModels
             {
                 var courses = await courseDB.GetCoursesAsync();
                 Assessment assessment = await assessmentDB.GetAssessmentByIdAsync(EditAssessmentId);
-                if (assessment == null)
-                {
-                    assessment = new Assessment();
-                }
+                assessment ??= new Assessment();
                 Courses.Clear();
                 Course course1 = new();
                 foreach (var course in courses)
@@ -212,8 +209,7 @@ namespace CourseTracker.Maui.ViewModels
                     return message;
                 }
                 foreach (var a in assessments)
-                {
-                    Debug.WriteLine("Assessment " + a.AssessmentName + " is " + a.AssessmentType);
+                { 
                     if (a.AssessmentType == assessment.AssessmentType)
                     {
                         message = "This course already has a " + assessment.AssessmentType + " assessment.";
