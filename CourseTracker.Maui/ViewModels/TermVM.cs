@@ -9,15 +9,79 @@ namespace CourseTracker.Maui.ViewModels
     [QueryProperty(nameof(EditTermId), nameof(EditTermId))]
     public class TermVM : ViewModelBase
     {
-        public ObservableCollection<Course> RelatedCourses { get; private set; } = [];
+        #region Fields
         private Term term = new();
+        private int termId;
+        private int editTermId;
+        private string termName;
+        private static readonly new DateTime dateStart = DateTime.Now.Date;
+        private static readonly new DateTime dateEnd = DateTime.Now.Date;
+        private DateTime termStart = new DateTime(dateStart.Year, dateStart.Month, 1);
+        private DateTime termEnd = DateTime.Now.Date.AddDays(30);
+        private int courseCount;
+        private bool notificationsEnabled;
+        #endregion
+
+        #region Properties
+        public ObservableCollection<Course> RelatedCourses { get; private set; } = [];
+        public Command OnTermSubmitButtonClick { get; set; }
+        public Command OnLoadCourseButtonClick { get; set; }
+        public Command OnTermCancelButtonClick { get; set; }
+
+        public Term Term
+        {
+            get => term;
+            set => SetProperty(ref term, value);
+        }
+
+        public int TermId
+        {
+            get => termId;
+            set => SetProperty(ref termId, value);
+        }
+
+        public int EditTermId
+        {
+            get => editTermId;
+            set => SetProperty(ref editTermId, value, onChanged: () => PerformOperation(value));
+        }
+
+        public string TermName
+        {
+            get => termName;
+            set => SetProperty(ref termName, value);
+        }
+
+        public DateTime TermStart
+        {
+            get => termStart;
+            set => SetProperty(ref termStart, value);
+        }
+
+        public DateTime TermEnd
+        {
+            get => termEnd;
+            set => SetProperty(ref termEnd, value);
+        }
+
+        public int CourseCount
+        {
+            get => courseCount;
+            set => SetProperty(ref courseCount, value);
+        }
+
+        #endregion
+
+        #region Constructors
         public TermVM()
         {
             OnTermSubmitButtonClick = new Command(async () => await SubmitButtonClicked());
-            OnTermCancelButtonClick = new Command(async () => await CancelButtonClicked());
             OnLoadCourseButtonClick = new Command(async () => await LoadCourses());
+            OnTermCancelButtonClick = new Command(async () => await CancelButtonClicked());
         }
+        #endregion
 
+        #region Methods
         private async Task SubmitButtonClicked()
         {
             Term term = new()
@@ -48,256 +112,7 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
-        public int termId;
-        public int editTermId;
-        public Command OnTermSubmitButtonClick { get; set; }
-        public Command OnTermCancelButtonClick { get; set; }
-        public Command OnLoadCourseButtonClick { get; set; }
-
-        public Term Term
-        {
-            get { return term; }
-            set
-            {
-                if (term != value)
-                {
-                    term = value;
-                    OnPropertyChanged(nameof(Term));
-                }
-            }
-        }
-
-
-        public int TermId
-        {
-            get { return termId; }
-            set
-            {
-                if (termId != value)
-                {
-                    termId = value;
-                    OnPropertyChanged(nameof(TermId));
-                }
-            }
-        }
-        public int EditTermId
-        {
-            get { return editTermId; }
-            set
-            {
-                if (editTermId != value)
-                {
-                    editTermId = value;
-                    PerformOperation(value);
-                }
-            }
-        }
-        private async Task PerformOperation(int Id)
-        {
-            if (Id <= 0)
-            {
-                TermId = await termsDB.GetNextId();
-            }
-            else
-            {
-                Term temp = await termsDB.GetTermByIdAsync(Id);
-                if (temp == null)
-                {
-                    return;
-                }
-                TermName = temp.TermName;
-                TermStart = temp.TermStart;
-                TermEnd = temp.TermEnd;
-                CourseCount = temp.CourseCount;
-                TermId = temp.TermId;
-            }
-        }
-
-        private string termName;
-        public string TermName
-        {
-            get { return termName; }
-            set
-            {
-                if (termName != value)
-                {
-                    termName = value;
-                    OnPropertyChanged(nameof(TermName));
-                }
-            }
-        }
-
-
-        private static readonly new DateTime dateStart = DateTime.Now.Date;
-        private DateTime termStart = new DateTime(dateStart.Year, dateStart.Month, 1);
-        public DateTime TermStart
-        {
-            get { return termStart; }
-            set
-            {
-                if (termStart != value)
-                {
-                    termStart = value;
-                    OnPropertyChanged(nameof(TermStart));
-                }
-            }
-        }
-
-        private static readonly new DateTime dateEnd = DateTime.Now.Date;
-        private DateTime termEnd = new DateTime(dateEnd.Year, dateEnd.Month, DateTime.DaysInMonth(dateEnd.Year, dateEnd.Month)).AddMonths(6).AddTicks(-1);
-        public DateTime TermEnd
-        {
-            get { return termEnd; }
-            set
-            {
-                if (termEnd != value)
-                {
-                    termEnd = value;
-                    OnPropertyChanged(nameof(TermEnd));
-                }
-            }
-        }
-
-        private int courseCount;
-        public int CourseCount
-        {
-            get { return courseCount; }
-            set
-            {
-                if (courseCount != value)
-                {
-                    courseCount = value;
-                    OnPropertyChanged(nameof(CourseCount));
-                }
-            }
-        }
-
-        private bool notificationsEnabled;
-        public bool NotificationsEnabled
-        {
-            get { return notificationsEnabled; }
-            set
-            {
-                if (notificationsEnabled != value)
-                {
-                    notificationsEnabled = value;
-                    OnPropertyChanged(nameof(NotificationsEnabled));
-                }
-            }
-        }
-
-        public async void OnAppearing()
-        {
-            if (EditTermId <= 0)
-            {
-                TermId = await termsDB.GetNextId();
-            }
-            await LoadCourses();
-        }
-
-        public string IsValidTerm(Term term)
-        {
-            var errorMessage = string.Empty;
-
-            if (!Validation.IdWasSet(termId))
-                errorMessage = "Term ID must be greater than 0.";
-            else if (!Validation.NotNull(termName))
-                errorMessage = "Term name cannot be empty.";
-            else if (!Validation.TermsAreValid(termStart, termEnd))
-                errorMessage = "Term start and end dates must be the first and last days of the month, respectively.";
-            else if (!Validation.CourseCountIsValid(courseCount))
-                errorMessage = "Terms should have between 1 and 6 courses.";
-            else if (!Validation.DatesAreValid(termStart, termEnd))
-                errorMessage = "Term start and end dates are not valid.";
-
-            if (!string.IsNullOrEmpty(errorMessage))
-                ShowToast(errorMessage);
-            return errorMessage;
-        }
-        private Course course = new();
-
-        public Course Course
-        {
-            get { return course; }
-            set
-            {
-                if (course != value)
-                {
-                    course = value;
-                    OnPropertyChanged(nameof(Course));
-                }
-            }
-        }
-
-        private string courseName;
-        public string CourseName
-        {
-            get { return courseName; }
-            set
-            {
-                if (courseName != value)
-                {
-                    courseName = value;
-                    OnPropertyChanged(nameof(CourseName));
-                }
-            }
-        }
-
-        private int courseId;
-        public int CourseId
-        {
-            get { return courseId; }
-            set
-            {
-                if (courseId != value)
-                {
-                    courseId = value;
-                    OnPropertyChanged(nameof(CourseId));
-                }
-            }
-        }
-
-        private string instructorName;
-        public string InstructorName
-        {
-            get { return instructorName; }
-            set
-            {
-                if (instructorName != value)
-                {
-                    instructorName = value;
-                    OnPropertyChanged(nameof(InstructorName));
-                }
-            }
-        }
-        private string instructorEmail;
-        public string InstructorEmail
-        {
-            get { return instructorEmail; }
-            set
-            {
-                if (instructorEmail != value)
-                {
-                    instructorEmail = value;
-                    OnPropertyChanged(nameof(InstructorEmail));
-                }
-            }
-        }
-        private string courseStatus;
-        public string CourseStatus
-        {
-            get { return courseStatus; }
-            set
-            {
-                if (courseStatus != value)
-                {
-                    courseStatus = value;
-                    OnPropertyChanged(nameof(CourseStatus));
-                }
-            }
-        }
-
-        public async Task LoadCourses()
+        private async Task LoadCourses()
         {
             Debug.WriteLine(RelatedCourses.Count + " related courses count.");
             try
@@ -322,7 +137,7 @@ namespace CourseTracker.Maui.ViewModels
                 foreach (var course in coursesForGivenTerm)
                 {
                     int i = 1;
-                    Debug.WriteLine(Course.CourseName + " loaded, number " + i);
+                    Debug.WriteLine(course.CourseName + " loaded, number " + i);
                     RelatedCourses.Add(course);
                     i++;
                 }
@@ -336,5 +151,55 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
+        private async Task PerformOperation(int Id)
+        {
+            if (Id <= 0)
+            {
+                TermId = await termsDB.GetNextId();
+            }
+            else
+            {
+                Term temp = await termsDB.GetTermByIdAsync(Id);
+                if (temp == null)
+                {
+                    return;
+                }
+                TermName = temp.TermName;
+                TermStart = temp.TermStart;
+                TermEnd = temp.TermEnd;
+                CourseCount = temp.CourseCount;
+                TermId = temp.TermId;
+            }
+        }
+
+        public string IsValidTerm(Term term)
+        {
+            var errorMessage = string.Empty;
+
+            if (!Validation.IdWasSet(termId))
+                errorMessage = "Term ID must be greater than 0.";
+            else if (!Validation.NotNull(termName))
+                errorMessage = "Term name cannot be empty.";
+            else if (!Validation.TermsAreValid(termStart, termEnd))
+                errorMessage = "Term start and end dates must be the first and last days of the month, respectively.";
+            else if (!Validation.CourseCountIsValid(courseCount))
+                errorMessage = "Terms should have between 1 and 6 courses.";
+            else if (!Validation.DatesAreValid(termStart, termEnd))
+                errorMessage = "Term start and end dates are not valid.";
+
+            if (!string.IsNullOrEmpty(errorMessage))
+                ShowToast(errorMessage);
+            return errorMessage;
+        }
+
+        public async void OnAppearing()
+        {
+            if (EditTermId <= 0)
+            {
+                TermId = await termsDB.GetNextId();
+            }
+            await LoadCourses();
+        }
+        #endregion
     }
 }
