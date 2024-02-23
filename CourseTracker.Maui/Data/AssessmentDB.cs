@@ -2,6 +2,7 @@
 using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Supplemental;
 using Plugin.LocalNotification;
+using SQLite;
 
 namespace CourseTracker.Maui.Data
 {

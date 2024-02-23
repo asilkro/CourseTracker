@@ -270,16 +270,17 @@ namespace CourseTracker.Maui.ViewModels
 
         private async Task CourseNoteShareButtonClicked()
         {
+            Course course = await courseDB.GetCourseByIdAsync(EditCourseId);
+            var courseName = course.CourseName;
             var notes = Course.CourseNotes;
-            var course = Course.CourseName;
 
             if (Validation.NotNull(notes))
             {
-                await ShareText(notes, course);
+                await ShareText(notes, courseName);
             }
             else
             {
-                ShowToast("Unable to share, no notes found for " + course);
+                ShowToast("Unable to share, no notes found for " + courseName);
             }
         }
 

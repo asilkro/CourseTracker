@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using SQLite;
 using static Microsoft.Maui.Storage.FileSystem;
 
 namespace CourseTracker.Maui.Services

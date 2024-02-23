@@ -1,5 +1,6 @@
 ﻿using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
+using SQLite;
 
 namespace CourseTracker.Maui.Data
 {

@@ -21,7 +21,7 @@ namespace CourseTracker.Maui.ViewModels
         private DateTime termStart = new(dateStart.Year, dateStart.Month, 1);
         private DateTime termEnd = DateTime.Now.Date.AddDays(30);
         private int courseCount;
-        private bool notificationsEnabled;
+        
         #endregion
 
         #region Properties

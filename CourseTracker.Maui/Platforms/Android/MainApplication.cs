@@ -4,13 +4,8 @@ using Android.Runtime;
 namespace CourseTracker.Maui.Platforms.Android
 {
     [Application]
-    public class MainApplication : MauiApplication
+    public class MainApplication(nint handle, JniHandleOwnership ownership) : MauiApplication(handle, ownership)
     {
-        public MainApplication(nint handle, JniHandleOwnership ownership)
-            : base(handle, ownership)
-        {
-        }
-
         protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
     }
 }

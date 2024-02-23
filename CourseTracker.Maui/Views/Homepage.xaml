@@ -9,22 +9,23 @@
         Padding="20, 10"
         Spacing="10">
 
-            <Label Text="Welcome to CourseTracker!" FontSize="Large" FontAttributes="Bold" HorizontalOptions="Center" />
-        <Label FontAttributes="Bold" Text="-------------------------------------------------------------------------------"/>
+        <Label Text="Welcome to CourseTracker!" TextColor="{StaticResource Primary}" FontSize="Large" FontAttributes="Bold" HorizontalOptions="Center" />
+        <BoxView HeightRequest="1" />
         <Label TextType="Text" HeightRequest="70" FontSize="Medium" LineBreakMode="WordWrap" TextColor="{StaticResource Primary}" HorizontalOptions="CenterAndExpand">
             <Label.Text>
                 The Evaluation User Guide may be accessed at any time from the flyout menu in the top-left of the application.
             </Label.Text>
         </Label>
-        <Label FontAttributes="Bold" Text="-------------------------------------------------------------------------------"/>
-        <Label TextType="Text" HeightRequest="50" FontSize="Medium" FontAttributes="Bold" LineBreakMode="WordWrap" TextColor="{StaticResource Primary}" HorizontalOptions="CenterAndExpand">
-            <Label.Text>If this is your 1st time using the application, click C971 - Load Evaluation Data below</Label.Text>
+
+        <Label TextType="Text" HeightRequest="50" FontSize="Medium" FontAttributes="Bold" LineBreakMode="WordWrap" TextColor="{StaticResource Primary}" HorizontalOptions="StartAndExpand">
+            <Label.Text>Evaluators, please click the button marked "C971 - Load Evaluation Data" below.</Label.Text>
         </Label>
 
-        <Label FontAttributes="Bold" Text="-------------------------------------------------------------------------------"/>
-        <Button x:Name="loadSampleDataButton" Text="C971 - Load Evaluation Data" Command="{Binding OnLoadButtonClicked}" FontAttributes="Bold" BackgroundColor="Red" TextColor="AntiqueWhite"/>
-        <Button x:Name="resetDbButton" Text="**RESET DATABASE - USE CAUTION**" Command="{Binding OnResetDBButtonClicked}" FontAttributes="Bold" BackgroundColor="Red" TextColor="AntiqueWhite"/>
-            <Label FontAttributes="Bold" Text="--------------------------------------------------------------------------------"/>
+        <BoxView HeightRequest="1" /> <!-- used as a separator -->
+        <Button x:Name="loadSampleDataButton" Text="C971 - Load Evaluation Data" Command="{Binding OnLoadButtonClicked}" BackgroundColor="DarkGreen" TextColor="White" FontSize="Large"/>
+        <BoxView HeightRequest="1" /> <!-- used as a separator -->
+        <Button x:Name="resetDbButton" Text="Reset Database" TextTransform="Uppercase" Command="{Binding OnResetDBButtonClicked}" FontAttributes="Bold" BackgroundColor="Red" FontSize="Large" TextColor="White"/>
+        <BoxView HeightRequest="1" /> <!-- used as a separator -->
 
 
     </VerticalStackLayout>

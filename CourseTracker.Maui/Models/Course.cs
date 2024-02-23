@@ -1,4 +1,5 @@
-﻿namespace CourseTracker.Maui.Models;
+﻿using SQLite;
+namespace CourseTracker.Maui.Models;
 
 [Table("Course")]
 public class Course

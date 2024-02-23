@@ -9,7 +9,8 @@ namespace CourseTracker.Maui
         public App()
         {
             InitializeComponent();
-            
+            Current.UserAppTheme = AppTheme.Light;
+            this.RequestedThemeChanged += (s, e) => { Application.Current.UserAppTheme = AppTheme.Light; };
             LocalNotificationCenter.Current.NotificationActionTapped += OnNotificationActionTapped;
             Task.Run(RequestNotificationPermissions);
             MainPage = new AppShell();

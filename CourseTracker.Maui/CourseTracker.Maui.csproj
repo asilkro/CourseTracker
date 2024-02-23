@@ -36,7 +36,6 @@
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 		<PackageReadmeFile></PackageReadmeFile>
-		<PackageIcon>owl1.png</PackageIcon>
 		<PublishAot>False</PublishAot>
 	</PropertyGroup>
 
@@ -58,13 +57,12 @@
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.png" />
 
 		<!-- Splash Screen -->
-
+		<MauiSplash Include="Resources\Splash\splashicon.webp" />
+		
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
-		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
 
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
@@ -74,7 +72,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiSplash Include="Resources\Splash\splashicon.webp" />
+	  <MauiIcon Include="Resources\AppIcon\ct_icon.png" Color="#0E606b" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -121,22 +119,6 @@
 	  <Compile Update="Views\AddCourses-Fallback.xaml.cs">
 	    <DependentUpon>AddCourses-Fallback.xaml</DependentUpon>
 	  </Compile>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Using Include="CourseTracker.Maui.Models">
-	    <Alias>Models</Alias>
-	  </Using>
-	  <Using Include="CourseTracker.Maui.Services">
-	    <Alias>Services</Alias>
-	  </Using>
-	  <Using Include="CourseTracker.Maui.Supplemental">
-	    <Alias>Supplemental</Alias>
-	  </Using>
-	  <Using Include="CourseTracker.Maui.ViewModels">
-	    <Alias>ViewModels</Alias>
-	  </Using>
-	  <Using Include="SQLite" />
 	</ItemGroup>
 
 	<ItemGroup>
