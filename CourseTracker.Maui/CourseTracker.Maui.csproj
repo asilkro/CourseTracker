@@ -72,6 +72,33 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <AndroidResource Remove="Platforms\iOS\**" />
+	  <AndroidResource Remove="Platforms\MacCatalyst\**" />
+	  <AndroidResource Remove="Platforms\Tizen\**" />
+	  <AndroidResource Remove="Platforms\Windows\**" />
+	  <Compile Remove="Platforms\iOS\**" />
+	  <Compile Remove="Platforms\MacCatalyst\**" />
+	  <Compile Remove="Platforms\Tizen\**" />
+	  <Compile Remove="Platforms\Windows\**" />
+	  <EmbeddedResource Remove="Platforms\iOS\**" />
+	  <EmbeddedResource Remove="Platforms\MacCatalyst\**" />
+	  <EmbeddedResource Remove="Platforms\Tizen\**" />
+	  <EmbeddedResource Remove="Platforms\Windows\**" />
+	  <MauiCss Remove="Platforms\iOS\**" />
+	  <MauiCss Remove="Platforms\MacCatalyst\**" />
+	  <MauiCss Remove="Platforms\Tizen\**" />
+	  <MauiCss Remove="Platforms\Windows\**" />
+	  <MauiXaml Remove="Platforms\iOS\**" />
+	  <MauiXaml Remove="Platforms\MacCatalyst\**" />
+	  <MauiXaml Remove="Platforms\Tizen\**" />
+	  <MauiXaml Remove="Platforms\Windows\**" />
+	  <None Remove="Platforms\iOS\**" />
+	  <None Remove="Platforms\MacCatalyst\**" />
+	  <None Remove="Platforms\Tizen\**" />
+	  <None Remove="Platforms\Windows\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <MauiIcon Include="Resources\AppIcon\ct_icon.png" Color="#0E606b" />
 	</ItemGroup>
 
