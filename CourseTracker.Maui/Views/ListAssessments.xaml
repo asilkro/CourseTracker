@@ -16,7 +16,7 @@
                     <StackLayout Padding="5,5">
                         <!-- Properties of each Term -->
                         <Label Text="{Binding AssessmentName, StringFormat='Assessment Name: {0}'}" FontAttributes="Bold" />
-                        <Label Text="{Binding RelatedCourseId, StringFormat='Assessment for CourseId: {0}'}"/>
+                        <Label Text="{Binding RelatedCourseId, StringFormat='Assessment for Course with Id: {0}'}"/>
                     </StackLayout>
                 </ViewCell>
             </DataTemplate>

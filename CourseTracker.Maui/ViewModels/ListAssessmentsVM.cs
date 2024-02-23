@@ -8,6 +8,7 @@ namespace CourseTracker.Maui.ViewModels
     public class ListAssessmentsVM : ViewModelBase
     {
         public ObservableCollection<Assessment> Assessments { get; private set; } = [];
+        public ObservableCollection<Course> Courses { get; private set; } = [];
 
         public ListAssessmentsVM()
         {
@@ -112,6 +113,22 @@ namespace CourseTracker.Maui.ViewModels
             }
         }
 
+        private Course _selectedCourse;
+        public Course SelectedCourse
+        {
+            get => _selectedCourse;
+            set
+            {
+                SetProperty(ref _selectedCourse, value, onChanged: () =>
+                {
+                    if (_selectedCourse != null && value != null)
+                    {
+                        Assessment.RelatedCourseId = value.CourseId;
+                    }
+                });
+            }
+        }
+
         private DateTime assessmentEndDate;
         public DateTime AssessmentEndDate
         {
@@ -163,14 +180,44 @@ namespace CourseTracker.Maui.ViewModels
                     await Shell.Current.GoToAsync($"{nameof(AssessmentPage)}?{nameof(AssessmentVM.EditAssessmentId)}={assessment.AssessmentId}");
                     break;
                 case "Delete Assessment":
-                    var course = await courseDB.GetCourseByIdAsync(assessment.RelatedCourseId);
-                    await assessmentDB.DeleteAssessmentAsync(assessment);
-                    await sharedDB.UpdateCourseAssessmentCount(course);
-                    await LoadAssessments();
-                    await Shell.Current.GoToAsync("..");
+                    bool answer = await Application.Current.MainPage.DisplayAlert("Delete Assessment", "Are you sure you want to delete this assessment?", "Yes", "No");
+                    if (answer)
+                    {
+                        var course = await courseDB.GetCourseByIdAsync(assessment.RelatedCourseId);
+                        await assessmentDB.DeleteAssessmentAsync(assessment);
+                        await sharedDB.UpdateCourseAssessmentCount(course);
+                        await LoadAssessments();
+                        await Shell.Current.GoToAsync("..");
+                    }
                     break;
                 default:
                     break;
+            }
+        }
+
+        public async Task<string> LoadCoursesAsync()
+        {
+            try
+            {
+                var courses = await courseDB.GetCoursesAsync();
+                Assessment assessment = await assessmentDB.GetAssessmentByIdAsync(AssessmentId);
+                assessment ??= new Assessment();
+                Courses.Clear();
+                Course course1 = new();
+                foreach (var course in courses)
+                {
+                    if (course.CourseId == assessment.RelatedCourseId)
+                    {
+                        course1 = course;
+                    }
+                    Courses.Add(course);
+                }
+                SelectedCourse = course1;
+                return SelectedCourse.CourseName;
+            }
+            catch (Exception ex)
+            {
+                return "Issue loading courses: " + ex.Message;
             }
         }
 

@@ -6,7 +6,7 @@
              x:Class="CourseTracker.Maui.Views.AssessmentPage"
              Title="Assessment Modification">
     <ScrollView>
-    <VerticalStackLayout Spacing="10" Padding="10,10">
+    <VerticalStackLayout Spacing="5" Padding="5">
         
         <HorizontalStackLayout HorizontalOptions="FillAndExpand" Spacing="10" Padding="5">
             <!-- Assessment Name -->

@@ -7,8 +7,8 @@
              Title="Course Modification">
     <ScrollView>
         <VerticalStackLayout
-    Spacing="10"
-    Padding="10,10">
+    Spacing="5"
+    Padding="5">
 
             <HorizontalStackLayout HorizontalOptions="FillAndExpand" Spacing="10" Padding="5">
                 <Label x:Name="courseIdLabel" Margin="12" Text="Course Id:" FontAttributes="Bold"/>
@@ -85,7 +85,7 @@
             <HorizontalStackLayout HorizontalOptions="FillAndExpand" Spacing="10" Padding="5">
                 <!--Course Notes-->
                 <Label x:Name="courseNoteLabel" Margin="12" Text="Course Notes" FontAttributes="Bold"/>
-                <Editor x:Name="courseNoteEditor" MaximumWidthRequest="220" HorizontalOptions="StartAndExpand" Text="{Binding CourseNotes}" AutoSize="TextChanges" />
+                <Editor x:Name="courseNoteEditor" MaximumWidthRequest="220" MinimumHeightRequest="50" HorizontalOptions="StartAndExpand" Text="{Binding CourseNotes}" AutoSize="TextChanges" />
             </HorizontalStackLayout>
 
             <Button x:Name="courseNoteShareButton" Text="Share Notes" BackgroundColor="{StaticResource PrimaryDark}" TextColor="WhiteSmoke" Command="{Binding CourseNoteShareButton_Clicked}"/>

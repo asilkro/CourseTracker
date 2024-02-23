@@ -2,8 +2,8 @@
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using CourseTracker.Maui.Models;
+using CourseTracker.Maui.Services;
 using CourseTracker.Maui.ViewModels;
-using static Android.Graphics.ImageDecoder;
 
 namespace CourseTracker.Maui.Data;
 public class SharedDB
@@ -12,7 +12,6 @@ public class SharedDB
     public TermsDB termsDB;
     public CourseDB courseDB;
     public AssessmentDB assessmentDB;
-    
     #endregion
 
     #region Constructor
@@ -21,14 +20,11 @@ public class SharedDB
         termsDB = new TermsDB();
         courseDB = new CourseDB();
         assessmentDB = new AssessmentDB();
-    
     }
     #endregion
 
     #region Utility Methods 
 
-    //This could probably be moved to another
-    //class but its here for convenience right now.
     public static async Task<bool> ConfirmedAction(string messageRequiringConfirmation)
     {
         bool result = await Application.Current.MainPage.DisplayAlert("Confirm Action", messageRequiringConfirmation, "Yes", "No");

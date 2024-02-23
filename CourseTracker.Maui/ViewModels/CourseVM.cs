@@ -228,7 +228,6 @@ namespace CourseTracker.Maui.ViewModels
             CourseId = temp.CourseId;
             TermId = temp.TermId;
             CourseAssessmentCount = temp.CourseAssessmentCount;
-            Debug.WriteLine(temp.CourseAssessmentCount);
         }
 
         public async Task SubmitButtonClicked()
@@ -270,9 +269,14 @@ namespace CourseTracker.Maui.ViewModels
 
         private async Task CourseNoteShareButtonClicked()
         {
-            Course course = await courseDB.GetCourseByIdAsync(EditCourseId);
+            Course course = new()
+            {
+                CourseId = CourseId,
+                CourseName = CourseName,
+                CourseNotes = CourseNotes,
+            };
             var courseName = course.CourseName;
-            var notes = Course.CourseNotes;
+            var notes = course.CourseNotes;
 
             if (Validation.NotNull(notes))
             {
@@ -290,8 +294,7 @@ namespace CourseTracker.Maui.ViewModels
             {
                 await Share.Default.RequestAsync(new ShareTextRequest
                 {
-                    Text = notes + Environment.NewLine + "SharedDB on " + DateTime.Now.ToShortDateString(),
-                    Title = "Course Notes for " + source,
+                    Text = "Course Notes for " + source + ":" + Environment.NewLine + notes + Environment.NewLine + "Shared on " + DateTime.Now.ToShortDateString(),
                 });
                 ShowToast("Notes shared successfully.");
             }

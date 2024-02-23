@@ -20,6 +20,7 @@ namespace CourseTracker.Maui.ViewModels
         }
         private static async Task ResetDbButton_Clicked()
         {
+
             bool confirmed = await App.Current.MainPage.DisplayAlert("Reset Database", "This will delete ALL data in the database. Are you sure you want to continue?", "Yes", "No");
             if (confirmed)
             {
