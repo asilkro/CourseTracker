@@ -50,7 +50,7 @@ namespace CourseTracker.Maui.ViewModels
                 IsRefreshing = false;
             }
         }
-    
+
 
         private Term term = new();
 

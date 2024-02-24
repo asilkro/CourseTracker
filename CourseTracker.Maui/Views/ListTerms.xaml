@@ -12,7 +12,7 @@ Padding="20,10" Spacing="5" VerticalOptions="FillAndExpand">
         <ListView x:Name="termListView" ItemsSource="{Binding Terms}" 
              RowHeight="80" CachingStrategy="RecycleElement" ItemTapped="TermListView_ItemTapped" IsRefreshing="{Binding IsRefreshing}" SelectionMode="Single">
             <ListView.ItemTemplate>
-                <DataTemplate x:DataType="{x:Type x:Term}">
+                <DataTemplate>
                     <ViewCell>
                         <Grid Padding="10" RowDefinitions="Auto, 30" RowSpacing="5">
                             <Label Grid.Row="0" Text="{Binding TermName, StringFormat='Term Name : {0}'}" FontAttributes="Bold" TextColor="{StaticResource Primary}"/>

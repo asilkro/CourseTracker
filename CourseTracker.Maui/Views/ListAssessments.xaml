@@ -11,7 +11,7 @@
               VerticalOptions="FillAndExpand" CachingStrategy="RecycleElement"
               SelectionMode="Single" ItemTapped="AssessmentListView_ItemTapped">
         <ListView.ItemTemplate>
-            <DataTemplate x:DataType="{x:Type x:Assessment}">
+            <DataTemplate>
                 <ViewCell>
                     <StackLayout Padding="5,5">
                         <!-- Properties of each Term -->

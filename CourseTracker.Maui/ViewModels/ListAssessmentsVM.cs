@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Diagnostics;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Views;
 

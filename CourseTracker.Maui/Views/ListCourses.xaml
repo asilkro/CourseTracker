@@ -11,8 +11,8 @@
                   ItemTapped="CourseListView_ItemTapped" VerticalOptions="FillAndExpand"
                   CachingStrategy="RecycleElement" SelectionMode="Single">
             <ListView.ItemTemplate>
-            <DataTemplate x:DataType="{x:Type x:Course}">
-                    <ViewCell>
+            <DataTemplate>
+                <ViewCell>
                         <StackLayout Padding="5,5">
                             <!-- Displayed Properties of each Course -->
                         <Label Text="{Binding CourseName, StringFormat='Course Name: {0}'}" FontAttributes="Bold" TextColor="{StaticResource Primary}" />

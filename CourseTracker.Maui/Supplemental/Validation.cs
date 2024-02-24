@@ -1,7 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using CourseTracker.Maui.Data;
 using CourseTracker.Maui.Models;
-using CourseTracker.Maui.Services;
 using Plugin.LocalNotification;
 
 namespace CourseTracker.Maui.Supplemental

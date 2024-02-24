@@ -1,6 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Diagnostics;
-using CourseTracker.Maui.Data;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Supplemental;
 using CourseTracker.Maui.Views;
@@ -214,7 +212,7 @@ namespace CourseTracker.Maui.ViewModels
                 CourseEnd = dateEnd;
                 return;
             }
-                    
+
             Course temp = await courseDB.GetCourseByIdAsync(Id);
             CourseName = temp.CourseName;
             InstructorName = temp.InstructorName;

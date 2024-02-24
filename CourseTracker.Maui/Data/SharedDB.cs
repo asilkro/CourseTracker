@@ -1,9 +1,6 @@
-﻿using System.Diagnostics;
-using CommunityToolkit.Maui.Alerts;
+﻿using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using CourseTracker.Maui.Models;
-using CourseTracker.Maui.Services;
-using CourseTracker.Maui.ViewModels;
 
 namespace CourseTracker.Maui.Data;
 public class SharedDB
@@ -85,7 +82,7 @@ public class SharedDB
                     await DeleteCourseAndRelatedEntities(course, showConfirmation: false);
                 }
                 await termsDB.DeleteTermAsync(term);
-             }
+            }
             catch (Exception e)
             {
                 ShowToast("Error deleting term " + term.TermName + ": " + e.Message);
@@ -250,8 +247,8 @@ public class SharedDB
             ShowToast("There was an error updating the course count for Term: " + term.TermName + " - " + ex);
             throw;
         }
-        
-        return;    
+
+        return;
     }
 
     public async Task UpdateCourseAssessmentCount(Course course)

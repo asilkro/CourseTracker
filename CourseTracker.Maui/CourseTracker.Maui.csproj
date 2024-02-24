@@ -2,15 +2,6 @@
 
 	<PropertyGroup>
 		<TargetFrameworks>net8.0-android34.0</TargetFrameworks>
-		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
-		<!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
-
-		<!-- Note for MacCatalyst:
-		The default runtime is maccatalyst-x64, except in Release config, in which case the default is maccatalyst-x64;maccatalyst-arm64.
-		When specifying both architectures, use the plural <RuntimeIdentifiers> instead of the singular <RuntimeIdentifier>.
-		The Mac App Store will NOT accept apps with ONLY maccatalyst-arm64 indicated;
-		either BOTH runtimes must be indicated or ONLY macatalyst-x64. -->
-		<!-- For example: <RuntimeIdentifiers>maccatalyst-x64;maccatalyst-arm64</RuntimeIdentifiers> -->
 
 		<OutputType>Exe</OutputType>
 		<RootNamespace>CourseTracker.Maui</RootNamespace>
@@ -18,7 +9,6 @@
 		<SingleProject>true</SingleProject>
 		<ImplicitUsings>Enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
-		<RunAOTCompilation>false</RunAOTCompilation>
 
 		<!-- Display name -->
 		<ApplicationTitle>CourseTracker.Maui</ApplicationTitle>
@@ -37,7 +27,7 @@
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
 		<PackageReadmeFile></PackageReadmeFile>
-		<PublishAot>True</PublishAot>
+		<PublishAot>False</PublishAot>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-maccatalyst|AnyCPU'">
@@ -48,9 +38,17 @@
 	  <ApplicationId>com.Silkroski.coursetracker.maui</ApplicationId>
 	  <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
 	  <TrimMode>copyused</TrimMode>
-	  <RunAOTCompilation>True</RunAOTCompilation>
-	  <EnableLLVM>True</EnableLLVM>
+	  <RunAOTCompilation>False</RunAOTCompilation>
+	  <EnableLLVM>False</EnableLLVM>
 	  <PublishTrimmed>False</PublishTrimmed>
+	  <IsPublishable>False</IsPublishable>
+	  <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
+	  <DebugSymbols>False</DebugSymbols>
+	  <AndroidKeyStore>False</AndroidKeyStore>
+	  <AndroidUseAapt2>True</AndroidUseAapt2>
+	  <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
+	  <AndroidPackageFormat>aab</AndroidPackageFormat>
+	  <AndroidEnableMultiDex>True</AndroidEnableMultiDex>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-maccatalyst|AnyCPU'">
@@ -60,13 +58,17 @@
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android34.0|AnyCPU'">
 	  <ApplicationId>com.Silkroski.coursetracker.maui</ApplicationId>
 	  <Optimize>True</Optimize>
-	  <AndroidPackageFormat>apk</AndroidPackageFormat>
+	  <AndroidPackageFormat>aab</AndroidPackageFormat>
 	  <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
 	  <PublishTrimmed>True</PublishTrimmed>
 	  <TrimMode>copyused</TrimMode>
-	  <RunAOTCompilation>True</RunAOTCompilation>
+	  <RunAOTCompilation>False</RunAOTCompilation>
 	  <EnableLLVM>True</EnableLLVM>
-	  <AndroidLinkTool>r8</AndroidLinkTool>
+	  <IsPublishable>False</IsPublishable>
+	  <AndroidKeyStore>False</AndroidKeyStore>
+	  <AndroidUseAapt2>True</AndroidUseAapt2>
+	  <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
+	  <AndroidEnableMultiDex>True</AndroidEnableMultiDex>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -121,7 +123,7 @@
 		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.7" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.7" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
-		<PackageReference Include="Plugin.LocalNotification" Version="10.1.8" />
+		<PackageReference Include="Plugin.LocalNotification" Version="11.1.0" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.8.116" />
 		<PackageReference Include="SQLitePCLRaw.provider.dynamic_cdecl" Version="2.1.8" />
 	</ItemGroup>

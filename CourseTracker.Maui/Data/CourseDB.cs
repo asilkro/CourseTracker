@@ -1,10 +1,10 @@
-﻿using SQLite;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Security.Cryptography;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Supplemental;
 using Plugin.LocalNotification;
+using SQLite;
 
 namespace CourseTracker.Maui.Data
 {

@@ -209,7 +209,7 @@ namespace CourseTracker.Maui.ViewModels
                     return message;
                 }
                 foreach (var a in assessments)
-                { 
+                {
                     if (a.AssessmentType == assessment.AssessmentType)
                     {
                         message = "This course already has a " + assessment.AssessmentType + " assessment.";
@@ -222,7 +222,7 @@ namespace CourseTracker.Maui.ViewModels
             }
             return message;
         }
-        
+
         #endregion
     }
 }

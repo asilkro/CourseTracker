@@ -25,6 +25,6 @@ public partial class ListCourses : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        viewModel.OnAppearing();   
+        viewModel.OnAppearing();
     }
 }

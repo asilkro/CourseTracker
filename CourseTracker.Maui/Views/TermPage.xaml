@@ -54,7 +54,7 @@
                     VerticalOptions="FillAndExpand" MinimumHeightRequest="100" BackgroundColor="WhiteSmoke"
                           SelectedItem="None">
                     <ListView.ItemTemplate>
-                        <DataTemplate x:DataType="{x:Type x:Course}">
+                        <DataTemplate>
                             <ViewCell>
                                 <Grid RowDefinitions="Auto, 20">
                                     <!-- Some properties of each Course on term-->

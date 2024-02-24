@@ -58,7 +58,7 @@ namespace CourseTracker.Maui.ViewModels
 
                 var demoCourse = await MakeDemoCourse1();
                 demoCourse.TermId = DemoTerm.TermId;
-                                
+
                 await sharedDB.InsertCourseAndUpdateTerm(demoCourse);
                 Debug.WriteLine("Inserted course: " + demoCourse.CourseName);
 
@@ -66,7 +66,7 @@ namespace CourseTracker.Maui.ViewModels
                 demoOA.RelatedCourseId = demoCourse.CourseId;
                 await sharedDB.SaveAssessmentAndUpdateCourse(demoOA); //1
                 Debug.WriteLine("Inserted assessment: " + demoOA.AssessmentName); //C6 OA
-                                
+
                 var demoPA = await MakeDemoPA(); //Assessment for course 1
                 demoPA.RelatedCourseId = demoCourse.CourseId;
                 await sharedDB.SaveAssessmentAndUpdateCourse(demoPA); //2
@@ -81,7 +81,7 @@ namespace CourseTracker.Maui.ViewModels
                 demoCourse2.TermId = demoTerm2.TermId;
 
                 await sharedDB.InsertCourseAndUpdateTerm(demoCourse2);
-                Debug.WriteLine("Inserted course: " + demoCourse2.CourseName);  
+                Debug.WriteLine("Inserted course: " + demoCourse2.CourseName);
 
                 var demoOA2 = await MakeDemoOA2();
                 demoOA2.RelatedCourseId = demoCourse2.CourseId;
@@ -94,10 +94,10 @@ namespace CourseTracker.Maui.ViewModels
                 Debug.WriteLine("Inserted course: " + demoCourse3.CourseName);
 
                 var demoPA2 = await MakeDemoPA2();
-                demoPA2.RelatedCourseId = demoCourse3.CourseId;  
+                demoPA2.RelatedCourseId = demoCourse3.CourseId;
                 await sharedDB.SaveAssessmentAndUpdateCourse(demoPA2); //4
                 Debug.WriteLine("Inserted assessment: " + demoPA2.AssessmentName);
-                
+
                 await App.Current.MainPage.DisplayAlert("Sample Data Loaded", "Sample data has been loaded successfully.", "OK");
             }
             catch (Exception ex)
