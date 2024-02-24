@@ -22,6 +22,8 @@ Thank you for evaluating and using this application. There are a few things you 
 	- To work around this issue, you can run the application on a physical device **(recommended)**, or open the XAML file (ie ListTerms.xaml) and make a small change *(changing CachingStrategy="RecycleElement" to "RetainElement" as an example)** and then save the file.
 	- The ListView should display correctly after.
 
+4. There are known [issues with collections](https://github.com/dotnet/maui/issues/19357) and [bindings](https://github.com/dotnet/maui/issues/20002) in MAUI that may cause the Lists to not populate properly. This is an issue with the MAUI framework and not the application or code itself.
+
 ## Application Workflow Overview:
 
 1. Add a new term.
@@ -29,11 +31,11 @@ Thank you for evaluating and using this application. There are a few things you 
 1. Add a new course.
 	1. While creating the course, assign it the term via the dropdown.
 		1. A course supports a maximum of 2 assessments.
-		1. A course supports alerting for the start and end dates 3 and 1 days before.
+		1. A course supports alerting on 3 and 1 days before the start and end dates.
 		1. Course notes are required for sharing functionality.
 1. Add a new assessment.
 	1. While creating the assessment, assign it to the appropriate course via the dropdown.
-		1. An assessment supports alerting for the start and end (due) dates 3 and 1 days before.
+		1. An assessment supports alerting on 3 and 1 days before the start and end(due) dates.
 	
 #### Deletion Notes
 - When removing a term, all courses and assessments associated with that term will be removed as well.
@@ -46,7 +48,7 @@ Thank you for evaluating and using this application. There are a few things you 
 	- Microsoft.Extensions.Logging.Debug 8.0.0
 	- Microsoft.Maui.Controls 8.0.7
 	- Microsoft.Maui.Controls.Compatibility 8.0.7
-	- Plugin.LocalNotification 10.1.8
+	- Plugin.LocalNotification 11.1.0
 	- SQLite-net-pcl 1.8.116
 	- SQLitePCLRaw.provider.dynamic_cdecl 2.1.8
 
