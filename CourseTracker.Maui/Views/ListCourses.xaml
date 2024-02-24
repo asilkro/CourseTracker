@@ -11,13 +11,13 @@
                   ItemTapped="CourseListView_ItemTapped" VerticalOptions="FillAndExpand"
                   CachingStrategy="RecycleElement" SelectionMode="Single">
             <ListView.ItemTemplate>
-                <DataTemplate>
+            <DataTemplate x:DataType="{x:Type x:Course}">
                     <ViewCell>
                         <StackLayout Padding="5,5">
                             <!-- Displayed Properties of each Course -->
-                        <Label Text="{Binding CourseName, StringFormat='Course Name: {0}'}" FontAttributes="Bold" />
-                        <Label Text="{Binding TermId, StringFormat='Term Id: {0}'}" />
-                        <Label Text="{Binding CourseAssessmentCount, StringFormat='Assessment Count: {0}'}" />
+                        <Label Text="{Binding CourseName, StringFormat='Course Name: {0}'}" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
+                        <Label Text="{Binding TermId, StringFormat='Term Id: {0}'}" TextColor="{StaticResource Primary}"/>
+                        <Label Text="{Binding CourseAssessmentCount, StringFormat='Assessment Count: {0}'}" TextColor="{StaticResource Primary}"/>
                     </StackLayout>
                     </ViewCell>
                 </DataTemplate>

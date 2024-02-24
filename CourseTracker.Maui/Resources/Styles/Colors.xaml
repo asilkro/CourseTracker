@@ -8,9 +8,9 @@
 
     <Color x:Key="Primary">#0E606b</Color>
     <Color x:Key="PrimaryDark">#252525</Color>
-    <Color x:Key="PrimaryDarkText">#D9D9D9</Color>
+    <Color x:Key="PrimaryDarkText">#252525</Color>
     <Color x:Key="Secondary">#aaaaaa</Color>
-    <Color x:Key="SecondaryDarkText">#fff4f1</Color>
+    <Color x:Key="SecondaryDarkText">#252525</Color>
     <Color x:Key="Tertiary">#ffc24b</Color>
     <Color x:Key="DarkGreen">DarkGreen</Color>
 

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
@@ -6,6 +7,11 @@ using CourseTracker.Maui.Data;
 
 namespace CourseTracker.Maui.ViewModels
 {
+    // [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)]
+    // Added to work around resolve issue with bindings detailed here:
+    // https://github.com/dotnet/maui/issues/20002
+    // https://stackoverflow.com/questions/75283345/collectionview-working-in-debug-but-not-in-release-in-net-maui
+    
     public class ViewModelBase : INotifyPropertyChanged
     {
         public TermsDB termsDB;

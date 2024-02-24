@@ -52,9 +52,9 @@
 
                 <ListView x:Name="termCoursesList" ItemsSource="{Binding RelatedCourses}"
                     VerticalOptions="FillAndExpand" MinimumHeightRequest="100" BackgroundColor="WhiteSmoke"
-                          SelectedItem="None">44
+                          SelectedItem="None">
                     <ListView.ItemTemplate>
-                        <DataTemplate>
+                        <DataTemplate x:DataType="{x:Type x:Course}">
                             <ViewCell>
                                 <Grid RowDefinitions="Auto, 20">
                                     <!-- Some properties of each Course on term-->
