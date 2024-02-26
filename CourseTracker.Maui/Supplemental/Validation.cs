@@ -12,6 +12,7 @@ namespace CourseTracker.Maui.Supplemental
         public TermsDB termsDB;
         public CourseDB courseDB;
         public AssessmentDB assessmentDB;
+        public NotifyDB notifyDB;
 
         public Validation()
         {
@@ -132,30 +133,30 @@ namespace CourseTracker.Maui.Supplemental
             return true;
         }
 
-        public async static Task<bool> IsValidNotification(NotificationRequest notification) //Non exhaustive checks
+        public async static Task<string> IsValidNotification(NotificationRequest notification) //Non exhaustive checks
         {
-            var result = true;
+            var message = string.Empty;
             if (notification == null)
             {
-                result = false;
+                message = "Notification is null.";
             }
             else if (!NotNull(notification.Title) || !NotNull(notification.Subtitle))
             {
-                result = false;
+                message = "Notification Title and subtitle cannot be empty.";
             }
             else if (notification.Schedule == null)
             {
-                result = false;
+                message = "No schedule was set for the notification.";
             }
             else if (notification.Schedule.NotifyTime <= DateTime.Now.Date)
             {
-                result = false;
+                message = "Notification time must be in the future.";
             }
             else if (notification.Schedule.NotifyAutoCancelTime < notification.Schedule.NotifyTime)
             {
-                result = false;
+                message = "Auto cancel time must be after the notify time.";
             }
-            return result;
+            return message;
         }
 
         public async Task<bool> DataExistsInTables()
@@ -163,13 +164,14 @@ namespace CourseTracker.Maui.Supplemental
             List<Term> termCount = await termsDB.GetTermsAsync();
             List<Course> courseCount = await courseDB.GetCoursesAsync();
             List<Assessment> assessmentCount = await assessmentDB.GetAssessmentsAsync();
+            List<Notification> notificationCount = await notifyDB.GetNotificationsAsync();
 
-            var result = (termCount.Count > 0, courseCount.Count > 0, assessmentCount.Count > 0)
+            var result = (termCount.Count > 0, courseCount.Count > 0, assessmentCount.Count > 0, notificationCount.Count > 0)
             switch
             {
-                // If not all three are empty, return true to avoid conflicts
-                (true, true, true) => true,
-                (false, false, false) => false,
+                // If not all four are empty, return true to avoid conflicts
+                (true, true, true, true) => true,
+                (false, false, false, false) => false,
                 _ => true,
             };
             return result;

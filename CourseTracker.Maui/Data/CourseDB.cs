@@ -3,6 +3,7 @@ using System.Security.Cryptography;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Supplemental;
+using CourseTracker.Maui.ViewModels;
 using Plugin.LocalNotification;
 using SQLite;
 
@@ -11,9 +12,11 @@ namespace CourseTracker.Maui.Data
     public class CourseDB
     {
         SQLiteAsyncConnection _database;
+        readonly NotifyDB notifyDB;
 
         public CourseDB()
         {
+            notifyDB = new NotifyDB();
         }
 
         public async Task Init()
@@ -29,6 +32,7 @@ namespace CourseTracker.Maui.Data
             await Init();
             return await _database.Table<Course>().ToListAsync();
         }
+
         public async Task<Course> GetCourseByIdAsync(int id)
         {
             await Init();
@@ -71,25 +75,51 @@ namespace CourseTracker.Maui.Data
         {
             if (course.NotificationsEnabled)
             {
-                var notificationId = course.CourseId + RandomNumberGenerator.GetInt32(999); // Ideally, generate a unique ID for each notification.
                 var title = $"Reminder for {course.CourseName}";
 
                 // Schedule notifications for start date reminders
                 var startReminders = new[] { 3, 1 };
                 foreach (var daysBefore in startReminders)
                 {
+                    try
+                    {
+                        Notification notification = new()
+                        {
+                            NotificationTitle = title,
+                            NotificationDate = course.CourseStart.AddDays(-daysBefore),
+                            RelatedItemType = "Course",
+                            NotificationMessage = $"{course.CourseName} begins in {daysBefore} day(s)",
+                        };
+                        await NotifyDB.ScheduleNotificationAsync(notification);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex.Message);
+                    }
                     var notifyTime = course.CourseStart.AddDays(-daysBefore);
-                    var subtitle = $"Starts in {daysBefore} days";
-                    await Notification.ScheduleNotificationAsync(notificationId++, title, subtitle, notifyTime, NotificationCategoryType.Reminder);
+                    
                 }
 
                 // Schedule notifications for end date reminders
                 var endReminders = new[] { 3, 1 };
                 foreach (var daysBefore in endReminders)
                 {
-                    var notifyTime = course.CourseEnd.AddDays(-daysBefore);
-                    var subtitle = $"Ends in {daysBefore} days";
-                    await Notification.ScheduleNotificationAsync(notificationId++, title, subtitle, notifyTime, NotificationCategoryType.Reminder);
+                    try
+                    {
+                        Notification notification = new()
+                        {
+                            NotificationTitle = title,
+                            NotificationDate = course.CourseEnd.AddDays(-daysBefore),
+                            RelatedItemType = "Course",
+                            NotificationMessage = $"{course.CourseName} concludes in {daysBefore} day(s)",
+                        };
+
+                        await NotifyDB.ScheduleNotificationAsync(notification);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex.Message);
+                    }
                 }
             }
         }

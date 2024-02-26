@@ -208,7 +208,7 @@ namespace CourseTracker.Maui.ViewModels
                 {
                     return message;
                 }
-                foreach (var a in assessments)
+                foreach (var a in assessments) //TODO: Fix this
                 {
                     if (a.AssessmentType == assessment.AssessmentType)
                     {

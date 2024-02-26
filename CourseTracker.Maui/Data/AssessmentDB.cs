@@ -1,4 +1,5 @@
-﻿using CourseTracker.Maui.Models;
+﻿using System.Diagnostics;
+using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Supplemental;
 using Plugin.LocalNotification;
@@ -11,12 +12,14 @@ namespace CourseTracker.Maui.Data
         #region Fields
         SQLiteAsyncConnection _database;
         readonly CourseDB courseDB;
+        readonly NotifyDB notifyDB;
         #endregion
 
         #region Constructors
         public AssessmentDB()
         {
             courseDB = new CourseDB();
+            notifyDB = new NotifyDB();
         }
         #endregion
 
@@ -102,27 +105,42 @@ namespace CourseTracker.Maui.Data
             // Assumptions: Using full days 
             if (assessment.NotificationsEnabled)
             {
-                //var notificationId = (assessment.AssessmentId + DateTime.Now.Second); // Ideally, generate a unique ID for each notification.
                 var title = $"Reminder for {assessment.AssessmentName}";
 
                 // Schedule notifications for start date reminders
                 var startReminders = new[] { 3, 1 }; // These could be different from the end reminders or configurable in-app in a future version.
                 foreach (var daysBefore in startReminders)
                 {
-                    var notificationId = (assessment.AssessmentId + DateTime.Now.Second);
-                    var notifyTime = assessment.AssessmentStartDate.AddDays(-daysBefore);
-                    var subtitle = $"{assessment.AssessmentName} starts in {daysBefore} day(s)";
-                    await Notification.ScheduleNotificationAsync(notificationId++, title, subtitle, notifyTime, NotificationCategoryType.Reminder);
+                    try
+                    {
+                        Notification notification = new()
+                        {                        
+                            NotificationTitle = title,
+                            NotificationDate = assessment.AssessmentStartDate.AddDays(-daysBefore),
+                            RelatedItemType = "Assessment",
+                            NotificationMessage = $"{assessment.AssessmentName} begins in {daysBefore} day(s)",
+                        };
+                        await NotifyDB.ScheduleNotificationAsync(notification);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex.Message);
+                    }
+                    
                 }
 
                 // Schedule notifications for end date reminders
                 var endReminders = new[] { 3, 1 }; // These could be different from the start reminders or configurable in-app in a future version.
                 foreach (var daysBefore in endReminders)
                 {
-                    var notificationId = (assessment.AssessmentId + DateTime.Now.Millisecond);
-                    var notifyTime = assessment.AssessmentEndDate.AddDays(-daysBefore);
-                    var subtitle = $"{assessment.AssessmentName} due in {daysBefore} day(s)";
-                    await Notification.ScheduleNotificationAsync(notificationId++, title, subtitle, notifyTime, NotificationCategoryType.Reminder);
+                    Notification notification = new()
+                    {
+                        NotificationTitle = title,
+                        NotificationDate = assessment.AssessmentEndDate.AddDays(-daysBefore),
+                        RelatedItemType = "Assessment",
+                        NotificationMessage = $"{assessment.AssessmentName} concludes in {daysBefore} day(s)"
+                    };
+                    await NotifyDB.ScheduleNotificationAsync(notification);
                 }
             }
             return;
