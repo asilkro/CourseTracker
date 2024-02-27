@@ -8,7 +8,7 @@
 
     <!-- Display List of Assessments using ListView -->
     <ListView x:Name="assessmentListView" ItemsSource="{Binding Assessments}" 
-              VerticalOptions="FillAndExpand" CachingStrategy="RecycleElement"
+              VerticalOptions="FillAndExpand"
               SelectionMode="Single" ItemTapped="AssessmentListView_ItemTapped">
         <ListView.ItemTemplate>
             <DataTemplate>

@@ -12,14 +12,12 @@ namespace CourseTracker.Maui.Data
         #region Fields
         SQLiteAsyncConnection _database;
         readonly CourseDB courseDB;
-        readonly NotifyDB notifyDB;
         #endregion
 
         #region Constructors
         public AssessmentDB()
         {
             courseDB = new CourseDB();
-            notifyDB = new NotifyDB();
         }
         #endregion
 

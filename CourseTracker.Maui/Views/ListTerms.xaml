@@ -10,9 +10,9 @@
 Padding="20,10" Spacing="5" VerticalOptions="FillAndExpand">
         <!-- Display List of Terms using ListView -->
         <ListView x:Name="termListView" ItemsSource="{Binding Terms}" 
-             RowHeight="80" CachingStrategy="RecycleElement" ItemTapped="TermListView_ItemTapped" IsRefreshing="{Binding IsRefreshing}" SelectionMode="Single">
+             RowHeight="80" ItemTapped="TermListView_ItemTapped" IsRefreshing="{Binding IsRefreshing}" SelectionMode="Single">
             <ListView.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="viewModels:TermVM">
                     <ViewCell>
                         <Grid Padding="10" RowDefinitions="Auto, 30" RowSpacing="5">
                             <Label Grid.Row="0" Text="{Binding TermName, StringFormat='Term Name : {0}'}" FontAttributes="Bold" TextColor="{StaticResource Primary}"/>
