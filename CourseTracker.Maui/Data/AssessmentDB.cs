@@ -103,7 +103,6 @@ namespace CourseTracker.Maui.Data
         public async Task ScheduleAssessmentNotifications(Assessment assessment)
         {
             // Assumptions: Using full days 
-            if (assessment.NotificationsEnabled)
             {
                 var title = $"Reminder for {assessment.AssessmentName}";
 
@@ -118,7 +117,7 @@ namespace CourseTracker.Maui.Data
                             NotificationTitle = title,
                             NotificationDate = assessment.AssessmentStartDate.AddDays(-daysBefore),
                             RelatedItemType = "Assessment",
-                            NotificationMessage = $"{assessment.AssessmentName} begins in {daysBefore} day(s)",
+                            NotificationMessage = $"The assessment: {assessment.AssessmentName} starts in {daysBefore} day(s)",
                         };
                         await notifyDB.ScheduleNotificationAsync(notification);
                     }
@@ -138,7 +137,7 @@ namespace CourseTracker.Maui.Data
                         NotificationTitle = title,
                         NotificationDate = assessment.AssessmentEndDate.AddDays(-daysBefore),
                         RelatedItemType = "Assessment",
-                        NotificationMessage = $"{assessment.AssessmentName} concludes in {daysBefore} day(s)"
+                        NotificationMessage = $"The assessment: {assessment.AssessmentName} is due in {daysBefore} day(s)"
                     };
                     await notifyDB.ScheduleNotificationAsync(notification);
                 }
@@ -168,19 +167,19 @@ namespace CourseTracker.Maui.Data
             var result = await _database.FindAsync<Assessment>(assessment.AssessmentId);
             if (result == null)
             {
-                await _database.InsertAsync(assessment);
                 if (assessment.NotificationsEnabled)
                 {
                     await ScheduleAssessmentNotifications(assessment);
                 }
+                await _database.InsertAsync(assessment);
             }
             else
             {
-                await _database.UpdateAsync(assessment);
                 if (assessment.NotificationsEnabled)
                 {
                     await ScheduleAssessmentNotifications(assessment);
                 }
+                await _database.UpdateAsync(assessment);
             }
         }
         #endregion

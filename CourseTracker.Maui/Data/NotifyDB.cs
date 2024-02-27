@@ -100,12 +100,10 @@ namespace CourseTracker.Maui.Data
                 await LocalNotificationCenter.Current.Show(notificationRequest);
                 List<Notification> notificationCount = await GetNotificationsAsync();
                 Debug.WriteLine(notificationCount.Count + " was the number of notifications");
+                
                 return;
                 }
-
             }
 
-            public static void CancelNotificationAsync(int notificationId)
-                => LocalNotificationCenter.Current.Cancel(notificationId);
         }
     }

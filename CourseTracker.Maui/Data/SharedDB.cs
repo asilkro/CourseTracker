@@ -9,6 +9,7 @@ public class SharedDB
     public TermsDB termsDB;
     public CourseDB courseDB;
     public AssessmentDB assessmentDB;
+    public NotifyDB notifyDB;
     #endregion
 
     #region Constructor
@@ -17,6 +18,7 @@ public class SharedDB
         termsDB = new TermsDB();
         courseDB = new CourseDB();
         assessmentDB = new AssessmentDB();
+        notifyDB = new NotifyDB();
     }
     #endregion
 

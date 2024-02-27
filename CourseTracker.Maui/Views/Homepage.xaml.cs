@@ -13,7 +13,7 @@ public partial class Homepage : ContentPage
     protected override void OnAppearing()
     {
         base.OnAppearing();
-        HomepageVM.OnAppearing();
+        viewModel.OnAppearing();
     }
 
 }

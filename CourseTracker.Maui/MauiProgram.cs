@@ -14,10 +14,15 @@ namespace CourseTracker.Maui
                 .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
             {
-                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                fonts.AddFont(
+                    "OpenSans-Regular.ttf",
+                    "OpenSansRegular");
+                fonts.AddFont(
+                    "OpenSans-Semibold.ttf",
+                    "OpenSansSemibold");
             })
             .UseLocalNotification();
+
             builder.Services.AddSingleton<TermsDB>();
             builder.Services.AddSingleton<CourseDB>();
             builder.Services.AddSingleton<AssessmentDB>();

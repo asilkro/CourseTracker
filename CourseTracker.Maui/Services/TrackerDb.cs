@@ -39,6 +39,7 @@ namespace CourseTracker.Maui.Services
                 _connection.GetConnection().Execute("Delete from Term");
                 _connection.GetConnection().Execute("Delete from Course");
                 _connection.GetConnection().Execute("Delete from Assessment");
+                _connection.GetConnection().Execute("Delete from Notification");
             }
 
             catch (Exception ex)

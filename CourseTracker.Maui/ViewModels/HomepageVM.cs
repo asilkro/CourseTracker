@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
+using CourseTracker.Maui.Data;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Supplemental;
@@ -9,14 +11,18 @@ namespace CourseTracker.Maui.ViewModels
     {
         public Command OnLoadButtonClicked { get; set; }
         public Command OnResetDBButtonClicked { get; set; }
+        public Command OnNotifyButtonClicked { get; set; }
+
+        public ObservableCollection<Notification> Notifications { get; private set; } = [];
+        private Connection _database;
+        readonly NotifyDB notifyDB;
+
         public HomepageVM()
         {
             OnLoadButtonClicked = new Command(async () => await LoadButton_Clicked());
             OnResetDBButtonClicked = new Command(async () => await ResetDbButton_Clicked());
-        }
-        private static async Task StartDB()
-        {
-            ShowToast("Ready for use.");
+            OnNotifyButtonClicked = new Command(async () => await NotifyButton_Clicked());
+            notifyDB = new NotifyDB();
         }
         private static async Task ResetDbButton_Clicked()
         {
@@ -32,9 +38,15 @@ namespace CourseTracker.Maui.ViewModels
         {
             await LoadSampleDataAsync();
         }
-        public static async void OnAppearing()
+
+        private async Task NotifyButton_Clicked()
         {
-            await StartDB();
+            await LoadNotifications();
+        }
+
+        public async void OnAppearing()
+        {
+            await LoadNotifications();
         }
 
         private async Task LoadSampleDataAsync()
@@ -106,6 +118,59 @@ namespace CourseTracker.Maui.ViewModels
                 return;
             }
         }
+        
+        #region Notifications
+
+        private Notification notification;
+        public Notification Notification
+        {
+            get => notification;
+            set => SetProperty(ref notification, value);
+        }
+
+        private DateTime notificationDate;
+        public DateTime NotificationDate
+        {
+            get => notificationDate;
+            set => SetProperty(ref notificationDate, value);
+        }
+
+        private string notificationTitle;
+        public string NotificationTitle
+        {
+            get => notificationTitle;
+            set => SetProperty(ref notificationTitle, value);
+        }
+
+        private string notificationMessage;
+        public string NotificationMessage
+        {
+            get => notificationMessage;
+            set => SetProperty(ref notificationMessage, value);
+        }
+
+        public async Task LoadNotifications()
+        {
+            try
+            {
+                _database ??= new Connection();
+                _database.GetAsyncConnection();
+                var updatedNotificationList = await notifyDB.GetNotificationsAsync();
+                Notifications.Clear();
+                foreach (var notification in updatedNotificationList)
+                {
+                    Notifications.Add(notification);
+                }
+            }
+            catch (Exception ex)
+            {
+                ShowToast("Issue loading notifications: " + ex.Message);
+                return;
+            }
+        }
+
+        #endregion
+
         #region Sample Data For Evaluation
 
         private async Task<Term> MakeDemoTerm()

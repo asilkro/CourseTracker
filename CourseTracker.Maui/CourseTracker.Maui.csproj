@@ -43,12 +43,17 @@
 	  <PublishTrimmed>False</PublishTrimmed>
 	  <IsPublishable>False</IsPublishable>
 	  <EmbedAssembliesIntoApk>True</EmbedAssembliesIntoApk>
-	  <DebugSymbols>False</DebugSymbols>
+	  <DebugSymbols>True</DebugSymbols>
 	  <AndroidKeyStore>False</AndroidKeyStore>
 	  <AndroidUseAapt2>True</AndroidUseAapt2>
 	  <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
 	  <AndroidPackageFormat>aab</AndroidPackageFormat>
 	  <AndroidEnableMultiDex>True</AndroidEnableMultiDex>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="$(TargetFramework.Contains('-android'))">
+		<PublishTrimmed>False</PublishTrimmed>
+		<RunAOTCompilation>False</RunAOTCompilation>
 	</PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-maccatalyst|AnyCPU'">
@@ -69,6 +74,7 @@
 	  <AndroidUseAapt2>True</AndroidUseAapt2>
 	  <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
 	  <AndroidEnableMultiDex>True</AndroidEnableMultiDex>
+	  <DebugSymbols>True</DebugSymbols>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -129,9 +135,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <MauiXaml Update="Views\AddCourses-Fallback.xaml">
-	    <Generator>MSBuild:Compile</Generator>
-	  </MauiXaml>
 	  <MauiXaml Update="Views\AssessmentPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -156,12 +159,6 @@
 	  <MauiXaml Update="Views\UserGuide.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	</ItemGroup>
-
-	<ItemGroup>
-	  <Compile Update="Views\AddCourses-Fallback.xaml.cs">
-	    <DependentUpon>AddCourses-Fallback.xaml</DependentUpon>
-	  </Compile>
 	</ItemGroup>
 
 	<ItemGroup>
