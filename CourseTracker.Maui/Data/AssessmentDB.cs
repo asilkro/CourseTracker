@@ -12,12 +12,14 @@ namespace CourseTracker.Maui.Data
         #region Fields
         SQLiteAsyncConnection _database;
         readonly CourseDB courseDB;
+        readonly NotifyDB notifyDB;
         #endregion
 
         #region Constructors
         public AssessmentDB()
         {
             courseDB = new CourseDB();
+            notifyDB = new NotifyDB();
         }
         #endregion
 
@@ -98,7 +100,7 @@ namespace CourseTracker.Maui.Data
             return "Assessment deleted successfully.";
         }
 
-        public static async Task ScheduleAssessmentNotifications(Assessment assessment)
+        public async Task ScheduleAssessmentNotifications(Assessment assessment)
         {
             // Assumptions: Using full days 
             if (assessment.NotificationsEnabled)
@@ -118,7 +120,7 @@ namespace CourseTracker.Maui.Data
                             RelatedItemType = "Assessment",
                             NotificationMessage = $"{assessment.AssessmentName} begins in {daysBefore} day(s)",
                         };
-                        await NotifyDB.ScheduleNotificationAsync(notification);
+                        await notifyDB.ScheduleNotificationAsync(notification);
                     }
                     catch (Exception ex)
                     {
@@ -138,7 +140,7 @@ namespace CourseTracker.Maui.Data
                         RelatedItemType = "Assessment",
                         NotificationMessage = $"{assessment.AssessmentName} concludes in {daysBefore} day(s)"
                     };
-                    await NotifyDB.ScheduleNotificationAsync(notification);
+                    await notifyDB.ScheduleNotificationAsync(notification);
                 }
             }
             return;

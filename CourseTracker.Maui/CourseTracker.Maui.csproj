@@ -57,7 +57,7 @@
 
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android34.0|AnyCPU'">
 	  <ApplicationId>com.Silkroski.coursetracker.maui</ApplicationId>
-	  <Optimize>False</Optimize>
+	  <Optimize>True</Optimize>
 	  <AndroidPackageFormat>aab</AndroidPackageFormat>
 	  <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
 	  <PublishTrimmed>True</PublishTrimmed>

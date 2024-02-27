@@ -19,6 +19,7 @@ namespace CourseTracker.Maui.Supplemental
             termsDB = new TermsDB();
             courseDB = new CourseDB();
             assessmentDB = new AssessmentDB();
+            notifyDB = new NotifyDB();
         }
 
         public static bool FirstOfTheMonth(DateTime date)

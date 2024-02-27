@@ -7,8 +7,8 @@ using CourseTracker.Maui.ViewModels;
 using Plugin.LocalNotification;
 using SQLite;
 
-namespace CourseTracker.Maui.Data
-{
+namespace CourseTracker.Maui.Data;
+
     public class CourseDB
     {
         SQLiteAsyncConnection _database;
@@ -19,7 +19,46 @@ namespace CourseTracker.Maui.Data
             notifyDB = new NotifyDB();
         }
 
-        public async Task Init()
+    public async Task SaveCourseAsync(Course course)
+    {
+        await Init();
+        var result = await _database.FindAsync<Course>(course.CourseId);
+
+        if (result == null)
+        {
+            await _database.InsertAsync(course);
+            if (course.NotificationsEnabled)
+            {
+                await ScheduleCourseNotifications(course);
+            }
+        }
+        else
+        {
+            await _database.UpdateAsync(course);
+            if (course.NotificationsEnabled)
+            {
+                await ScheduleCourseNotifications(course);
+            }
+        }
+        Debug.WriteLine(result);
+    }
+
+    public async Task<int> GetNextId()
+    {
+        await Init();
+        List<Course> courses = await GetCoursesAsync();
+        if (courses.Count == 0)
+        {
+            return 1;
+        }
+        else
+        {
+            int maxId = courses.Max(t => t.CourseId);
+            maxId++;
+            return maxId;
+        }
+    }
+    public async Task Init()
         {
             if (_database != null)
                 return;
@@ -71,10 +110,8 @@ namespace CourseTracker.Maui.Data
         }
 
 
-        public static async Task ScheduleCourseNotifications(Course course)
+        public async Task ScheduleCourseNotifications(Course course)
         {
-            if (course.NotificationsEnabled)
-            {
                 var title = $"Reminder for {course.CourseName}";
 
                 // Schedule notifications for start date reminders
@@ -90,14 +127,13 @@ namespace CourseTracker.Maui.Data
                             RelatedItemType = "Course",
                             NotificationMessage = $"{course.CourseName} begins in {daysBefore} day(s)",
                         };
-                        await NotifyDB.ScheduleNotificationAsync(notification);
+                        await notifyDB.ScheduleNotificationAsync(notification);
                     }
                     catch (Exception ex)
                     {
                         Debug.WriteLine(ex.Message);
                     }
-                    var notifyTime = course.CourseStart.AddDays(-daysBefore);
-                    
+                                        
                 }
 
                 // Schedule notifications for end date reminders
@@ -114,7 +150,7 @@ namespace CourseTracker.Maui.Data
                             NotificationMessage = $"{course.CourseName} concludes in {daysBefore} day(s)",
                         };
 
-                        await NotifyDB.ScheduleNotificationAsync(notification);
+                        await notifyDB.ScheduleNotificationAsync(notification);
                     }
                     catch (Exception ex)
                     {
@@ -129,45 +165,3 @@ namespace CourseTracker.Maui.Data
             public Course? Course { get; set; }
             public string ErrorMessage { get; set; } = string.Empty;
         }
-
-        public async Task SaveCourseAsync(Course course)
-        {
-            await Init();
-            var result = await _database.FindAsync<Course>(course.CourseId);
-
-            if (result == null)
-            {
-                await _database.InsertAsync(course);
-                if (course.NotificationsEnabled)
-                {
-                    await ScheduleCourseNotifications(course);
-                }
-            }
-            else
-            {
-                await _database.UpdateAsync(course);
-                if (course.NotificationsEnabled)
-                {
-                    await ScheduleCourseNotifications(course);
-                }
-            }
-            Debug.WriteLine(result);
-        }
-
-        public async Task<int> GetNextId()
-        {
-            await Init();
-            List<Course> courses = await GetCoursesAsync();
-            if (courses.Count == 0)
-            {
-                return 1;
-            }
-            else
-            {
-                int maxId = courses.Max(t => t.CourseId);
-                maxId++;
-                return maxId;
-            }
-        }
-    }
-}

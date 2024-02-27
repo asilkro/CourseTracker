@@ -78,7 +78,7 @@ namespace CourseTracker.Maui.Data
             }
         }
 
-        public static async Task ScheduleNotificationAsync(Notification notification)
+        public async Task ScheduleNotificationAsync(Notification notification)
             {
             var notificationRequest = new NotificationRequest
                 {
@@ -96,13 +96,13 @@ namespace CourseTracker.Maui.Data
                 var result = await Validation.IsValidNotification(notificationRequest);
                 if (result == string.Empty)
                 {
-                    await LocalNotificationCenter.Current.Show(notificationRequest);
-                    return;
+                await SaveNotificationAsync(notification);
+                await LocalNotificationCenter.Current.Show(notificationRequest);
+                List<Notification> notificationCount = await GetNotificationsAsync();
+                Debug.WriteLine(notificationCount.Count + " was the number of notifications");
+                return;
                 }
-                else
-                {
-                Debug.WriteLine(result);
-                }
+
             }
 
             public static void CancelNotificationAsync(int notificationId)

@@ -32,10 +32,6 @@ namespace CourseTracker.Maui.Models
             RelatedItemType = relatedItemType;
         }
 
-
-
-        
-
         #endregion
     }
 }
