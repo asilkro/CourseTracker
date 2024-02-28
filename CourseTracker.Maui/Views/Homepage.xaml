@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModel="clr-namespace:CourseTracker.Maui.ViewModels"
+             xmlns:model="clr-namespace:CourseTracker.Maui.Models"
              x:DataType="viewModel:HomepageVM"
              x:Class="CourseTracker.Maui.Views.Homepage">
     
@@ -27,24 +28,26 @@
         <Button x:Name="resetDbButton" Text="Reset Database" TextTransform="Uppercase" Command="{Binding OnResetDBButtonClicked}" FontAttributes="Bold" BackgroundColor="Red" FontSize="Large" TextColor="White"/>
         <BoxView HeightRequest="1" /> <!-- used as a separator -->
 
+
+        <StackLayout IsVisible="{Binding IsDebugEnabled}">
         <Button x:Name="notificationLoaderButton" Text="DEBUG: Load Notifications" BackgroundColor="MediumBlue" Command="{Binding OnNotifyButtonClicked}" TextColor="White"/>
         <ListView x:Name="notificationListView" ItemsSource="{Binding Notifications}"
           VerticalOptions="FillAndExpand" HeightRequest="200">
             <ListView.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="model:Notification">
                     <ViewCell>
                         <StackLayout Padding="5,5" HeightRequest="50">
                             <Grid RowDefinitions="Auto, 50" ColumnDefinitions="Auto, *">
-                            <Label x:Name="notificationTitleLabel" Grid.Row="0" Grid.Column="0" Text="{Binding NotificationTitle}" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
-                            <Label x:Name="notificationDateLabel" Grid.Row="0" Grid.Column="1" Text="{Binding NotificationDate, StringFormat='Alert Date: {0:d}'}" FontSize="Micro" TextColor="{StaticResource Primary}"/>
-                            <Label x:Name="notificationMessageLabel" Grid.Row="1" Text="{Binding NotificationMessage, StringFormat='{0}'}" Grid.Column="0" FontSize="Micro"/>
+                                <Label x:Name="notificationTitleLabel" Grid.Row="0" Grid.Column="0" Text="{Binding NotificationTitle}" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
+                                <Label x:Name="notificationDateLabel" Grid.Row="0" Grid.Column="1" Text="{Binding NotificationDate, StringFormat='Alert Date: {0:d}'}" FontSize="Micro" TextColor="{StaticResource Primary}"/>
+                                <Label x:Name="notificationMessageLabel" Grid.Row="1" Text="{Binding NotificationMessage, StringFormat='{0}'}" Grid.Column="0" FontSize="Micro"/>
                             </Grid>
                         </StackLayout>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-
+        </StackLayout>
 
     </VerticalStackLayout>
 </ContentPage>

@@ -208,9 +208,9 @@ namespace CourseTracker.Maui.ViewModels
                 {
                     return message;
                 }
-                foreach (var a in assessments) //TODO: Fix this
+                foreach (var a in assessments)
                 {
-                    if (a.AssessmentType == assessment.AssessmentType)
+                    if (a.AssessmentType == assessment.AssessmentType && a.AssessmentId != assessment.AssessmentId)
                     {
                         message = "This course already has a " + assessment.AssessmentType + " assessment.";
                     }

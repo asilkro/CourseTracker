@@ -4,6 +4,7 @@ using CourseTracker.Maui.Data;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Supplemental;
+using Plugin.LocalNotification;
 
 namespace CourseTracker.Maui.ViewModels
 {
@@ -47,8 +48,18 @@ namespace CourseTracker.Maui.ViewModels
         public async void OnAppearing()
         {
             await LoadNotifications();
+#if DEBUG
+            IsDebugEnabled = true;
+#endif
         }
 
+        private bool isDebugEnabled;
+        public bool IsDebugEnabled
+        {
+            get => isDebugEnabled;
+            set => SetProperty(ref isDebugEnabled, value);
+        }
+        
         private async Task LoadSampleDataAsync()
         {
             var validation = new Validation();
@@ -74,15 +85,27 @@ namespace CourseTracker.Maui.ViewModels
                 await sharedDB.InsertCourseAndUpdateTerm(demoCourse);
                 Debug.WriteLine("Inserted course: " + demoCourse.CourseName);
 
+                Debug.WriteLine(await assessmentDB.GetNextId());
+
                 var demoOA = await MakeDemoOA(); //Assessment for course 1
+                if (demoOA.AssessmentId == 1)
+                {
+                    ShowToast("Assessment already exists.");
+                }
                 demoOA.RelatedCourseId = demoCourse.CourseId;
+                await Task.Delay(10000);
                 await sharedDB.SaveAssessmentAndUpdateCourse(demoOA); //1
                 Debug.WriteLine("Inserted assessment: " + demoOA.AssessmentName); //C6 OA
 
+                Debug.WriteLine(await assessmentDB.GetNextId());
+
                 var demoPA = await MakeDemoPA(); //Assessment for course 1
                 demoPA.RelatedCourseId = demoCourse.CourseId;
+                await Task.Delay(1000);
                 await sharedDB.SaveAssessmentAndUpdateCourse(demoPA); //2
                 Debug.WriteLine("Inserted assessment: " + demoPA.AssessmentName); //C6 PA
+
+                Debug.WriteLine(await assessmentDB.GetNextId());
 
                 //Second term and courses to provide a more robust demo set of data for evaluator
                 var demoTerm2 = await MakeDemoTerm2();

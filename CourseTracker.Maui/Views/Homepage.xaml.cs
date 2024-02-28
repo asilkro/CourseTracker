@@ -15,5 +15,4 @@ public partial class Homepage : ContentPage
         base.OnAppearing();
         viewModel.OnAppearing();
     }
-
 }

@@ -20,17 +20,16 @@ namespace CourseTracker.Maui
         {
             await MainThread.InvokeOnMainThreadAsync(async () =>
             {
-                if (await LocalNotificationCenter.Current.AreNotificationsEnabled() == false)
+                if (!await LocalNotificationCenter.Current.AreNotificationsEnabled())
                 {
                     var result = await LocalNotificationCenter.Current.RequestNotificationPermission();
                     if (!result)
                     {
-                        await Toast.Make("Notifications require approval.").Show();
+                        await Toast.Make("Notifications require permission approval.").Show();
                         return;
                     }
                     var notification = new NotificationRequest
                     {
-                        NotificationId = 10109,
                         Title = "Notifications Working",
                         Description = "This notification verifies that you have the required permissions.",
                         ReturningData = null,
