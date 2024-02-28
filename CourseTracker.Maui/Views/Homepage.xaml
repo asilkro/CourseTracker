@@ -18,7 +18,11 @@
             </Label.Text>
         </Label>
 
-        <Label TextType="Text" HeightRequest="50" FontSize="Medium" FontAttributes="Bold" LineBreakMode="WordWrap" TextColor="{StaticResource Primary}" HorizontalOptions="StartAndExpand">
+        <Label TextType="Text" HeightRequest="100" FontAttributes="Italic,Bold" LineBreakMode="WordWrap" TextColor="{StaticResource Primary}" FontSize="Medium" HorizontalOptions="StartAndExpand">
+            <Label.Text>If you don't receive a notification upon approving notifications, please close and re-launch the application for the permissions to apply.</Label.Text>
+        </Label>
+
+        <Label TextType="Text" HeightRequest="50" FontSize="Body" FontAttributes="Bold" LineBreakMode="WordWrap" TextColor="{StaticResource Primary}" HorizontalOptions="StartAndExpand">
             <Label.Text>Evaluators, please click the button marked "C971 - Load Evaluation Data" below.</Label.Text>
         </Label>
 

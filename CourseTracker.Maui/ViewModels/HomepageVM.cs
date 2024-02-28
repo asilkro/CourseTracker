@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
+using CommunityToolkit.Maui.Alerts;
 using CourseTracker.Maui.Data;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
@@ -94,8 +95,6 @@ namespace CourseTracker.Maui.ViewModels
                 demoPA.RelatedCourseId = demoCourse.CourseId;
                 await sharedDB.SaveAssessmentAndUpdateCourse(demoPA); //2
                 Debug.WriteLine("Inserted assessment: " + demoPA.AssessmentName); //C6 PA
-
-                
 
                 //Second term and courses to provide a more robust demo set of data for evaluator
                 var demoTerm2 = await MakeDemoTerm2();

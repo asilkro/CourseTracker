@@ -44,6 +44,7 @@ namespace CourseTracker.Maui.Data
             await Init();
             return await _database.DeleteAsync(notification);
         }
+
         public async Task SaveNotificationAsync(Notification notification)
         {
             await Init();
@@ -80,16 +81,22 @@ namespace CourseTracker.Maui.Data
 
         public async Task ScheduleNotificationAsync(Notification notification)
             {
-            var notificationRequest = new NotificationRequest
-                {
+            NotificationRequest notificationRequest = new()
+            {
+                    Android = 
+                    {
+                        AutoCancel = true,
+                        ChannelId = "CourseTracker",
+                        LaunchAppWhenTapped = true
+                    },
                     NotificationId = notification.NotificationId,
                     Title = notification.NotificationTitle,
                     Subtitle = notification.NotificationMessage,
-                    CategoryType = NotificationCategoryType.Reminder,
+                    CategoryType = NotificationCategoryType.Event,
                     Schedule = new NotificationRequestSchedule
                     {
                         NotifyTime = notification.NotificationDate,
-                        NotifyAutoCancelTime = notification.NotificationDate.AddDays(1)
+                        NotifyAutoCancelTime = notification.NotificationDate.AddDays(1),
                     }
                 };
 
@@ -99,8 +106,10 @@ namespace CourseTracker.Maui.Data
                 await SaveNotificationAsync(notification);
                 await LocalNotificationCenter.Current.Show(notificationRequest);
                 List<Notification> notificationCount = await GetNotificationsAsync();
+#if DEBUG
                 Debug.WriteLine(notificationCount.Count + " was the number of notifications");
-                
+#endif
+
                 return;
                 }
             }

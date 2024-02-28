@@ -25,11 +25,10 @@
             _userGuideText =
                 "Welcome to the CourseTracker App for C971.\n\n" +
                 "If you are the evaluator, please use the data setup button on the main page before beginning to guarantee the configuration.\r\n\r\n" +
-                "IMPORTANT: There is a known issue with Visual Studio 2022 that may cause ListViews to not populate properly without changing the XAML file containing that ListView.\r\n\r\n" +
-                "If you encounter this issue, please open the XAML file (ie ListTerms.xaml) and make a small change (changing CachingStrategy=\"RecycleElement\" to \"RetainElement\" for example) and then save the file. The ListView should display correctly after.\r\n\r\n" +
+                "**NOTE**:\r\nThe TermList view seems to impacted by the MAUI bug documented in the README, but works properly if you click New Term then back to List.\r\n\r\n" +
 
                 "Overview:\r\n" + "A term may have up to six courses and each course may have up to two assessments. \r\n\r\n" +
-                "Removal of a term will also remove all courses and assessments associated with it. \r\n\r\n" +
+                "Removal of a term will also remove all associated courses and assessments. \r\n\r\n" +
                 "Removal of a course will also remove all assessments associated with it. \r\n\r\n" +
 
                 "Add a Term:\r\n" +

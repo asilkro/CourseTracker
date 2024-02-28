@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Maui.Alerts;
+using CourseTracker.Maui.Data;
 using Plugin.LocalNotification;
 using Plugin.LocalNotification.EventArgs;
 
@@ -18,6 +19,22 @@ namespace CourseTracker.Maui
 
         private static async Task RequestNotificationPermissions()
         {
+            NotificationRequest notification = new()
+            {
+                Android = 
+                {
+                    AutoCancel = true,
+                    ChannelId = "CourseTracker"
+                },
+                Title = "Notifications Working",
+                Description = "This notification verifies that you have the required permissions.",
+                Schedule =
+                        {
+                            NotifyTime = DateTime.Now // Triggers Notification in 5 seconds
+                        }
+                
+            };
+
             await MainThread.InvokeOnMainThreadAsync(async () =>
             {
                 if (!await LocalNotificationCenter.Current.AreNotificationsEnabled())
@@ -28,34 +45,25 @@ namespace CourseTracker.Maui
                         await Toast.Make("Notifications require permission approval.").Show();
                         return;
                     }
-                    var notification = new NotificationRequest
-                    {
-                        Title = "Notifications Working",
-                        Description = "This notification verifies that you have the required permissions.",
-                        ReturningData = null,
-                        Schedule =
-                        {
-                            NotifyTime = DateTime.Now.AddSeconds(5) // Triggers Notification in 5 seconds
-                        }
-                    };
-
-                    await LocalNotificationCenter.Current.Show(notification);
                 }
+                    
             });
+            await LocalNotificationCenter.Current.Show(notification);
         }
 
         private void OnNotificationActionTapped(NotificationActionEventArgs e)
         {
+
             if (e.IsDismissed)
             {
                 e.Request.Cancel();
-                Toast.Make("Notification: " + e.ToString() + " dismissed.").Show();
+                Snackbar.Make("Notification " + e.Request.Title + " dismissed.").Show();
                 return;
             }
             if (e.IsTapped)
             {
                 e.Request.Show();
-                Toast.Make("Notification: " + e.ToString() + " tapped.").Show();
+                Snackbar.Make("Notification " + e.Request.Title + " tapped.").Show();
                 return;
             }
         }

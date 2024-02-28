@@ -151,7 +151,7 @@ namespace CourseTracker.Maui.Supplemental
             }
             else if (notification.Schedule.NotifyTime <= DateTime.Now.Date)
             {
-                message = "Notification time must be in the future.";
+                message = "Notification will not occur in the past.";
             }
             else if (notification.Schedule.NotifyAutoCancelTime < notification.Schedule.NotifyTime)
             {

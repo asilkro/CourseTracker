@@ -72,6 +72,13 @@
 	  <DebugSymbols>True</DebugSymbols>
 	</PropertyGroup>
 
+	<!-- Recommended by Author of Plugin.LocalNotification for Notifications
+		that are not working in Release mode despite having permissions -->
+	<PropertyGroup Condition="$(TargetFramework.Contains('-android'))">
+		<PublishTrimmed>False</PublishTrimmed>
+		<RunAOTCompilation>False</RunAOTCompilation>
+	</PropertyGroup>
+
 	<ItemGroup>
 		<!-- App Icon -->
 
