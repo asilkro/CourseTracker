@@ -85,27 +85,17 @@ namespace CourseTracker.Maui.ViewModels
                 await sharedDB.InsertCourseAndUpdateTerm(demoCourse);
                 Debug.WriteLine("Inserted course: " + demoCourse.CourseName);
 
-                Debug.WriteLine(await assessmentDB.GetNextId());
-
                 var demoOA = await MakeDemoOA(); //Assessment for course 1
-                if (demoOA.AssessmentId == 1)
-                {
-                    ShowToast("Assessment already exists.");
-                }
                 demoOA.RelatedCourseId = demoCourse.CourseId;
-                await Task.Delay(10000);
                 await sharedDB.SaveAssessmentAndUpdateCourse(demoOA); //1
                 Debug.WriteLine("Inserted assessment: " + demoOA.AssessmentName); //C6 OA
-
-                Debug.WriteLine(await assessmentDB.GetNextId());
-
+                
                 var demoPA = await MakeDemoPA(); //Assessment for course 1
                 demoPA.RelatedCourseId = demoCourse.CourseId;
-                await Task.Delay(1000);
                 await sharedDB.SaveAssessmentAndUpdateCourse(demoPA); //2
                 Debug.WriteLine("Inserted assessment: " + demoPA.AssessmentName); //C6 PA
 
-                Debug.WriteLine(await assessmentDB.GetNextId());
+                
 
                 //Second term and courses to provide a more robust demo set of data for evaluator
                 var demoTerm2 = await MakeDemoTerm2();
@@ -202,8 +192,8 @@ namespace CourseTracker.Maui.ViewModels
             {
                 TermId = await termsDB.GetNextId(),
                 TermName = "Demo Term",
-                TermStart = new DateTime(2024, 01, 01),
-                TermEnd = new DateTime(2024, 06, 30),
+                TermStart = new DateTime(2024, 02, 01),
+                TermEnd = new DateTime(2024, 07, 31),
                 CourseCount = 0
             };
             return demoTerm;
@@ -230,8 +220,8 @@ namespace CourseTracker.Maui.ViewModels
                 CourseId = await courseDB.GetNextId(),
                 CourseName = "Example Course for Evaluation",
                 CourseStatus = "In Progress",
-                CourseStart = new DateTime(2024, 01, 01),
-                CourseEnd = new DateTime(2024, 06, 30),
+                CourseStart = new DateTime(2024, 02, 01),
+                CourseEnd = new DateTime(2024, 07, 31),
                 InstructorEmail = "anika.patel@strimeuniversity.edu",
                 InstructorPhone = "555-123-4567",
                 InstructorName = "Anika Patel",
@@ -288,11 +278,11 @@ namespace CourseTracker.Maui.ViewModels
         {
             Assessment demoOA = new()
             {
-                AssessmentId = await assessmentDB.GetNextId(),
+                AssessmentId = 1, //await assessmentDB.GetNextId(),
                 AssessmentName = "C6 OA",
                 AssessmentType = "Objective",
-                AssessmentStartDate = new DateTime(2024, 01, 01),
-                AssessmentEndDate = new DateTime(2024, 02, 29),
+                AssessmentStartDate = new DateTime(2024, 03, 01),
+                AssessmentEndDate = new DateTime(2024, 03, 31),
                 RelatedCourseId = 1,
                 NotificationsEnabled = true
             };
@@ -306,7 +296,7 @@ namespace CourseTracker.Maui.ViewModels
                 AssessmentId = await assessmentDB.GetNextId(),
                 AssessmentName = "C6 PA",
                 AssessmentType = "Performance",
-                AssessmentStartDate = new DateTime(2024, 03, 01),
+                AssessmentStartDate = new DateTime(2024, 04, 01),
                 AssessmentEndDate = new DateTime(2024, 04, 30),
                 RelatedCourseId = 1,
                 NotificationsEnabled = true

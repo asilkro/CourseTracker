@@ -51,11 +51,6 @@
 	  <AndroidEnableMultiDex>True</AndroidEnableMultiDex>
 	</PropertyGroup>
 
-	<PropertyGroup Condition="$(TargetFramework.Contains('-android'))">
-		<PublishTrimmed>False</PublishTrimmed>
-		<RunAOTCompilation>False</RunAOTCompilation>
-	</PropertyGroup>
-
 	<PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-maccatalyst|AnyCPU'">
 	  <ApplicationId>com.Silkroski.coursetracker.maui</ApplicationId>
 	</PropertyGroup>
@@ -65,7 +60,7 @@
 	  <Optimize>True</Optimize>
 	  <AndroidPackageFormat>aab</AndroidPackageFormat>
 	  <GenerateAssemblyInfo>False</GenerateAssemblyInfo>
-	  <PublishTrimmed>True</PublishTrimmed>
+	  <PublishTrimmed>False</PublishTrimmed>
 	  <TrimMode>copyused</TrimMode>
 	  <RunAOTCompilation>False</RunAOTCompilation>
 	  <EnableLLVM>True</EnableLLVM>
