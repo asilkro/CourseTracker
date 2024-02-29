@@ -136,7 +136,7 @@ namespace CourseTracker.Maui.Supplemental
             return true;
         }
 
-        public static string IsValidNotification(NotificationRequest notification) //Non exhaustive checks
+        public static string IsValidNotification(NotificationRequest notification) // TODO: This might be the problem?
         {
             var message = string.Empty;
             if (notification.Schedule.NotifyTime < DateTime.Now)
