@@ -124,6 +124,11 @@ public class CourseDB
                     NotificationMessage = $"{course.CourseName} begins in {daysBefore} day(s)",
                     NotificationTriggered = 0
                 };
+                if (notification.NotificationDate < DateTime.Now)
+                {
+                    Debug.WriteLine("Notification is in the past.");
+                    return;
+                }
                 await notifyDB.SaveNotificationAsync(notification);
             }
             catch (Exception ex)
@@ -147,7 +152,11 @@ public class CourseDB
                     NotificationMessage = $"{course.CourseName} ends in {daysBefore} day(s)",
                     NotificationTriggered = 0
                 };
-
+                if (notification.NotificationDate < DateTime.Now)
+                {
+                    Debug.WriteLine("Notification is in the past.");
+                    return;
+                }
                 await notifyDB.SaveNotificationAsync(notification);
             }
             catch (Exception ex)

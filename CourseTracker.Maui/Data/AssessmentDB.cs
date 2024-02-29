@@ -119,6 +119,11 @@ namespace CourseTracker.Maui.Data
                             NotificationMessage = $"{assessment.AssessmentName} starts in {daysBefore} day(s)",
                             NotificationTriggered = 0
                         };
+                        if (notification.NotificationDate < DateTime.Now)
+                        {
+                            Debug.WriteLine("Notification is in the past.");
+                            return;
+                        }
                         await notifyDB.SaveNotificationAsync(notification);
                     }
                     catch (Exception ex)
@@ -140,6 +145,11 @@ namespace CourseTracker.Maui.Data
                         NotificationMessage = $"Assessment: {assessment.AssessmentName} is due in {daysBefore} day(s)",
                         NotificationTriggered = 0
                     };
+                    if (notification.NotificationDate < DateTime.Now)
+                    {
+                        Debug.WriteLine("Notification is in the past.");
+                        return;
+                    }
                     await notifyDB.SaveNotificationAsync(notification);
                 }
             }
