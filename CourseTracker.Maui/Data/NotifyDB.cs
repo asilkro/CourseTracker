@@ -56,7 +56,7 @@ namespace CourseTracker.Maui.Data
             }
             else
             {
-                await _database.UpdateAsync(notification); 
+                await _database.UpdateAsync(notification);
                 // Notifications are not editable currently
                 // but this will allow future expansions to the app
             }
@@ -80,29 +80,39 @@ namespace CourseTracker.Maui.Data
         }
 
         public async Task ScheduleNotificationAsync(Notification notification)
-            {
+        {
             NotificationRequest notificationRequest = new()
             {
-                    Android = 
+                Android =
                     {
-                        AutoCancel = true,
-                        ChannelId = "CourseTracker",
-                        LaunchAppWhenTapped = true
+                    AutoCancel = true,
+                    ChannelId = "CourseTracker",
+                    LaunchAppWhenTapped = true,
+                    When = notification.NotificationDate,
+                    Priority = Plugin.LocalNotification.AndroidOption.AndroidPriority.Default,
+                    TimeoutAfter = notification.NotificationDate.AddDays(7).TimeOfDay,
+                    VisibilityType = Plugin.LocalNotification.AndroidOption.AndroidVisibilityType.Public
                     },
-                    NotificationId = notification.NotificationId,
-                    Title = notification.NotificationTitle,
-                    Subtitle = notification.NotificationMessage,
-                    CategoryType = NotificationCategoryType.Event,
-                    Schedule = new NotificationRequestSchedule
-                    {
-                        NotifyTime = notification.NotificationDate,
-                        NotifyAutoCancelTime = notification.NotificationDate.AddDays(1),
-                    }
-                };
 
-                var result = await Validation.IsValidNotification(notificationRequest);
-                if (result == string.Empty)
+                NotificationId = notification.NotificationId,
+                Title = notification.NotificationTitle,
+                Subtitle = notification.NotificationMessage,
+                CategoryType = NotificationCategoryType.Reminder,
+                Schedule = new NotificationRequestSchedule
                 {
+                    NotifyTime = notification.NotificationDate,
+                    NotifyAutoCancelTime = notification.NotificationDate.AddDays(7),
+                    RepeatType = NotificationRepeat.TimeInterval,
+                    NotifyRepeatInterval = TimeSpan.FromDays(1)
+                }
+            };
+
+            var result = Validation.IsValidNotification(notificationRequest);
+#if DEBUG
+            Debug.WriteLine(notificationRequest.Title + " returns " + result);
+#endif
+            if (result == string.Empty)
+            {
                 await SaveNotificationAsync(notification);
                 await LocalNotificationCenter.Current.Show(notificationRequest);
                 List<Notification> notificationCount = await GetNotificationsAsync();
@@ -111,8 +121,8 @@ namespace CourseTracker.Maui.Data
 #endif
 
                 return;
-                }
             }
-
         }
+
     }
+}

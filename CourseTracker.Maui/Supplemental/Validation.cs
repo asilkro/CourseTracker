@@ -1,4 +1,6 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Diagnostics;
+using System.Text.RegularExpressions;
+using CommunityToolkit.Maui.Alerts;
 using CourseTracker.Maui.Data;
 using CourseTracker.Maui.Models;
 using Plugin.LocalNotification;
@@ -134,28 +136,24 @@ namespace CourseTracker.Maui.Supplemental
             return true;
         }
 
-        public async static Task<string> IsValidNotification(NotificationRequest notification) //Non exhaustive checks
+        public static string IsValidNotification(NotificationRequest notification) //Non exhaustive checks
         {
             var message = string.Empty;
-            if (notification == null)
-            {
-                message = "Notification is null.";
-            }
-            else if (!NotNull(notification.Title) || !NotNull(notification.Subtitle))
-            {
-                message = "Notification Title and subtitle cannot be empty.";
-            }
-            else if (notification.Schedule == null)
-            {
-                message = "No schedule was set for the notification.";
-            }
-            else if (notification.Schedule.NotifyTime <= DateTime.Now.Date)
+            if (notification.Schedule.NotifyTime < DateTime.Now)
             {
                 message = "Notification will not occur in the past.";
+                Snackbar.Make(message + " Notification for " + notification.Title + " will not be created.").Show();
+#if DEBUG
+                Debug.WriteLine(message + " Notification for " + notification.Title + " will not be created.");
+#endif
             }
             else if (notification.Schedule.NotifyAutoCancelTime < notification.Schedule.NotifyTime)
             {
                 message = "Auto cancel time must be after the notify time.";
+                Snackbar.Make(message + " Notification for " + notification.Title + " will not be created.").Show();
+#if DEBUG
+                Debug.WriteLine(message + " Notification for " + notification.Title + " will not be created.");
+#endif
             }
             return message;
         }

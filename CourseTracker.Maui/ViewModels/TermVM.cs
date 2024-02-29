@@ -137,17 +137,24 @@ namespace CourseTracker.Maui.ViewModels
                     RelatedCourses.Clear();
                 }
                 List<Course> coursesForGivenTerm = await courseDB.GetCoursesByTermIdAsync(TermId);
+#if DEBUG
                 Debug.WriteLine(TermId + " is your termId.");
                 Debug.WriteLine("Count of courses for term: " + coursesForGivenTerm.Count);
+#endif
                 switch (coursesForGivenTerm)
                 {
                     case null:
+#if DEBUG
                         ShowToast("Course count returned null.");
+#endif
                         return;
                     case { Count: 0 }:
+#if DEBUG
                         ShowToast("No courses found for term.");
+#endif
                         return;
                 }
+
                 foreach (var course in coursesForGivenTerm)
                 {
                     int i = 1;
@@ -201,8 +208,6 @@ namespace CourseTracker.Maui.ViewModels
             else if (!Validation.DatesAreValid(term.TermStart, term.TermEnd))
                 errorMessage = "Term start and end dates are not valid.";
 
-            if (!string.IsNullOrEmpty(errorMessage))
-                ShowToast(errorMessage);
             return errorMessage;
         }
 
