@@ -7,22 +7,24 @@ Thank you for evaluating and using this application. There are a few things you 
 ### Evaluator-Specific Notes
 **Please use the data setup button on the app's main screen to load the required evaluation data.**
 
-- This must be run on empty tables to work properly.
-- If you have already added data, you will need to reset the database by clearing the tables first.
-- You may do so with the labelled button on the main screen.
+- Please load the evaluation data before adding other data.
+- If you have already added data, you will need to reset the database by using the button on the home page.
+- When prompted, please allow the application to access your device's notifications as this is required for proper functionality. If you do not allow this, the application will be unable to send you reminders for upcoming assessments and courses.
+    - *If you do not receive a "Notifications Working" notification after doing this, please close and reopen the application and try again.*
 
 ## Important User Information
 
 1. The application is designed to be used on a mobile device and will work best on hardware. It relies on Android version 12.1 and above.
 
-2. If prompted, please allow the application to access your device's notifications as this is required for proper functionality.
+2. When prompted, please allow the application to access your device's notifications as this is required for proper functionality. If you do not allow this, the application will be unable to send you reminders for upcoming assessments and courses.
+ - *If you do not receive a "Notifications Working" notification after doing this, please close and reopen the application and try again.*
 
-3.	If the application is run through an Android emulator, you are likely to encounter issues with the Terms List page not populating properly. This is a known bug/issue MAUI inside Visual Studio 2022 and it's interaction with the Android Emulator and not the application or code itself.
+3.	If the application is run through an Android emulator, you are likely to encounter issues with the pages containing ListViews not populating properly. This is a known bug/issue with MAUI inside Visual Studio 2022 and it's interaction with the Android Emulator and **not the application or code itself.**
 	 
 	- To work around this issue, you can run the application on a physical device **(recommended)**, or open the XAML file (ie ListTerms.xaml) and make a small change *(changing CachingStrategy="RecycleElement" to "RetainElement" as an example)** and then save the file.
 	- The ListView should display correctly after.
 
-4. There are known [issues with collections](https://github.com/dotnet/maui/issues/19357) and [bindings](https://github.com/dotnet/maui/issues/20002) in MAUI that may cause the Lists to not populate properly. This is an issue with the MAUI framework and not the application or code itself.
+4. There are [known issues with collections](https://github.com/dotnet/maui/issues/19357) and [bindings](https://github.com/dotnet/maui/issues/20002) in MAUI that may cause the Lists to not populate properly. This is an issue with the MAUI framework and not the application or code itself.
 
 ## Application Workflow Overview:
 
@@ -48,7 +50,7 @@ Thank you for evaluating and using this application. There are a few things you 
 	- Microsoft.Extensions.Logging.Debug 8.0.0
 	- Microsoft.Maui.Controls 8.0.7
 	- Microsoft.Maui.Controls.Compatibility 8.0.7
-	- Plugin.LocalNotification 11.1.0
+	- Plugin.LocalNotification 11.1.1
 	- SQLite-net-pcl 1.8.116
 	- SQLitePCLRaw.provider.dynamic_cdecl 2.1.8
 

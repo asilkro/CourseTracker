@@ -184,7 +184,7 @@ public class SharedDB
             return;
         }
 
-        if (course.CourseAssessmentCount >= 2)
+        if (course.CourseAssessmentCount > 2)
         {
             ShowToast("Courses may have no more than two assessments.");
             return;

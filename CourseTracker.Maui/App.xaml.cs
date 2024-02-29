@@ -23,16 +23,15 @@ namespace CourseTracker.Maui
             {
                 Android = 
                 {
-                    AutoCancel = true,
-                    ChannelId = "CourseTracker"
+                    AutoCancel = true
                 },
                 Title = "Notifications Working",
-                Description = "This notification verifies that you have the required permissions.",
+                Description = "Your permissions are set correctly.",
                 Schedule =
                         {
-                            NotifyTime = DateTime.Now // Triggers Notification in 5 seconds
+                            NotifyTime = DateTime.Now, // Triggers Notification in 5 seconds
+                            NotifyAutoCancelTime = DateTime.Now.AddSeconds(120)
                         }
-                
             };
 
             await MainThread.InvokeOnMainThreadAsync(async () =>
@@ -46,24 +45,21 @@ namespace CourseTracker.Maui
                         return;
                     }
                 }
-                    
+                await LocalNotificationCenter.Current.Show(notification);
             });
-            await LocalNotificationCenter.Current.Show(notification);
+            
         }
 
         private void OnNotificationActionTapped(NotificationActionEventArgs e)
         {
-
             if (e.IsDismissed)
             {
                 e.Request.Cancel();
-                Snackbar.Make("Notification " + e.Request.Title + " dismissed.").Show();
                 return;
             }
             if (e.IsTapped)
             {
                 e.Request.Show();
-                Snackbar.Make("Notification " + e.Request.Title + " tapped.").Show();
                 return;
             }
         }

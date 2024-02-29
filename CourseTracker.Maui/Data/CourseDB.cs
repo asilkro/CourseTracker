@@ -112,10 +112,10 @@ namespace CourseTracker.Maui.Data;
 
         public async Task ScheduleCourseNotifications(Course course)
         {
-                var title = $"Reminder for {course.CourseName}";
+                var title = $"Course Reminder: {course.CourseName}";
 
                 // Schedule notifications for start date reminders
-                var startReminders = new[] { 3, 1 };
+                var startReminders = new[] { 1 };
                 foreach (var daysBefore in startReminders)
                 {
                     try
@@ -137,7 +137,7 @@ namespace CourseTracker.Maui.Data;
                 }
 
                 // Schedule notifications for end date reminders
-                var endReminders = new[] { 3, 1 };
+                var endReminders = new[] { 1 };
                 foreach (var daysBefore in endReminders)
                 {
                     try
@@ -147,7 +147,7 @@ namespace CourseTracker.Maui.Data;
                             NotificationTitle = title,
                             NotificationDate = course.CourseEnd.AddDays(-daysBefore),
                             RelatedItemType = "Course",
-                            NotificationMessage = $"{course.CourseName} concludes in {daysBefore} day(s)",
+                            NotificationMessage = $"{course.CourseName} ends in {daysBefore} day(s)",
                         };
 
                         await notifyDB.ScheduleNotificationAsync(notification);

@@ -294,7 +294,6 @@ namespace CourseTracker.Maui.ViewModels
                 {
                     Text = "Course Notes for " + source + ":" + Environment.NewLine + notes + Environment.NewLine + "Shared on " + DateTime.Now.ToShortDateString(),
                 });
-                ShowToast("Notes shared successfully.");
             }
             catch (Exception ex)
             {

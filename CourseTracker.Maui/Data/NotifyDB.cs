@@ -79,44 +79,48 @@ namespace CourseTracker.Maui.Data
             }
         }
 
+        public NotificationRequestSchedule schedule = new()
+        {
+            NotifyTime = DateTime.Now,
+            
+            RepeatType = NotificationRepeat.TimeInterval,
+            NotifyRepeatInterval = TimeSpan.FromHours(4)
+        };
+
         public async Task ScheduleNotificationAsync(Notification notification)
         {
             NotificationRequest notificationRequest = new()
             {
                 Android =
-                    {
+                {
                     AutoCancel = true,
                     ChannelId = "CourseTracker",
                     LaunchAppWhenTapped = true,
                     When = notification.NotificationDate,
                     Priority = Plugin.LocalNotification.AndroidOption.AndroidPriority.Default,
-                    TimeoutAfter = notification.NotificationDate.AddDays(7).TimeOfDay,
+                    TimeoutAfter = notification.NotificationDate.AddDays(3).TimeOfDay,
                     VisibilityType = Plugin.LocalNotification.AndroidOption.AndroidVisibilityType.Public
-                    },
+                },
 
                 NotificationId = notification.NotificationId,
                 Title = notification.NotificationTitle,
                 Subtitle = notification.NotificationMessage,
                 CategoryType = NotificationCategoryType.Reminder,
-                Schedule = new NotificationRequestSchedule
-                {
-                    NotifyTime = notification.NotificationDate,
-                    NotifyAutoCancelTime = notification.NotificationDate.AddDays(7),
-                    RepeatType = NotificationRepeat.TimeInterval,
-                    NotifyRepeatInterval = TimeSpan.FromDays(1)
-                }
+                Schedule = schedule,
             };
+            Debug.WriteLine("NotifyTime is: " + schedule.NotifyTime);
 
-            var result = Validation.IsValidNotification(notificationRequest);
+
+//            var result = Validation.IsValidNotification(notificationRequest);
 #if DEBUG
-            Debug.WriteLine(notificationRequest.Title + " returns " + result);
+            // Debug.WriteLine(notificationRequest.Title + " returns " + result);
 #endif
-            if (result == string.Empty)
+            //if (result == string.Empty)
             {
                 await SaveNotificationAsync(notification);
                 await LocalNotificationCenter.Current.Show(notificationRequest);
-                List<Notification> notificationCount = await GetNotificationsAsync();
 #if DEBUG
+                List<Notification> notificationCount = await GetNotificationsAsync();
                 Debug.WriteLine(notificationCount.Count + " was the number of notifications");
 #endif
 

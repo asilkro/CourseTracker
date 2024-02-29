@@ -104,10 +104,10 @@ namespace CourseTracker.Maui.Data
         {
             // Assumptions: Using full days 
             {
-                var title = $"Reminder for {assessment.AssessmentName}";
+                var title = $"Assessment Reminder: {assessment.AssessmentName}";
 
                 // Schedule notifications for start date reminders
-                var startReminders = new[] { 3, 1 }; // These could be different from the end reminders or configurable in-app in a future version.
+                var startReminders = new[] { 1 }; // These could be different from the end reminders or configurable in-app in a future version.
                 foreach (var daysBefore in startReminders)
                 {
                     try
@@ -117,7 +117,7 @@ namespace CourseTracker.Maui.Data
                             NotificationTitle = title,
                             NotificationDate = assessment.AssessmentStartDate.AddDays(-daysBefore),
                             RelatedItemType = "Assessment",
-                            NotificationMessage = $"The assessment: {assessment.AssessmentName} starts in {daysBefore} day(s)",
+                            NotificationMessage = $"{assessment.AssessmentName} starts in {daysBefore} day(s)",
                         };
                         await notifyDB.ScheduleNotificationAsync(notification);
                     }
@@ -129,7 +129,7 @@ namespace CourseTracker.Maui.Data
                 }
 
                 // Schedule notifications for end date reminders
-                var endReminders = new[] { 3, 1 }; // These could be different from the start reminders or configurable in-app in a future version.
+                var endReminders = new[] { 1 }; // These could be different from the start reminders or configurable in-app in a future version.
                 foreach (var daysBefore in endReminders)
                 {
                     Notification notification = new()
@@ -137,7 +137,7 @@ namespace CourseTracker.Maui.Data
                         NotificationTitle = title,
                         NotificationDate = assessment.AssessmentEndDate.AddDays(-daysBefore),
                         RelatedItemType = "Assessment",
-                        NotificationMessage = $"The assessment: {assessment.AssessmentName} is due in {daysBefore} day(s)"
+                        NotificationMessage = $"Assessment: {assessment.AssessmentName} is due in {daysBefore} day(s)"
                     };
                     await notifyDB.ScheduleNotificationAsync(notification);
                 }
@@ -169,6 +169,7 @@ namespace CourseTracker.Maui.Data
             {
                 if (assessment.NotificationsEnabled)
                 {
+                    Debug.WriteLine("Notification enabled for assessment: " + assessment.AssessmentName);
                     await ScheduleAssessmentNotifications(assessment);
                 }
                 await _database.InsertAsync(assessment);
