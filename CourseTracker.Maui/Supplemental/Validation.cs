@@ -114,7 +114,6 @@ namespace CourseTracker.Maui.Supplemental
             return result;
         }
 
-
         public static bool AssessmentTypeIsValid(string assessmentType)
         {
             var result = assessmentType switch
@@ -134,26 +133,6 @@ namespace CourseTracker.Maui.Supplemental
                 return false;
             }
             return true;
-        }
-
-        public static string IsValidNotification(NotificationRequest notification) // TODO: This might be the problem?
-        {
-            var message = string.Empty;
-            if (notification.Schedule.NotifyTime < DateTime.Now)
-            {
-                message = "Notification will not occur in the past.";
-#if DEBUG
-               Debug.WriteLine(message + " Notification for " + notification.Title + " will not be created.");
-#endif
-            }
-            else if (notification.Schedule.NotifyAutoCancelTime < notification.Schedule.NotifyTime)
-            {
-                message = "Auto cancel time must be after the notify time.";
-#if DEBUG
-                Debug.WriteLine(message + ": Notification for " + notification.Title + " will not be created.");
-#endif
-            }
-            return message;
         }
 
         public async Task<bool> DataExistsInTables()

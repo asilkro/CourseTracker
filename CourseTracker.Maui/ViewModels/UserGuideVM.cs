@@ -31,6 +31,10 @@
                 "Removal of a term will also remove all associated courses and assessments. \r\n\r\n" +
                 "Removal of a course will also remove all assessments associated with it. \r\n\r\n" +
 
+                                "Notifications:\r\n" +
+                "Notification dates are 1 day before those in the pickers (Start / End).\r\nIf this notification date is the same as the current date, no notification will be generated - this is a limitation of the plugin used for notifications.\r\n\r\n" +
+                "Notifications are generated when the app's main screen launches and matches the notification date against the system date.\r\n\r\n" +
+
                 "Add a Term:\r\n" +
                 "Start by defining a Term; it's the foundation of your planning. Navigate to the Term creation section and fill in the necessary details.\r\n\r\n" +
                 "Remember, every course and assessment you plan will need to be linked to a Term. \r\n\r\n" +

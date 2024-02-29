@@ -65,7 +65,5 @@ namespace CourseTracker.Maui.Data
             return await _database.DeleteAsync(term);
         }
 
-
-
     }
 }

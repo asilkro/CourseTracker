@@ -4,7 +4,6 @@ using CourseTracker.Maui.ViewModels;
 
 namespace CourseTracker.Maui.Views;
 
-[Preserve(AllMembers = true)]
 public partial class ListCourses : ContentPage
 {
     private readonly ListCoursesVM viewModel;

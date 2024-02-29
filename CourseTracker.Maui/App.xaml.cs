@@ -22,10 +22,10 @@ namespace CourseTracker.Maui
         {
             NotificationRequest notification = new()
             {
-                Android = 
+                Android =
                 {
                     AutoCancel = true,
-                    
+
                 },
                 Title = "Notifications Working",
                 Description = "Your permissions are set correctly.",
@@ -37,7 +37,7 @@ namespace CourseTracker.Maui
             };
 #if DEBUG
             Debug.WriteLine("NotifyAutoCancelTime is: " + notification.Schedule.NotifyAutoCancelTime.ToString());
-                #endif
+#endif
 
             await MainThread.InvokeOnMainThreadAsync(async () =>
             {
@@ -46,13 +46,13 @@ namespace CourseTracker.Maui
                     var result = await LocalNotificationCenter.Current.RequestNotificationPermission();
                     if (!result)
                     {
-                        await Application.Current.MainPage.DisplayAlert("Notifications Are Not Enabled","You must accept the request to enable permissions for notifications to function.","Acknowledge");
+                        await Application.Current.MainPage.DisplayAlert("Notifications Are Not Enabled", "You must accept the request to enable permissions for notifications to function.", "Acknowledge");
                         return;
                     }
                 }
                 await LocalNotificationCenter.Current.Show(notification);
             });
-            
+
         }
 
         private void OnNotificationActionTapped(NotificationActionEventArgs e)

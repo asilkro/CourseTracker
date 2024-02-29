@@ -2,7 +2,6 @@
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Supplemental;
-using Plugin.LocalNotification;
 using SQLite;
 
 namespace CourseTracker.Maui.Data
@@ -113,20 +112,20 @@ namespace CourseTracker.Maui.Data
                     try
                     {
                         Notification notification = new()
-                        {                        
+                        {
                             NotificationTitle = title,
                             NotificationDate = assessment.AssessmentStartDate.AddDays(-daysBefore),
                             RelatedItemType = "Assessment",
                             NotificationMessage = $"{assessment.AssessmentName} starts in {daysBefore} day(s)",
                             NotificationTriggered = 0
                         };
-                        await notifyDB.ScheduleNotificationAsync(notification);
+                        await notifyDB.SaveNotificationAsync(notification);
                     }
                     catch (Exception ex)
                     {
                         Debug.WriteLine(ex.Message);
                     }
-                    
+
                 }
 
                 // Schedule notifications for end date reminders
@@ -141,7 +140,7 @@ namespace CourseTracker.Maui.Data
                         NotificationMessage = $"Assessment: {assessment.AssessmentName} is due in {daysBefore} day(s)",
                         NotificationTriggered = 0
                     };
-                    await notifyDB.ScheduleNotificationAsync(notification);
+                    await notifyDB.SaveNotificationAsync(notification);
                 }
             }
             return;

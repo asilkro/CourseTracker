@@ -8,7 +8,6 @@ namespace CourseTracker.Maui.ViewModels
 {
     public class ListCoursesVM : ViewModelBase
     {
-        private Connection _database;
 
         public ObservableCollection<Course> Courses { get; private set; } = [];
 
@@ -25,8 +24,6 @@ namespace CourseTracker.Maui.ViewModels
         {
             try
             {
-                _database ??= new Connection();
-                _database.GetAsyncConnection();
                 var updatedCoursesList = await courseDB.GetCoursesAsync();
                 Courses.Clear();
                 foreach (var course in updatedCoursesList)

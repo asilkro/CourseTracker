@@ -29,7 +29,22 @@ public class SharedDB
         bool result = await Application.Current.MainPage.DisplayAlert("Confirm Action", messageRequiringConfirmation, "Yes", "No");
         return result;
     }
+
+    private static async void ShowToast(string message)
+    {
+        CancellationTokenSource cancellationTokenSource = new();
+
+        string text = message;
+        ToastDuration duration = ToastDuration.Short;
+        double fontSize = 14;
+
+        var toast = Toast.Make(text, duration, fontSize);
+
+        await toast.Show(cancellationTokenSource.Token);
+    }
+
     #endregion
+    
     #region Term Methods
     public async Task SaveTerm(Term newTerm)
     {
@@ -207,49 +222,6 @@ public class SharedDB
             ShowToast("Course " + course.CourseName + " updated successfully.");
             ShowToast("Assessment added successfully.");
         }
-        return;
-    }
-
-    private static async void ShowToast(string message)
-    {
-        CancellationTokenSource cancellationTokenSource = new();
-
-        string text = message;
-        ToastDuration duration = ToastDuration.Short;
-        double fontSize = 14;
-
-        var toast = Toast.Make(text, duration, fontSize);
-
-        await toast.Show(cancellationTokenSource.Token);
-    }
-
-    public async Task UpdateTermCourseCount(Term term)
-    {
-        try
-        {
-            var courses = await courseDB.GetCoursesByTermIdAsync(term.TermId);
-            if (courses == null)
-            {
-                ShowToast("No courses found for term: " + term.TermName);
-                return;
-            }
-            if (courses.Count > 6)
-            {
-                ShowToast("Term: " + term.TermName + " has more than 6 courses.");
-                return;
-            }
-            if (courses.Count != term.CourseCount)
-            {
-                term.CourseCount = courses.Count;
-                ShowToast("Term: " + term.TermName + " course count updated successfully.");
-            }
-        }
-        catch (Exception ex)
-        {
-            ShowToast("There was an error updating the course count for Term: " + term.TermName + " - " + ex);
-            throw;
-        }
-
         return;
     }
 

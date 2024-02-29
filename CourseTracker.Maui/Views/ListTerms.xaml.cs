@@ -1,10 +1,8 @@
-using Android.Runtime;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.ViewModels;
 
 namespace CourseTracker.Maui.Views;
 
-[Preserve(AllMembers = true)]
 public partial class ListTerms : ContentPage
 {
     readonly ListTermsVM _listTermsVM;

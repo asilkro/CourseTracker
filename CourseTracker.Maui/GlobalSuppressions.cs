@@ -5,7 +5,6 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "Project is only targetting one platform", Scope = "member", Target = "~M:CourseTracker.Maui.Data.NotifyDB.ScheduleNotificationAsync(CourseTracker.Maui.Models.Notification)~System.Threading.Tasks.Task")]
 [assembly: SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "Project is only targetting one platform", Scope = "member", Target = "~M:CourseTracker.Maui.App.#ctor")]
 [assembly: SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "Project is only targetting one platform", Scope = "member", Target = "~M:CourseTracker.Maui.App.OnNotificationActionTapped(Plugin.LocalNotification.EventArgs.NotificationActionEventArgs)")]
 [assembly: SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "Project is only targetting one platform", Scope = "member", Target = "~M:CourseTracker.Maui.App.RequestNotificationPermissions~System.Threading.Tasks.Task")]
@@ -56,7 +55,5 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "Project is only targetting one platform", Scope = "type", Target = "~T:CourseTracker.Maui.Platforms.Android.MainApplication")]
 [assembly: SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "Project is only targetting one platform", Scope = "member", Target = "~M:CourseTracker.Maui.Supplemental.Validation.IsValidNotification(Plugin.LocalNotification.NotificationRequest)~System.String")]
 [assembly: SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "Project is only targetting one platform", Scope = "member", Target = "~F:CourseTracker.Maui.Data.NotifyDB.schedule")]
-[assembly: SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "Project is only targetting one platform", Scope = "member", Target = "~M:CourseTracker.Maui.Data.NotifyDB.GetPendingRequestsAsync~System.Threading.Tasks.Task{System.Collections.Generic.List{Plugin.LocalNotification.NotificationRequest}}")]
-[assembly: SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "Project is only targetting one platform", Scope = "member", Target = "~M:CourseTracker.Maui.Data.NotifyDB.MakeNotifications(System.Collections.Generic.List{CourseTracker.Maui.Models.Notification})~System.Threading.Tasks.Task")]
 [assembly: SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "Project is only targetting one platform", Scope = "member", Target = "~M:CourseTracker.Maui.Data.NotifyDB.PrintOutPendingRequests")]
 [assembly: SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>", Scope = "member", Target = "~M:CourseTracker.Maui.Data.NotifyDB.MakeAndroidNotification(CourseTracker.Maui.Models.Notification)~System.Threading.Tasks.Task")]

@@ -1,11 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
-using CommunityToolkit.Maui.Alerts;
 using CourseTracker.Maui.Data;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
 using CourseTracker.Maui.Supplemental;
-using Plugin.LocalNotification;
 
 namespace CourseTracker.Maui.ViewModels
 {
@@ -62,7 +60,7 @@ namespace CourseTracker.Maui.ViewModels
             get => isDebugEnabled;
             set => SetProperty(ref isDebugEnabled, value);
         }
-        
+
         private async Task LoadSampleDataAsync()
         {
             var validation = new Validation();
@@ -92,7 +90,7 @@ namespace CourseTracker.Maui.ViewModels
                 demoOA.RelatedCourseId = demoCourse.CourseId;
                 await sharedDB.SaveAssessmentAndUpdateCourse(demoOA); //1
                 Debug.WriteLine("Inserted assessment: " + demoOA.AssessmentName); //C6 OA
-                
+
                 var demoPA = await MakeDemoPA(); //Assessment for course 1
                 demoPA.RelatedCourseId = demoCourse.CourseId;
                 await sharedDB.SaveAssessmentAndUpdateCourse(demoPA); //2
@@ -132,7 +130,7 @@ namespace CourseTracker.Maui.ViewModels
                 return;
             }
         }
-        
+
         #region Notifications
 
         private Notification notification;
@@ -279,7 +277,7 @@ namespace CourseTracker.Maui.ViewModels
         {
             Assessment demoOA = new()
             {
-                AssessmentId = 1, //await assessmentDB.GetNextId(),
+                AssessmentId = await assessmentDB.GetNextId(),
                 AssessmentName = "C6 OA",
                 AssessmentType = "Objective",
                 AssessmentStartDate = new DateTime(2024, 03, 24),

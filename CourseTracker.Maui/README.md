@@ -12,9 +12,14 @@ Thank you for evaluating and using this application. There are a few things you 
 - When prompted, please allow the application to access your device's notifications as this is required for proper functionality. If you do not allow this, the application will be unable to send you reminders for upcoming assessments and courses.
     - *If you do not receive a "Notifications Working" notification after doing this, please close and reopen the application and try again.*
 
+- Notification dates are 1 day before those listed in the pickers (Start / End).
+- **If this notification date is the same as the current date, no notification will be generated. This is a limitation of the plugin used for notifications.**
+
 ## Important User Information
 
 1. The application is designed to be used on a mobile device and will work best on hardware. It relies on Android version 12.1 and above.
+
+
 
 2. When prompted, please allow the application to access your device's notifications as this is required for proper functionality. If you do not allow this, the application will be unable to send you reminders for upcoming assessments and courses.
  - *If you do not receive a "Notifications Working" notification after doing this, please close and reopen the application and try again.*

@@ -33,14 +33,6 @@ class Connection : IAsyncSqLite
         var asyncConnection = GetAsyncConnection();
         await asyncConnection.InsertAsync(obj);
     }
-
-    public async Task<int> InsertAndGetIdAsync<T>(T obj)
-    {
-        var asyncConnection = GetAsyncConnection();
-        await asyncConnection.InsertAsync(obj);
-        return await asyncConnection.ExecuteScalarAsync<int>("SELECT last_insert_rowid()");
-    }
-
     public async Task<List<T>> Table<T>() where T : new()
     {
         var asyncConnection = GetAsyncConnection();

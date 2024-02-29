@@ -131,11 +131,7 @@ namespace CourseTracker.Maui.ViewModels
             Debug.WriteLine(RelatedCourses.Count + " related courses count.");
             try
             {
-                RelatedCourses ??= [];
-                if (RelatedCourses.Count > 0)
-                {
-                    RelatedCourses.Clear();
-                }
+                RelatedCourses = [];
                 List<Course> coursesForGivenTerm = await courseDB.GetCoursesByTermIdAsync(TermId);
 #if DEBUG
                 Debug.WriteLine(TermId + " is your termId.");

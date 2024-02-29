@@ -24,7 +24,7 @@ namespace CourseTracker.Maui.Models
         {
         }
 
-        public Notification(int notificationId, string notificationTitle, string notificationMessage, DateTime notificationDate, string relatedItemType, int? relatedItemId)
+        public Notification(int notificationId, string notificationTitle, string notificationMessage, DateTime notificationDate, string relatedItemType)
         {
             NotificationId = notificationId;
             NotificationTitle = notificationTitle;

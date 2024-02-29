@@ -18,11 +18,7 @@ namespace CourseTracker.Maui.ViewModels
             try
             {
                 IsRefreshing = true;
-                Terms ??= [];
-                if (Terms.Count > 0)
-                {
-                    Terms = [];
-                }
+                Terms = [];
                 List<Term> terms = await termsDB.GetTermsAsync();
                 try
                 {

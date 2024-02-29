@@ -1,9 +1,6 @@
 ﻿using System.Diagnostics;
-using CommunityToolkit.Maui.Alerts;
-using CommunityToolkit.Maui.Core;
 using CourseTracker.Maui.Models;
 using CourseTracker.Maui.Services;
-using CourseTracker.Maui.Supplemental;
 using Plugin.LocalNotification;
 using SQLite;
 
@@ -41,7 +38,10 @@ namespace CourseTracker.Maui.Data
 
         public async void NotificationRunner()
         {
-            var matchingNotifications = await GetNotificationsForToday(DateTime.Now.Date);
+            var matchingNotifications = await GetNotificationByDate(DateTime.Now.Date);
+#if DEBUG
+            Debug.WriteLine("There are: " + matchingNotifications.Count + " notifications for today.");
+#endif
             if (matchingNotifications.Count > 0)
             {
 #if DEBUG
@@ -49,27 +49,25 @@ namespace CourseTracker.Maui.Data
 #endif
                 foreach (var notification in matchingNotifications)
                 {
-                    if (notification.NotificationTriggered == 0)
-                    {
-                        await MakeAndroidNotification(notification);
-                    }
+                    await MakeAndroidNotification(notification);
+
 #if DEBUG
-                Debug.WriteLine("Notification");
-                PrintOutPendingRequests();
+                    Debug.WriteLine("Notification");
+                    PrintOutPendingRequests();
 #endif
                 }
             }
         }
 
-        public async Task<List<Notification>> GetNotificationsForToday(DateTime date)
+        public async Task<List<Notification>> GetNotificationByDate(DateTime date)
         {
             await Init();
             return await _database.Table<Notification>()
-                .Where(i => i.NotificationDate.Date == date.Date)
+                .Where(i => i.NotificationDate == date && i.NotificationTriggered != 1)
                 .ToListAsync();
         }
 
-        public async void PrintOutPendingRequests()
+        public static async void PrintOutPendingRequests()
         {
             IList<NotificationRequest> requests = await LocalNotificationCenter.Current.GetPendingNotificationList();
             foreach (var request in requests)
@@ -88,11 +86,11 @@ namespace CourseTracker.Maui.Data
 
         public async Task MakeAndroidNotification(Notification notification)
         {
-                try
+            try
+            {
+                NotificationRequest request = new()
                 {
-                    NotificationRequest request = new()
-                    {
-                        Android =
+                    Android =
                             {
                                 ChannelId = "CourseTracker",
                                 When = notification.NotificationDate,
@@ -100,25 +98,25 @@ namespace CourseTracker.Maui.Data
                                 VisibilityType = Plugin.LocalNotification.AndroidOption.AndroidVisibilityType.Public
                             },
 
-                        NotificationId = notification.NotificationId,
-                        Title = notification.NotificationTitle,
-                        Subtitle = notification.NotificationMessage,
-                        CategoryType = NotificationCategoryType.Reminder,
-                        Schedule = schedule,
-                    };
-                    await LocalNotificationCenter.Current.Show(request);
+                    NotificationId = notification.NotificationId,
+                    Title = notification.NotificationTitle,
+                    Subtitle = notification.NotificationMessage,
+                    CategoryType = NotificationCategoryType.Reminder,
+                    Schedule = schedule,
+                };
+                await LocalNotificationCenter.Current.Show(request);
 #if DEBUG
-PrintOutPendingRequests();
+                PrintOutPendingRequests();
 #endif
-                    notification.NotificationTriggered = 1;
-                    await SaveNotificationAsync(notification);
-                }
-                catch (Exception ex)
-                {
-                    Debug.WriteLine("There was an issue scheduling: " + notification.NotificationTitle + " : " + ex.Message);
-                    return;
-                }
+                notification.NotificationTriggered = 1;
+                await SaveNotificationAsync(notification);
             }
+            catch (Exception ex)
+            {
+                Debug.WriteLine("There was an issue scheduling: " + notification.NotificationTitle + " : " + ex.Message);
+                return;
+            }
+        }
 
         public async Task<int> DeleteNotificationAsync(Notification notification)
         {
@@ -167,44 +165,5 @@ PrintOutPendingRequests();
             RepeatType = NotificationRepeat.TimeInterval,
             NotifyRepeatInterval = TimeSpan.FromHours(4)
         };
-
-        public async Task ScheduleNotificationAsync(Notification notification)
-        {
-            NotificationRequest notificationRequest = new()
-            {
-                Android =
-                {
-                    ChannelId = "CourseTracker",
-                    When = notification.NotificationDate,
-                    TimeoutAfter = notification.NotificationDate.AddDays(3).TimeOfDay,
-                    VisibilityType = Plugin.LocalNotification.AndroidOption.AndroidVisibilityType.Public
-                },
-
-                NotificationId = notification.NotificationId,
-                Title = notification.NotificationTitle,
-                Subtitle = notification.NotificationMessage,
-                CategoryType = NotificationCategoryType.Reminder,
-                Schedule = schedule,
-            };
-#if DEBUG
-            Debug.WriteLine("NotifyTime is: " + schedule.NotifyTime);
-#endif
-
-            var result = Validation.IsValidNotification(notificationRequest);
-#if DEBUG
-            Debug.WriteLine(notificationRequest.Title + " returns " + result);
-#endif
-            if (result == string.Empty) // If the notification is valid, save and schedule it
-            {
-                await SaveNotificationAsync(notification);
-                await LocalNotificationCenter.Current.Show(notificationRequest);
-#if DEBUG
-                PrintOutPendingRequests();
-#endif
-
-                return;
-            }
-        }
-
     }
 }
