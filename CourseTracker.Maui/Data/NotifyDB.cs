@@ -39,6 +39,87 @@ namespace CourseTracker.Maui.Data
                 .FirstOrDefaultAsync();
         }
 
+        public async void NotificationRunner()
+        {
+            var matchingNotifications = await GetNotificationsForToday(DateTime.Now.Date);
+            if (matchingNotifications.Count > 0)
+            {
+#if DEBUG
+                Debug.WriteLine("There are: " + matchingNotifications.Count + " notifications for today.");
+#endif
+                foreach (var notification in matchingNotifications)
+                {
+                    if (notification.NotificationTriggered == 0)
+                    {
+                        await MakeAndroidNotification(notification);
+                    }
+#if DEBUG
+                Debug.WriteLine("Notification");
+                PrintOutPendingRequests();
+#endif
+                }
+            }
+        }
+
+        public async Task<List<Notification>> GetNotificationsForToday(DateTime date)
+        {
+            await Init();
+            return await _database.Table<Notification>()
+                .Where(i => i.NotificationDate.Date == date.Date)
+                .ToListAsync();
+        }
+
+        public async void PrintOutPendingRequests()
+        {
+            IList<NotificationRequest> requests = await LocalNotificationCenter.Current.GetPendingNotificationList();
+            foreach (var request in requests)
+            {
+                Debug.WriteLine("--");
+                Debug.WriteLine("NotificationId: " + request.NotificationId);
+                Debug.WriteLine("Title: " + request.Title);
+                Debug.WriteLine("Subtitle: " + request.Subtitle);
+                Debug.WriteLine("Description: " + request.Description);
+                Debug.WriteLine("NotifyTime: " + request.Schedule.NotifyTime);
+                Debug.WriteLine("NotifyAutoCancelTime: " + request.Schedule.NotifyAutoCancelTime);
+                Debug.WriteLine("Repeat Interval: " + request.Schedule.NotifyRepeatInterval);
+                Debug.WriteLine("--");
+            }
+        }
+
+        public async Task MakeAndroidNotification(Notification notification)
+        {
+                try
+                {
+                    NotificationRequest request = new()
+                    {
+                        Android =
+                            {
+                                ChannelId = "CourseTracker",
+                                When = notification.NotificationDate,
+                                TimeoutAfter = notification.NotificationDate.AddDays(3).TimeOfDay,
+                                VisibilityType = Plugin.LocalNotification.AndroidOption.AndroidVisibilityType.Public
+                            },
+
+                        NotificationId = notification.NotificationId,
+                        Title = notification.NotificationTitle,
+                        Subtitle = notification.NotificationMessage,
+                        CategoryType = NotificationCategoryType.Reminder,
+                        Schedule = schedule,
+                    };
+                    await LocalNotificationCenter.Current.Show(request);
+#if DEBUG
+PrintOutPendingRequests();
+#endif
+                    notification.NotificationTriggered = 1;
+                    await SaveNotificationAsync(notification);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine("There was an issue scheduling: " + notification.NotificationTitle + " : " + ex.Message);
+                    return;
+                }
+            }
+
         public async Task<int> DeleteNotificationAsync(Notification notification)
         {
             await Init();
@@ -82,7 +163,7 @@ namespace CourseTracker.Maui.Data
         public NotificationRequestSchedule schedule = new()
         {
             NotifyTime = DateTime.Now,
-            
+            NotifyAutoCancelTime = DateTime.Now.AddDays(3),
             RepeatType = NotificationRepeat.TimeInterval,
             NotifyRepeatInterval = TimeSpan.FromHours(4)
         };
@@ -93,11 +174,8 @@ namespace CourseTracker.Maui.Data
             {
                 Android =
                 {
-                    AutoCancel = true,
                     ChannelId = "CourseTracker",
-                    LaunchAppWhenTapped = true,
                     When = notification.NotificationDate,
-                    Priority = Plugin.LocalNotification.AndroidOption.AndroidPriority.Default,
                     TimeoutAfter = notification.NotificationDate.AddDays(3).TimeOfDay,
                     VisibilityType = Plugin.LocalNotification.AndroidOption.AndroidVisibilityType.Public
                 },
@@ -108,20 +186,20 @@ namespace CourseTracker.Maui.Data
                 CategoryType = NotificationCategoryType.Reminder,
                 Schedule = schedule,
             };
-            Debug.WriteLine("NotifyTime is: " + schedule.NotifyTime);
-
-
-//            var result = Validation.IsValidNotification(notificationRequest);
 #if DEBUG
-            // Debug.WriteLine(notificationRequest.Title + " returns " + result);
+            Debug.WriteLine("NotifyTime is: " + schedule.NotifyTime);
 #endif
-            //if (result == string.Empty)
+
+            var result = Validation.IsValidNotification(notificationRequest);
+#if DEBUG
+            Debug.WriteLine(notificationRequest.Title + " returns " + result);
+#endif
+            if (result == string.Empty) // If the notification is valid, save and schedule it
             {
                 await SaveNotificationAsync(notification);
                 await LocalNotificationCenter.Current.Show(notificationRequest);
 #if DEBUG
-                List<Notification> notificationCount = await GetNotificationsAsync();
-                Debug.WriteLine(notificationCount.Count + " was the number of notifications");
+                PrintOutPendingRequests();
 #endif
 
                 return;

@@ -142,17 +142,15 @@ namespace CourseTracker.Maui.Supplemental
             if (notification.Schedule.NotifyTime < DateTime.Now)
             {
                 message = "Notification will not occur in the past.";
-                Snackbar.Make(message + " Notification for " + notification.Title + " will not be created.").Show();
 #if DEBUG
-                Debug.WriteLine(message + " Notification for " + notification.Title + " will not be created.");
+               Debug.WriteLine(message + " Notification for " + notification.Title + " will not be created.");
 #endif
             }
             else if (notification.Schedule.NotifyAutoCancelTime < notification.Schedule.NotifyTime)
             {
                 message = "Auto cancel time must be after the notify time.";
-                Snackbar.Make(message + " Notification for " + notification.Title + " will not be created.").Show();
 #if DEBUG
-                Debug.WriteLine(message + " Notification for " + notification.Title + " will not be created.");
+                Debug.WriteLine(message + ": Notification for " + notification.Title + " will not be created.");
 #endif
             }
             return message;

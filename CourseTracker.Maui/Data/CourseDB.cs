@@ -126,6 +126,7 @@ namespace CourseTracker.Maui.Data;
                             NotificationDate = course.CourseStart.AddDays(-daysBefore),
                             RelatedItemType = "Course",
                             NotificationMessage = $"{course.CourseName} begins in {daysBefore} day(s)",
+                            NotificationTriggered = 0
                         };
                         await notifyDB.ScheduleNotificationAsync(notification);
                     }
@@ -148,6 +149,7 @@ namespace CourseTracker.Maui.Data;
                             NotificationDate = course.CourseEnd.AddDays(-daysBefore),
                             RelatedItemType = "Course",
                             NotificationMessage = $"{course.CourseName} ends in {daysBefore} day(s)",
+                            NotificationTriggered = 0
                         };
 
                         await notifyDB.ScheduleNotificationAsync(notification);

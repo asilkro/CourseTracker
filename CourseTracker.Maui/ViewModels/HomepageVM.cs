@@ -48,8 +48,10 @@ namespace CourseTracker.Maui.ViewModels
 
         public async void OnAppearing()
         {
-            await LoadNotifications();
+            notifyDB.NotificationRunner();
+            Debug.WriteLine("Called Notification runner");
 #if DEBUG
+            await LoadNotifications();
             IsDebugEnabled = true;
 #endif
         }
@@ -190,9 +192,9 @@ namespace CourseTracker.Maui.ViewModels
             Term demoTerm = new()
             {
                 TermId = await termsDB.GetNextId(),
-                TermName = "Demo Term",
-                TermStart = new DateTime(2024, 02, 01),
-                TermEnd = new DateTime(2024, 07, 31),
+                TermName = "Evaluation Term",
+                TermStart = new DateTime(2024, 03, 01),
+                TermEnd = new DateTime(2024, 08, 31),
                 CourseCount = 0
             };
             return demoTerm;
@@ -203,9 +205,9 @@ namespace CourseTracker.Maui.ViewModels
             Term demoTerm2 = new()
             {
                 TermId = await termsDB.GetNextId(),
-                TermName = "Term One - 2023",
-                TermStart = new DateTime(2023, 01, 01),
-                TermEnd = new DateTime(2023, 06, 30),
+                TermName = "Previous Term",
+                TermStart = new DateTime(2023, 09, 01),
+                TermEnd = new DateTime(2024, 02, 29),
                 CourseCount = 0
             };
             return demoTerm2;
@@ -219,8 +221,8 @@ namespace CourseTracker.Maui.ViewModels
                 CourseId = await courseDB.GetNextId(),
                 CourseName = "Example Course for Evaluation",
                 CourseStatus = "In Progress",
-                CourseStart = new DateTime(2024, 02, 01),
-                CourseEnd = new DateTime(2024, 07, 31),
+                CourseStart = new DateTime(2024, 03, 01),
+                CourseEnd = new DateTime(2024, 08, 31),
                 InstructorEmail = "anika.patel@strimeuniversity.edu",
                 InstructorPhone = "555-123-4567",
                 InstructorName = "Anika Patel",
@@ -240,8 +242,8 @@ namespace CourseTracker.Maui.ViewModels
                 CourseId = await courseDB.GetNextId(),
                 CourseName = "Relationships in a Digital Era",
                 CourseStatus = "Completed",
-                CourseStart = new DateTime(2023, 01, 01),
-                CourseEnd = new DateTime(2023, 02, 28),
+                CourseStart = new DateTime(2023, 09, 01),
+                CourseEnd = new DateTime(2023, 11, 30),
                 InstructorEmail = "zenobia@subbrat.edu",
                 InstructorPhone = "554-207-6943",
                 InstructorName = "Marielle CC Zenobia",
@@ -260,8 +262,8 @@ namespace CourseTracker.Maui.ViewModels
                 CourseId = await courseDB.GetNextId(),
                 CourseName = "Screen Writing for Community",
                 CourseStatus = "Dropped",
-                CourseStart = new DateTime(2023, 03, 01),
-                CourseEnd = new DateTime(2023, 04, 30),
+                CourseStart = new DateTime(2023, 12, 01),
+                CourseEnd = new DateTime(2024, 02, 29),
                 InstructorEmail = "dharmon@greendale.edu",
                 InstructorPhone = "555-424-1565",
                 InstructorName = "Dan Harmon",
@@ -280,8 +282,8 @@ namespace CourseTracker.Maui.ViewModels
                 AssessmentId = 1, //await assessmentDB.GetNextId(),
                 AssessmentName = "C6 OA",
                 AssessmentType = "Objective",
-                AssessmentStartDate = new DateTime(2024, 03, 01),
-                AssessmentEndDate = new DateTime(2024, 03, 31),
+                AssessmentStartDate = new DateTime(2024, 03, 24),
+                AssessmentEndDate = new DateTime(2024, 03, 27),
                 RelatedCourseId = 1,
                 NotificationsEnabled = true
             };
@@ -295,8 +297,8 @@ namespace CourseTracker.Maui.ViewModels
                 AssessmentId = await assessmentDB.GetNextId(),
                 AssessmentName = "C6 PA",
                 AssessmentType = "Performance",
-                AssessmentStartDate = new DateTime(2024, 04, 01),
-                AssessmentEndDate = new DateTime(2024, 04, 30),
+                AssessmentStartDate = new DateTime(2024, 03, 01),
+                AssessmentEndDate = new DateTime(2024, 03, 23),
                 RelatedCourseId = 1,
                 NotificationsEnabled = true
             };
@@ -310,8 +312,8 @@ namespace CourseTracker.Maui.ViewModels
                 AssessmentId = await assessmentDB.GetNextId(),
                 AssessmentName = "Digital Relationships OA",
                 AssessmentType = "Objective",
-                AssessmentStartDate = new DateTime(2023, 01, 01),
-                AssessmentEndDate = new DateTime(2023, 02, 28),
+                AssessmentStartDate = new DateTime(2023, 10, 01),
+                AssessmentEndDate = new DateTime(2023, 10, 05),
                 RelatedCourseId = 2,
                 NotificationsEnabled = false
             };
@@ -325,8 +327,8 @@ namespace CourseTracker.Maui.ViewModels
                 AssessmentId = await assessmentDB.GetNextId(),
                 AssessmentName = "Community Script PA",
                 AssessmentType = "Performance",
-                AssessmentStartDate = new DateTime(2023, 03, 01),
-                AssessmentEndDate = new DateTime(2024, 02, 29),
+                AssessmentStartDate = new DateTime(2024, 01, 04),
+                AssessmentEndDate = new DateTime(2024, 01, 22),
                 RelatedCourseId = 3,
                 NotificationsEnabled = false
             };

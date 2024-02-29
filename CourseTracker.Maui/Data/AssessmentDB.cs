@@ -118,6 +118,7 @@ namespace CourseTracker.Maui.Data
                             NotificationDate = assessment.AssessmentStartDate.AddDays(-daysBefore),
                             RelatedItemType = "Assessment",
                             NotificationMessage = $"{assessment.AssessmentName} starts in {daysBefore} day(s)",
+                            NotificationTriggered = 0
                         };
                         await notifyDB.ScheduleNotificationAsync(notification);
                     }
@@ -137,7 +138,8 @@ namespace CourseTracker.Maui.Data
                         NotificationTitle = title,
                         NotificationDate = assessment.AssessmentEndDate.AddDays(-daysBefore),
                         RelatedItemType = "Assessment",
-                        NotificationMessage = $"Assessment: {assessment.AssessmentName} is due in {daysBefore} day(s)"
+                        NotificationMessage = $"Assessment: {assessment.AssessmentName} is due in {daysBefore} day(s)",
+                        NotificationTriggered = 0
                     };
                     await notifyDB.ScheduleNotificationAsync(notification);
                 }

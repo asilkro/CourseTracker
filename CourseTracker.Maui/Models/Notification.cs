@@ -16,6 +16,7 @@ namespace CourseTracker.Maui.Models
         public string NotificationMessage { get; set; }
         public DateTime NotificationDate { get; set; }
         public string RelatedItemType { get; set; } // Course, Assessment
+        public int NotificationTriggered { get; set; }
         #endregion
 
         #region Constructors

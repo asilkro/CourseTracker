@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Maui.Alerts;
+﻿using System.Diagnostics;
+using CommunityToolkit.Maui.Alerts;
 using CourseTracker.Maui.Data;
 using Plugin.LocalNotification;
 using Plugin.LocalNotification.EventArgs;
@@ -23,16 +24,20 @@ namespace CourseTracker.Maui
             {
                 Android = 
                 {
-                    AutoCancel = true
+                    AutoCancel = true,
+                    
                 },
                 Title = "Notifications Working",
                 Description = "Your permissions are set correctly.",
                 Schedule =
                         {
-                            NotifyTime = DateTime.Now, // Triggers Notification in 5 seconds
-                            NotifyAutoCancelTime = DateTime.Now.AddSeconds(120)
+                            NotifyTime = DateTime.Now, // Triggers Notification
+                            NotifyAutoCancelTime = DateTime.Now.AddSeconds(30) // Removes Notification
                         }
             };
+#if DEBUG
+            Debug.WriteLine("NotifyAutoCancelTime is: " + notification.Schedule.NotifyAutoCancelTime.ToString());
+                #endif
 
             await MainThread.InvokeOnMainThreadAsync(async () =>
             {
@@ -41,7 +46,7 @@ namespace CourseTracker.Maui
                     var result = await LocalNotificationCenter.Current.RequestNotificationPermission();
                     if (!result)
                     {
-                        await Toast.Make("Notifications require permission approval.").Show();
+                        await Application.Current.MainPage.DisplayAlert("Notifications Are Not Enabled","You must accept the request to enable permissions for notifications to function.","Acknowledge");
                         return;
                     }
                 }

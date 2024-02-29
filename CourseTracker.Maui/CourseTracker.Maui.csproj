@@ -125,6 +125,10 @@
 	<ItemGroup>
 	  <MauiIcon Include="Resources\AppIcon\ct_icon.png" Color="#0E606b" />
 	</ItemGroup>
+		
+	<ItemGroup>
+   	<TrimmerRootAssembly Include="Plugin.LocalNotification"/>
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Maui" Version="7.0.1" />
